@@ -1,0 +1,56 @@
+package ch.droptilllate.filesystem.api;
+
+import static org.junit.Assert.*;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
+
+import ch.droptilllate.filesystem.commons.Constants;
+import ch.droptilllate.filesystem.info.ContainerInfo;
+import ch.droptilllate.filesystem.info.FileInfo;
+
+public class FileInfoTest
+{
+
+	@Rule public TestName name = new TestName();
+	 
+	@Test
+	public void testSimpleFileInfo()
+	{
+		System.out.println(Constants.TESTCASE_LIMITER);
+		System.out.println(this.getClass().getSimpleName()+": " + name.getMethodName());
+		int id = 123;
+		FileInfo fi = new FileInfo(id);
+		assertTrue(id == fi.getFileID());
+	}
+	
+	@Test
+	public void testContainerInfo()
+	{
+		System.out.println(Constants.TESTCASE_LIMITER);
+		System.out.println(this.getClass().getSimpleName()+": " + name.getMethodName());
+		int id = 123;
+		int containerID = 9999;
+		String parentContPath = "C:\\test";
+		FileInfo fi = new FileInfo(id, new ContainerInfo(containerID, parentContPath));
+		assertTrue(containerID == fi.getContainerInfo().getContainerID());
+		assertEquals(parentContPath, fi.getContainerInfo().getParentContainerPath());		
+	}
+	
+	@Test
+	public void testError()
+	{
+		System.out.println(Constants.TESTCASE_LIMITER);
+		System.out.println(this.getClass().getSimpleName()+": " + name.getMethodName());
+		int id = 123;
+		String testMsg = "Test";
+		FileInfo fi = new FileInfo(id);
+		fi.setError(FileError.DEST_FILE_NOT_FOUND);
+		assertEquals(FileError.DEST_FILE_NOT_FOUND, fi.getError());
+		fi.setError(FileError.IO_EXCEPTION, testMsg);
+		assertEquals(FileError.IO_EXCEPTION, fi.getError());
+		assertEquals(testMsg, fi.getErrorMessage());
+	}
+
+}

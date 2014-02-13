@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="libraries/annotations-2.0.1.jar"/>
+	<classpathentry kind="lib" path="libraries/bcprov-jdk16-1.46.jar"/>
+	<classpathentry kind="lib" path="libraries/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="libraries/commons-compress-1.6.jar"/>
+	<classpathentry kind="lib" path="libraries/truezip-7.7.5-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="libraries/truezip-archetype-file-7.7.5.jar"/>
+	<classpathentry kind="lib" path="libraries/truezip-archetype-path-7.7.5.jar"/>
+	<classpathentry kind="lib" path="libraries/truezip-driver-file-7.7.5.jar"/>
+	<classpathentry kind="lib" path="libraries/truezip-driver-tar-7.7.5.jar"/>
+	<classpathentry kind="lib" path="libraries/truezip-driver-tzp-7.7.5.jar"/>
+	<classpathentry kind="lib" path="libraries/truezip-driver-zip-7.7.5.jar"/>
+	<classpathentry kind="lib" path="libraries/truezip-file-7.7.5.jar"/>
+	<classpathentry kind="lib" path="libraries/truezip-kernel-7.7.5.jar"/>
+	<classpathentry kind="lib" path="libraries/truezip-path-7.7.5.jar"/>
+	<classpathentry kind="lib" path="libraries/xz-1.4.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
