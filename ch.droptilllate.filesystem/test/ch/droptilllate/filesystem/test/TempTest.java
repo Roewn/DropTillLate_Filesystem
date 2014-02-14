@@ -77,7 +77,7 @@ public class TempTest
 		{
 
 			// Test cases
-			switch (2)
+			switch (1)
 			{
 			case 1: // Encrypt Files 
 				ArrayList<FileInfoEncrypt> fileInfoEncList = new ArrayList<FileInfoEncrypt>();
