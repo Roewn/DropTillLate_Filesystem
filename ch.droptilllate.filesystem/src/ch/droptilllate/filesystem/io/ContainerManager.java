@@ -1,7 +1,6 @@
 package ch.droptilllate.filesystem.io;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -48,8 +47,6 @@ public class ContainerManager
 
 		// generate the ContainerInfo entries for every ShareRelation
 		HashMap<String, TreeSet<ContainerInfo>> shareRelationsMap = getContainersPerShareRelation(fileInfoList);
-
-		
 
 		// Sort the fileInfos from big to small size
 		// The set of ContainerInfos is order from small to big size
@@ -135,7 +132,7 @@ public class ContainerManager
 	{
 		HashMap<String, TreeSet<ContainerInfo>> shareRelationsMap = new HashMap<String, TreeSet<ContainerInfo>>();
 		ContainerInfo actFileContInfo;
-		
+
 		System.out.println(Constants.CONSOLE_LIMITER);
 		System.out.println("Fetching existing Containers per share relations ...");
 
@@ -154,27 +151,12 @@ public class ContainerManager
 				{
 					// TODO Maybe check if the parent folder of droptilllate is correct
 					shareRelationsMap.put(actFileContInfo.getParentContainerPath(), new TreeSet<ContainerInfo>());
-
-					// get all containers in this share relation
-					File directory = new File(actFileContInfo.getParentContainerPath());
-					// Create folder of share relation if it does not exists
-					if (!directory.exists())
-					{
-						directory.mkdirs();
-						System.out.println(Constants.CONSOLE_LIMITER);
-						System.out.println("Directory created: " + directory.getAbsolutePath());
-					} else
+					
 					// If folder already exists, get all containers and update the Map with these infos
+					if (DirectoryOperator.checkIfDirectoryExists(actFileContInfo.getParentContainerPath()))
 					{
-						File[] containerList = directory.listFiles(new FilenameFilter()
-						{
-							@Override
-							public boolean accept(File dir, String name)
-							{
-								// TODO Check if it is really an archive and maybe put to another class
-								return name.endsWith("." + Constants.CONTAINER_EXTENTION);
-							}
-						});
+						// get all containers in this share relation
+						List<File> containerList = DirectoryOperator.getContainersInDir(actFileContInfo.getParentContainerPath());						
 						TreeSet<ContainerInfo> contInfoSet = new TreeSet<ContainerInfo>();
 						// get all FileInfos for the containers in these path
 						for (File file : containerList)
@@ -201,10 +183,10 @@ public class ContainerManager
 				fileInfo.setError(FileError.UNKNOWN, e.getMessage());
 			}
 		}
-	
+
 		System.out.println("Existing Containers per share relations verified: ");
 		System.out.println(shareRelationsMap);
-		
+
 		return shareRelationsMap;
 	}
 

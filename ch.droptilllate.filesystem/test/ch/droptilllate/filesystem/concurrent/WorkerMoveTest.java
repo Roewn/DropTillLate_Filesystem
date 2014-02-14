@@ -15,12 +15,14 @@ import ch.droptilllate.filesystem.api.FileError;
 import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
+import ch.droptilllate.filesystem.info.FileInfoMove;
+import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.FileOperator;
 import ch.droptilllate.filesystem.security.KeyManager;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
 
-public class WorkerEncryptTest
+public class WorkerMoveTest
 {
 
 	private File textFile;
@@ -33,7 +35,7 @@ public class WorkerEncryptTest
 	/**
 	 * Constructor
 	 */
-	public WorkerEncryptTest()
+	public WorkerMoveTest()
 	{
 		// initalize the config
 		TConfig config = TConfig.get();
@@ -50,10 +52,26 @@ public class WorkerEncryptTest
 
 		int id = 1234;
 		int contId = 9999;
+		// Create share directory
+		File shareDir = new File(TestHelper.getTestDir(), "share");
+		shareDir.mkdir();
 		// Create FileInfo
 		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
 		fie.getContainerInfo().setContainerID(contId);
-		Thread thread = new Thread(new WorkerEncrypt(fie));
+		// Add the text file
+		try
+		{
+			FileOperator.addFile(fie);
+		} catch (FileException e1)
+		{
+			e1.printStackTrace();
+		}
+		FileOperator.umountFileSystem();
+
+		// move the file
+		FileInfoMove fim = new FileInfoMove(id, fie.getSize(), fie.getContainerInfo().getParentContainerPath(), contId,
+				shareDir.getAbsolutePath());
+		Thread thread = new Thread(new WorkerMove(fim));
 		thread.start();
 		try
 		{
@@ -62,8 +80,12 @@ public class WorkerEncryptTest
 		{
 			e.printStackTrace();
 		}
-		assertTrue(FileOperator.isFileInContainer(fie));
+
 		FileOperator.umountFileSystem();
+		// file should not be longer in the source container
+		assertFalse(FileOperator.isFileInContainer(fie));
+		// check if its in the dest container
+		assertTrue(FileOperator.isFileInContainer(fim));
 	}
 
 	@Test
@@ -74,23 +96,36 @@ public class WorkerEncryptTest
 
 		int id = 1234;
 		int contId = 9999;
+		// Create share directory
+		File shareDir = new File(TestHelper.getTestDir(), "share");
+		shareDir.mkdir();
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath() + "bla", TestHelper.getTestDir());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
 		fie.getContainerInfo().setContainerID(contId);
-		Thread thread = new Thread(new WorkerEncrypt(fie));
-		thread.start();
+		// Add the text file
+		try
+		{
+			FileOperator.addFile(fie);
+		} catch (FileException e1)
+		{
+			e1.printStackTrace();
+		}
+		FileOperator.umountFileSystem();
 
+		// move the file
+		FileInfoMove fim = new FileInfoMove(id+1, fie.getSize(), fie.getContainerInfo().getParentContainerPath(), contId,
+				shareDir.getAbsolutePath());
+		Thread thread = new Thread(new WorkerMove(fim));
+		thread.start();
 		try
 		{
 			thread.join();
-		}
-
-		catch (InterruptedException e)
+		} catch (InterruptedException e)
 		{
 			e.printStackTrace();
 		}
-		assertFalse(FileOperator.isFileInContainer(fie));
-		assertTrue(fie.getError() == FileError.SRC_FILE_NOT_FOUND);
+		
+		assertTrue(fim.getError() == FileError.SRC_FILE_NOT_FOUND);
 		FileOperator.umountFileSystem();
 
 	}

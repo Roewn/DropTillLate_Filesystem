@@ -3,14 +3,10 @@ package ch.droptilllate.filesystem.io;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,6 +16,7 @@ import org.junit.rules.TestName;
 
 import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.commons.Timer;
+import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
@@ -33,8 +30,6 @@ import de.schlichtherle.truezip.file.TFile;
 
 public class FileOperatorTest
 {
-	private static String workingDir = System.getProperty("user.dir");
-	private static File testDir;
 
 	private File textFile;
 	private String filenameTextFile = "test.txt";
@@ -62,7 +57,7 @@ public class FileOperatorTest
 		int id = 1234;
 		int contId = 9999;
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), testDir.getAbsolutePath());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
 		fie.getContainerInfo().setContainerID(contId);
 		// Adding File
 		System.out.println(Constants.CONSOLE_LIMITER);
@@ -81,8 +76,8 @@ public class FileOperatorTest
 		assertTrue(FileOperator.isFileInContainer(fie));
 
 		// Create FileInfo
-		FileInfoDecrypt fid = new FileInfoDecrypt(id, InfoHelper.checkFileExt(filenameTextFile), testDir.getAbsolutePath(),
-				testDir.getAbsolutePath(), contId);
+		FileInfoDecrypt fid = new FileInfoDecrypt(id, InfoHelper.checkFileExt(filenameTextFile), TestHelper.getTestDir(),
+				TestHelper.getTestDir(), contId);
 		// Extract File
 		System.out.println();
 		System.out.println("Extracting the text file");
@@ -96,7 +91,7 @@ public class FileOperatorTest
 		}
 		Timer.stop(true);
 		System.out.println("Size: " + (textFile.length() / 1024) + "kb");
-		assertTrue(getTextFileContent(textFile).equals(getTextFileContent(new File(fid.getFullTmpFilePath()))));
+		assertTrue(TestHelper.getTextFileContent(textFile).equals(TestHelper.getTextFileContent(new File(fid.getFullTmpFilePath()))));
 		FileOperator.umountFileSystem();
 
 	}
@@ -107,11 +102,15 @@ public class FileOperatorTest
 		System.out.println(this.getClass().getSimpleName()+": " + name.getMethodName());
 		int id = 1234;
 		int contId = 9999;
+		String deleteDir = TestHelper.getTestDir()+InfoHelper.getDirLimiter()+"dirToDelete";
 		System.out.println(Constants.CONSOLE_LIMITER);
 		System.out.println("Deleting the text file");
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), testDir.getAbsolutePath());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), deleteDir);
 		fie.getContainerInfo().setContainerID(contId);
+		// Create the directories
+		DirectoryOperator.checkIfDirectoryExists(fie.getContainerInfo().getParentContainerPath());
+		
 		// Adding File
 		try
 		{
@@ -124,7 +123,7 @@ public class FileOperatorTest
 		assertTrue(FileOperator.isFileInContainer(fie));
 
 		// Create FileInfo to delete
-		FileInfo fi = new FileInfo(id, new ContainerInfo(contId, testDir.getAbsolutePath()));
+		FileInfo fi = new FileInfo(id, new ContainerInfo(contId, deleteDir));
 		try
 		{
 			FileOperator.deleteFile(fi);
@@ -147,9 +146,9 @@ public class FileOperatorTest
 		System.out.println("Moving the text file");
 		// Create two share directories
 		// create DIR
-		File shareDir1 = new File(testDir, "share1");
+		File shareDir1 = new File(TestHelper.getTestDir(), "share1");
 		shareDir1.mkdir();
-		File shareDir2 = new File(testDir, "share2");
+		File shareDir2 = new File(TestHelper.getTestDir(), "share2");
 		shareDir2.mkdir();
 		
 		// Create FileInfo for adding to share1
@@ -185,62 +184,18 @@ public class FileOperatorTest
 	}
 
 	@Before
-	public void befor() {
+	public void befor()
+	{
+		// create DIR
+		TestHelper.setupTestDir();
 		// create a new textfile
-		try
-		{
-			// create DIR
-			testDir = new File(workingDir, "tmpTest");
-			testDir.mkdir();
-			// create Test File
-			textFile = new File(testDir.getAbsolutePath(), filenameTextFile);
-			BufferedWriter writer = new BufferedWriter(new FileWriter(textFile));
-			writer.write(contentTextFile);
-
-			// close writer
-			writer.close();
-		} catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		textFile = TestHelper.createTextFile(filenameTextFile, contentTextFile);
 	}
 
 	@After
-	public void after() {
-		try
-		{
-			TFile.rm_r(new TFile(testDir.getAbsolutePath()));
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	private String getTextFileContent(File file) {
-		String thisLine;
-		StringBuilder sb = null;
-		try
-		{
-			FileInputStream fin = new FileInputStream(file);
-			BufferedReader myInput = new BufferedReader(new InputStreamReader(fin));
-			sb = new StringBuilder();
-			while ((thisLine = myInput.readLine()) != null)
-			{
-				sb.append(thisLine);
-			}
-			myInput.close();
-		} catch (FileNotFoundException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return sb.toString();
+	public void after()
+	{
+		TestHelper.cleanTestDir();
 	}
 
 }

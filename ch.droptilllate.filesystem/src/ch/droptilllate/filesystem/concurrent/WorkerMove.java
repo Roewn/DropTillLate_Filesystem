@@ -3,7 +3,7 @@
  */
 package ch.droptilllate.filesystem.concurrent;
 
-import ch.droptilllate.filesystem.info.FileInfoDecrypt;
+import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.info.InfoHelper;
 import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.FileOperator;
@@ -12,11 +12,11 @@ import ch.droptilllate.filesystem.io.FileOperator;
  * @author Roewn
  *
  */
-public class WorkerDecrypt implements Runnable
+public class WorkerMove implements Runnable
 {
-	private FileInfoDecrypt fileInfo;
+	private FileInfoMove fileInfo;
 
-    public WorkerDecrypt(FileInfoDecrypt fileInfo){
+    public WorkerMove(FileInfoMove fileInfo){
         this.fileInfo= fileInfo;
     }
 
@@ -25,7 +25,7 @@ public class WorkerDecrypt implements Runnable
         System.out.println("Thread started: " +Thread.currentThread().getName() + " -> File: " + fileInfo.getContainerInfo().getFullContainerPath()+InfoHelper.getDirLimiter()+fileInfo.getFileID());
         try
 		{
-			FileOperator.extractFile(fileInfo);
+			FileOperator.moveFile(fileInfo);
 		} catch (FileException e)
 		{
 			System.err.println(e.getError());

@@ -14,15 +14,16 @@ import org.junit.rules.TestName;
 import ch.droptilllate.filesystem.api.FileError;
 import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.helper.TestHelper;
+import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
+import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.FileOperator;
 import ch.droptilllate.filesystem.security.KeyManager;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
 
-public class WorkerEncryptTest
+public class WorkerDeleteTest
 {
-
 	private File textFile;
 	private String filenameTextFile = "test.txt";
 	private String contentTextFile = "This is a test File";
@@ -33,7 +34,7 @@ public class WorkerEncryptTest
 	/**
 	 * Constructor
 	 */
-	public WorkerEncryptTest()
+	public WorkerDeleteTest()
 	{
 		// initalize the config
 		TConfig config = TConfig.get();
@@ -53,7 +54,19 @@ public class WorkerEncryptTest
 		// Create FileInfo
 		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
 		fie.getContainerInfo().setContainerID(contId);
-		Thread thread = new Thread(new WorkerEncrypt(fie));
+		// Add the text file
+		try
+		{
+			FileOperator.addFile(fie);
+		} catch (FileException e1)
+		{
+			e1.printStackTrace();
+		}
+		FileOperator.umountFileSystem();
+
+		// delete the file
+		FileInfo fi = new FileInfo(id, fie.getContainerInfo());
+		Thread thread = new Thread(new WorkerDelete(fi));
 		thread.start();
 		try
 		{
@@ -62,8 +75,9 @@ public class WorkerEncryptTest
 		{
 			e.printStackTrace();
 		}
-		assertTrue(FileOperator.isFileInContainer(fie));
+
 		FileOperator.umountFileSystem();
+		assertFalse(FileOperator.isFileInContainer(fie));
 	}
 
 	@Test
@@ -74,23 +88,33 @@ public class WorkerEncryptTest
 
 		int id = 1234;
 		int contId = 9999;
-		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath() + "bla", TestHelper.getTestDir());
-		fie.getContainerInfo().setContainerID(contId);
-		Thread thread = new Thread(new WorkerEncrypt(fie));
-		thread.start();
 
+		// Create FileInfo
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		fie.getContainerInfo().setContainerID(contId);
+		// Add the text file
+		try
+		{
+			FileOperator.addFile(fie);
+		} catch (FileException e1)
+		{
+			e1.printStackTrace();
+		}
+		FileOperator.umountFileSystem();
+
+		// delete the file
+		FileInfo fi = new FileInfo(id+1, fie.getContainerInfo());
+		Thread thread = new Thread(new WorkerDelete(fi));
+		thread.start();
 		try
 		{
 			thread.join();
-		}
-
-		catch (InterruptedException e)
+		} catch (InterruptedException e)
 		{
 			e.printStackTrace();
 		}
-		assertFalse(FileOperator.isFileInContainer(fie));
-		assertTrue(fie.getError() == FileError.SRC_FILE_NOT_FOUND);
+
+		assertTrue(fi.getError() == FileError.SRC_FILE_NOT_FOUND);
 		FileOperator.umountFileSystem();
 
 	}

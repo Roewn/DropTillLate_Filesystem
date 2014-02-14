@@ -4,17 +4,14 @@
 package ch.droptilllate.filesystem.api;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import ch.droptilllate.filesystem.commons.Constants;
-import ch.droptilllate.filesystem.commons.Timer;
-import ch.droptilllate.filesystem.concurrent.WorkerEncrypt;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.io.ContainerManager;
+import ch.droptilllate.filesystem.io.ContainerOperator;
 import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.FileOperator;
 import ch.droptilllate.filesystem.security.KeyManager;
@@ -22,6 +19,7 @@ import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
 
 /**
+ *  This class extends the IFileSystem interface and operates on the filesystem (no multithreading).
  * @author Roewn
  * 
  */
@@ -132,7 +130,8 @@ public class FileSystemHandler implements IFileSystem
 			}
 		}
 		FileOperator.umountFileSystem();
-
+		// Remove all empty containers from the fileSystem
+		ContainerOperator.removeEmptyContainers(fileInfoList);
 		// Initialise the summary
 		FileHandlingSummary fileHandSummary = new FileHandlingSummary(fileInfoList);
 		return fileHandSummary;

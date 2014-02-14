@@ -28,29 +28,32 @@ public class FileOperator
 	 */
 	public static void addFile(FileInfoEncrypt fileInfo) throws FileException
 	{
-		// TODO Trow error if file not exists
-		TFile src = new TFile(fileInfo.getFullPlainFilePath());
-		checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND);
-
-		TFile dst = new TFile(fileInfo.getContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()));
-
-		// check if it is a File and not an directory
-		if (src.isDirectory())
+		try
 		{
-			throw new FileException(FileError.SRC_FILE_IS_A_DIR, src.getAbsolutePath());
-		} else
-		{
-			try
+			TFile src = new TFile(fileInfo.getFullPlainFilePath());
+			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND);
+
+			TFile dst = new TFile(fileInfo.getContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()));
+
+			// check if it is a File and not an directory
+			if (src.isDirectory())
 			{
+				throw new FileException(FileError.SRC_FILE_IS_A_DIR, src.getAbsolutePath());
+			} else
+			{
+
 				src.cp(dst);
 
-			} catch (IOException e)
-			{
-				throw new FileException(FileError.IO_EXCEPTION, e.getMessage());
-			} catch (Exception e)
-			{
-				throw new FileException(FileError.UNKNOWN, e.getMessage());
 			}
+		} catch (IOException e)
+		{
+			throw new FileException(FileError.IO_EXCEPTION, e.getMessage());
+		} catch (FileException e)
+		{
+			throw e;
+		} catch (Exception e)
+		{
+			throw new FileException(FileError.UNKNOWN, e.getMessage());
 		}
 	}
 
@@ -68,9 +71,8 @@ public class FileOperator
 			TFile src = new TFile(fileInfo.getContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()));
 			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND);
 
+			DirectoryOperator.checkIfDirectoryExists(fileInfo.getTempDirPath());
 			TFile dst = new TFile(fileInfo.getTempDirPath(), fileInfo.getFileID() + Constants.EXT_LIMITER + fileInfo.getFileExtension());
-
-			// TODO check why the path is wrong on a mac (maybe because of the \)
 
 			src.cp(dst);
 			checkIfFileExists(dst, FileError.EXTRACTED_FILE_NOT_FOUND);
@@ -78,6 +80,9 @@ public class FileOperator
 		} catch (IOException e)
 		{
 			throw new FileException(FileError.IO_EXCEPTION, e.getMessage());
+		} catch (FileException e)
+		{
+			throw e;
 		} catch (Exception e)
 		{
 			throw new FileException(FileError.UNKNOWN, e.getMessage());
@@ -92,17 +97,21 @@ public class FileOperator
 	 */
 	public static void deleteFile(FileInfo fileInfo) throws FileException
 	{
-		// TODO check why the path is wrong on a mac (maybe because of the \)
 		// TODO delete dir if it contains no more containers
 		try
 		{
 			TFile src = new TFile(fileInfo.getContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()));
+			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND);
 			ContainerOperator.checkForEmptyContainer(fileInfo.getContainerInfo());
+
 			src.rm();
 
 		} catch (IOException e)
 		{
 			throw new FileException(FileError.IO_EXCEPTION, e.getMessage());
+		} catch (FileException e)
+		{
+			throw e;
 		} catch (Exception e)
 		{
 			throw new FileException(FileError.UNKNOWN, e.getMessage());
@@ -119,16 +128,21 @@ public class FileOperator
 	{
 		try
 		{
-			// TODO check why the path is wrong on a mac (maybe because of the \)
+			// TODO Check if the whole container can be moved instead of reencrypt the files (Performance check!)
 			TFile src = new TFile(fileInfo.getSrcContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()));
 			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND);
 
+			DirectoryOperator.checkIfDirectoryExists(fileInfo.getDestContainerInfo().getParentContainerPath());
 			TFile dst = new TFile(fileInfo.getDestContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()));
 
 			src.mv(dst);
+
 		} catch (IOException e)
 		{
 			throw new FileException(FileError.IO_EXCEPTION, e.getMessage());
+		} catch (FileException e)
+		{
+			throw e;
 		} catch (Exception e)
 		{
 			throw new FileException(FileError.UNKNOWN, e.getMessage());

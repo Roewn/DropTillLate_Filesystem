@@ -154,4 +154,13 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 		return getFullContainerPath() + ", Size: " + Long.toString(estimatedContainerSize / 1024) + "KB";
 	}
 	
+	 @Override
+	   public int hashCode(){
+	       int result = 0;
+	       result = 31*result + this.containerID;
+	       result = 31*result + (this.containerPath !=null ? this.containerPath.hashCode() : 0);
+	      
+	       return result;
+	   }
+	
 }

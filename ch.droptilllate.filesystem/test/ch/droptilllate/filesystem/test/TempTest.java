@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.droptilllate.filesystem.api.FileHandlingSummary;
-import ch.droptilllate.filesystem.api.FileSystemHandler;
 import ch.droptilllate.filesystem.api.FileSystemHandlerConcurrent;
 import ch.droptilllate.filesystem.api.IFileSystem;
 import ch.droptilllate.filesystem.commons.Constants;
@@ -132,7 +131,6 @@ public class TempTest
 				input.readLine();
 			} catch (IOException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

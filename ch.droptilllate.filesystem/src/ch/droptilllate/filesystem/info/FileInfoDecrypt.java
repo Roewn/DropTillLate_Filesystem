@@ -3,6 +3,8 @@
  */
 package ch.droptilllate.filesystem.info;
 
+import ch.droptilllate.filesystem.commons.Constants;
+
 
 /**
  * @author Roewn
@@ -62,6 +64,15 @@ public class FileInfoDecrypt extends FileInfo
 	 */
 	public String getFullTmpFilePath() {
 		return InfoHelper.createFullPath(this.tempDirPath, Integer.toString(super.getFileID()), this.fileExtension);
+	}
+	
+	/**
+	 * Returns the filename including the extension (without path)
+	 * Example: "3425.txt"
+	 * @return
+	 */
+	public String getFullFileName() {
+		return super.getFileID() + Constants.EXT_LIMITER + this.fileExtension;
 	}
 
 }

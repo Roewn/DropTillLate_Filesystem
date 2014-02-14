@@ -120,6 +120,27 @@ public class FileInfo implements Comparable<FileInfo>
 	public void setSize(long size) {
 		this.size = size;
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other == null)
+		{
+			return false;
+		}
+		
+		if (!(other instanceof FileInfo))
+		{
+			return false;
+		}
+
+		if (this.fileID != ((FileInfo) other).fileID)
+		{
+			return false;
+		}
+
+		// TODO if necessary check for more equals values
+		return true;
+	}
 
 	@Override
 	public int compareTo(FileInfo o) {

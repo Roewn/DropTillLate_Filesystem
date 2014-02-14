@@ -6,7 +6,9 @@ package ch.droptilllate.filesystem.io;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ch.droptilllate.filesystem.api.FileError;
 import ch.droptilllate.filesystem.commons.Constants;
@@ -20,8 +22,40 @@ import de.schlichtherle.truezip.file.TFile;
  */
 public class ContainerOperator
 {
+
+	/**
+	 * Removes all empty containers from the filesystem.
+	 * 
+	 * @param fileInfoList List of the deleted Fileinfos which contain the containers to check
+	 */
+	public synchronized static void removeEmptyContainers(List<FileInfo> fileInfoList)
+	{
+		Set<ContainerInfo> contSet = new HashSet<ContainerInfo>();
+		// get all containerInfos to check
+		for (FileInfo fi : fileInfoList)
+		{
+			if (fi.getError() == FileError.NONE)
+			{
+				contSet.add(fi.getContainerInfo());
+			}
+		}
+		// remove empty containers
+		for (ContainerInfo contInfo : contSet)
+		{
+			try
+			{
+				checkForEmptyContainer(contInfo);
+			} catch (FileException e)
+			{
+				System.err.println("Could not delete empty container: " + contInfo);
+			}
+		}
+
+	}
+
 	/**
 	 * Checks if the Container is empty, if this is the case it will be removed.
+	 * 
 	 * @param containerInfo Info of the container to check
 	 * @throws FileException Throw when container is corrupt.
 	 */
@@ -34,7 +68,7 @@ public class ContainerOperator
 			// .. delete the container
 			deleteContainer(containerInfo);
 			System.out.println(Constants.CONSOLE_LIMITER);
-			System.out.println("Empty Container deleted: "+ containerInfo.getFullContainerPath());
+			System.out.println("Empty Container deleted: " + containerInfo.getFullContainerPath());
 		}
 	}
 
@@ -71,14 +105,17 @@ public class ContainerOperator
 		ArrayList<FileInfo> fileInfoList = new ArrayList<FileInfo>();
 		try
 		{
-			for (TFile file : fileList)
+			if (fileList != null)
 			{
-				// TODO add error handling
-				fileInfoList.add(new FileInfo(Integer.parseInt(file.getName())));
+				for (TFile file : fileList)
+				{
+					// TODO add error handling
+					fileInfoList.add(new FileInfo(Integer.parseInt(file.getName())));
+				}
 			}
 		} catch (Exception e)
 		{
-			return null;
+			e.printStackTrace();
 		}
 		return fileInfoList;
 	}

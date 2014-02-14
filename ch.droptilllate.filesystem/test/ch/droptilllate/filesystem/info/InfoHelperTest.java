@@ -1,4 +1,4 @@
-package ch.droptilllate.filesystem.commons;
+package ch.droptilllate.filesystem.info;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,7 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
-import ch.droptilllate.filesystem.info.InfoHelper;
+import ch.droptilllate.filesystem.commons.Constants;
 
 public class InfoHelperTest
 {

@@ -16,6 +16,7 @@ public class FileInfoMove extends FileInfo
 	 * Constructor for moving an existing file from a container to a new share relation.
 	 * The target container info does just pass the path of the share relation, the container id will be assigned by the Container Manager.
 	 * @param fileID Unique id of the File
+	 * @param fileSize Size of the file to move
 	 * @param srcParentContainerPath Path to the directory (directory of the share relation) which holds the container of the encrypted source file.
 	 * @param srcContainerID Id of the container which contains the source file. 
 	 * @param destShareRelationPath Path to the directory (directory of the share relation) where the file has to be moved in a new container.

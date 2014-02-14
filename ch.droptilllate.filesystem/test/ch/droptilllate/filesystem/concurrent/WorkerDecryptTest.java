@@ -1,6 +1,5 @@
 package ch.droptilllate.filesystem.concurrent;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -14,13 +13,15 @@ import org.junit.rules.TestName;
 import ch.droptilllate.filesystem.api.FileError;
 import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.helper.TestHelper;
+import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
+import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.FileOperator;
 import ch.droptilllate.filesystem.security.KeyManager;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
 
-public class WorkerEncryptTest
+public class WorkerDecryptTest
 {
 
 	private File textFile;
@@ -33,7 +34,7 @@ public class WorkerEncryptTest
 	/**
 	 * Constructor
 	 */
-	public WorkerEncryptTest()
+	public WorkerDecryptTest()
 	{
 		// initalize the config
 		TConfig config = TConfig.get();
@@ -53,7 +54,19 @@ public class WorkerEncryptTest
 		// Create FileInfo
 		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
 		fie.getContainerInfo().setContainerID(contId);
-		Thread thread = new Thread(new WorkerEncrypt(fie));
+		// Add the text file
+		try
+		{
+			FileOperator.addFile(fie);
+		} catch (FileException e1)
+		{
+			e1.printStackTrace();
+		}
+		FileOperator.umountFileSystem();
+
+		// Extract the file
+		FileInfoDecrypt fid = new FileInfoDecrypt(id, "txt", TestHelper.getExtractDir(), TestHelper.getTestDir(), contId);
+		Thread thread = new Thread(new WorkerDecrypt(fid));
 		thread.start();
 		try
 		{
@@ -62,7 +75,7 @@ public class WorkerEncryptTest
 		{
 			e.printStackTrace();
 		}
-		assertTrue(FileOperator.isFileInContainer(fie));
+		assertTrue(TestHelper.getTextFileContent(textFile).equals(TestHelper.getTextFileContent(new File(fid.getFullTmpFilePath()))));
 		FileOperator.umountFileSystem();
 	}
 
@@ -74,23 +87,33 @@ public class WorkerEncryptTest
 
 		int id = 1234;
 		int contId = 9999;
-		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath() + "bla", TestHelper.getTestDir());
-		fie.getContainerInfo().setContainerID(contId);
-		Thread thread = new Thread(new WorkerEncrypt(fie));
-		thread.start();
 
+		// Create FileInfo
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		fie.getContainerInfo().setContainerID(contId);
+		// Add the text file
+		try
+		{
+			FileOperator.addFile(fie);
+		} catch (FileException e1)
+		{
+			e1.printStackTrace();
+		}
+		FileOperator.umountFileSystem();
+
+		// Extract the file
+		FileInfoDecrypt fid = new FileInfoDecrypt(id+1, "txt", TestHelper.getExtractDir(), TestHelper.getTestDir(), contId);
+		Thread thread = new Thread(new WorkerDecrypt(fid));
+		thread.start();
 		try
 		{
 			thread.join();
-		}
-
-		catch (InterruptedException e)
+		} catch (InterruptedException e)
 		{
 			e.printStackTrace();
 		}
-		assertFalse(FileOperator.isFileInContainer(fie));
-		assertTrue(fie.getError() == FileError.SRC_FILE_NOT_FOUND);
+		
+		assertTrue(fid.getError() == FileError.SRC_FILE_NOT_FOUND);
 		FileOperator.umountFileSystem();
 
 	}

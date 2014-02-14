@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.rules.TestName;
 
 import ch.droptilllate.filesystem.commons.Constants;
+import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.security.KeyManager;
 import de.schlichtherle.truezip.file.TArchiveDetector;
@@ -28,9 +29,6 @@ import de.schlichtherle.truezip.file.TFile;
 public class ContainerManagerTest
 {
 	private ContainerManager containerManager;
-	private static String workingDir = System.getProperty("user.dir");
-
-	private static File testDir;
 
 	private File textFile;
 	private File textFileBigger;
@@ -57,7 +55,7 @@ public class ContainerManagerTest
 		System.out.println(this.getClass().getSimpleName()+": " + name.getMethodName());
 		int id = 2222;
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), testDir.getAbsolutePath());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
 		
 		List<FileInfoEncrypt> fileInfoList = new ArrayList<FileInfoEncrypt>();
 		fileInfoList.add(fie);
@@ -80,7 +78,7 @@ public class ContainerManagerTest
 		int id = 2222;
 		int contId = 9999;
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), testDir.getAbsolutePath());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
 		fie.getContainerInfo().setContainerID(contId);
 		
 		List<FileInfoEncrypt> fileInfoList = new ArrayList<FileInfoEncrypt>();
@@ -105,9 +103,9 @@ public class ContainerManagerTest
 		int id2 = 1002;
 		int id3 = 2000;
 		// Create FileInfo
-		FileInfoEncrypt textFileInfo1 = new FileInfoEncrypt(id1, textFile.getAbsolutePath(), testDir.getAbsolutePath());
-		FileInfoEncrypt textFileInfo2 = new FileInfoEncrypt(id2, textFile.getAbsolutePath(), testDir.getAbsolutePath());
-		FileInfoEncrypt textFileInfoBigger = new FileInfoEncrypt(id3, textFileBigger.getAbsolutePath(), testDir.getAbsolutePath());
+		FileInfoEncrypt textFileInfo1 = new FileInfoEncrypt(id1, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt textFileInfo2 = new FileInfoEncrypt(id2, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt textFileInfoBigger = new FileInfoEncrypt(id3, textFileBigger.getAbsolutePath(), TestHelper.getTestDir());
 		
 
 		// create FileInfoList
@@ -141,47 +139,18 @@ public class ContainerManagerTest
 	
 	@Before
 	public void befor() {
-		try
-		{
+		
 			// create DIR
-			testDir = new File(workingDir, "tmpTest");
-			testDir.mkdir();
-			// create textfile
-			textFile = new File(testDir.getAbsolutePath(), filenameTextFile);
-			// write content
-			BufferedWriter writer1 = new BufferedWriter(new FileWriter(textFile));
-			writer1.write(contentTextFile);
-			// close writer
-			writer1.close();
-
+			TestHelper.setupTestDir();
+			// create a new textfile
+			textFile = TestHelper.createTextFile(filenameTextFile, contentTextFile);	
 			// create Bigger textfile
-			textFileBigger = new File(testDir.getAbsolutePath(), filenameTextFileBigger);
-			// write content
-			PrintWriter writer2 = new PrintWriter(new FileWriter(textFileBigger));
-			for (int i = 0; i < 100; i++)
-			{
-				writer2.println(contentTextFile);
-				writer2.flush();
-			}
-			// close writer
-			writer2.close();
-		} catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			textFileBigger = TestHelper.createTextFile(filenameTextFileBigger, contentTextFile, 100);			
 	}
 
 	@After
 	public void after() {
-		try
-		{
-			TFile.rm_r(new TFile(testDir.getAbsolutePath()));
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		TestHelper.cleanTestDir();
 	}
 
 }
