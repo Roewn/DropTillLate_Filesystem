@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.After;
@@ -21,8 +22,13 @@ import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
-import ch.droptilllate.filesystem.io.DirectoryOperator;
-import ch.droptilllate.filesystem.io.FileOperator;
+import ch.droptilllate.filesystem.io.IFile;
+import ch.droptilllate.filesystem.io.IShareRelation;
+import ch.droptilllate.filesystem.io.ShareRelationHandler;
+import ch.droptilllate.filesystem.security.KeyRelation;
+import ch.droptilllate.filesystem.truezip.FileHandler;
+import ch.droptilllate.filesystem.truezip.KeyManager;
+import de.schlichtherle.truezip.file.TConfig;
 
 public class FileSystemHandlerTest
 {
@@ -30,7 +36,13 @@ public class FileSystemHandlerTest
 	@Rule
 	public TestName name = new TestName();
 
-	FileSystemHandler fsh = null;
+	private FileSystemHandler fsh = null;
+	private KeyRelation kr1 = null;
+
+	private IFile iFile = new FileHandler();
+	private IShareRelation iShareRelation = new ShareRelationHandler();
+
+	// TODO Add testcase for different src and dest keys for moving files
 
 	public FileSystemHandlerTest()
 	{
@@ -62,10 +74,10 @@ public class FileSystemHandlerTest
 		// ******************************************************************
 		// encrypt all files
 		Timer.start();
-		FileHandlingSummary fhs = fsh.encryptFiles(fieList);
+		FileHandlingSummary fhs = fsh.encryptFiles(fieList, kr1);
 		Timer.stop(true);
 		// list the files
-		FileOperator.listFileAssignment(fieList);
+		iFile.listFileAssignment(fieList);
 		// test if the Summary
 		for (FileInfoEncrypt fie : fieList)
 		{
@@ -96,7 +108,7 @@ public class FileSystemHandlerTest
 			id++;
 		}
 		// encrypt all files
-		fsh.encryptFiles(fieList);
+		fsh.encryptFiles(fieList, kr1);
 
 		// create FileInfos Decrypt
 		ArrayList<FileInfoDecrypt> fidList = new ArrayList<FileInfoDecrypt>();
@@ -109,7 +121,7 @@ public class FileSystemHandlerTest
 		// ******************************************************************
 		// decrypt all Files
 		Timer.start();
-		FileHandlingSummary fhs = fsh.decryptFiles(fidList);
+		FileHandlingSummary fhs = fsh.decryptFiles(fidList, kr1);
 		Timer.stop(true);
 		// test if the Summary
 		for (FileInfoDecrypt fid : fidList)
@@ -148,7 +160,7 @@ public class FileSystemHandlerTest
 			id++;
 		}
 		// encrypt all files
-		fsh.encryptFiles(fieList);
+		fsh.encryptFiles(fieList, kr1);
 
 		// create FileInfos Delete
 		ArrayList<FileInfo> fiList = new ArrayList<FileInfo>();
@@ -160,7 +172,7 @@ public class FileSystemHandlerTest
 		// ******************************************************************
 		// delete all Files
 		Timer.start();
-		FileHandlingSummary fhs = fsh.deleteFiles(fiList);
+		FileHandlingSummary fhs = fsh.deleteFiles(fiList, kr1);
 		Timer.stop(true);
 		// test if the Summary is correct and the empty container got deleted
 		for (FileInfo fi : fiList)
@@ -182,7 +194,7 @@ public class FileSystemHandlerTest
 		System.out.println(Constants.TESTCASE_LIMITER);
 		System.out.println(this.getClass().getSimpleName() + ": " + name.getMethodName());
 		System.out.println(count + " Files a " + size + " MB");
-		
+
 		// Create share directory
 		File shareDir = new File(TestHelper.getTestDir(), "share");
 		shareDir.mkdir();
@@ -198,35 +210,46 @@ public class FileSystemHandlerTest
 			id++;
 		}
 		// encrypt all files
-		fsh.encryptFiles(fieList);
+		fsh.encryptFiles(fieList, kr1);
 
 		// create FileInfos Move
 		ArrayList<FileInfoMove> fimList = new ArrayList<FileInfoMove>();
 		for (FileInfoEncrypt fie : fieList)
 		{
-			fimList.add(new FileInfoMove(fie.getFileID(), fie.getSize(), fie.getContainerInfo().getParentContainerPath(), fie.getContainerInfo().getContainerID(), shareDir.getAbsolutePath()));
+			fimList.add(new FileInfoMove(fie.getFileID(), fie.getSize(), fie.getContainerInfo().getParentContainerPath(), fie
+					.getContainerInfo().getContainerID(), shareDir.getAbsolutePath()));
 		}
 
 		// ******************************************************************
 		// move Files
 		Timer.start();
-		FileHandlingSummary fhs = fsh.moveFiles(fimList);
+		FileHandlingSummary fhs = fsh.moveFiles(fimList, kr1);
 		Timer.stop(true);
-		
+
+		// pass for the share relation
+		KeyRelation krS = new KeyRelation();
+		krS.addKeyOfShareRelation(shareDir.getAbsolutePath(), Constants.TEST_PASSWORD_1);
 		// get all files in the share directory
-		List<FileInfo> fiShareList = DirectoryOperator.getAllEncryptedFilesInDir(shareDir.getAbsolutePath());
-		// test if the Summary is ok and  all files are in the shared directory
+		HashMap<String, List<FileInfo>> resultMap = fsh.getFilesPerRelation(krS);
+		
+		List<FileInfo> fiShareList = resultMap.get(shareDir.getAbsolutePath());
+
+		// test if the Summary is ok and all files are in the shared directory
 		for (FileInfoMove fim : fimList)
 		{
 			assertTrue(fhs.getFileInfoSuccessList().contains(fim));
 			assertTrue(fiShareList.contains(fim));
 		}
+
 	}
 
 	@Before
 	public void befor()
 	{
 		TestHelper.setupTestDir();
+		// create key relation
+		kr1 = new KeyRelation();
+		kr1.addKeyOfShareRelation(TestHelper.getTestDir(), Constants.TEST_PASSWORD_1);
 	}
 
 	@After

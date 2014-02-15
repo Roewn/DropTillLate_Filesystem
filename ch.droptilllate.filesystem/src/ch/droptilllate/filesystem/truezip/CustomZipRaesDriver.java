@@ -1,4 +1,4 @@
-package ch.droptilllate.filesystem.security;
+package ch.droptilllate.filesystem.truezip;
 
 import java.util.zip.Deflater;
 

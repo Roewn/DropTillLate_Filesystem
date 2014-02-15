@@ -25,7 +25,7 @@ public class InfoHelper
 	 * @param fileExtension Extension of the file
 	 * @return Full file path (Example: "C:\\Temp\\3425.txt")
 	 */
-	public static String createFullPath(String path, String fileName, String fileExtension) {
+	public synchronized static String createFullPath(String path, String fileName, String fileExtension) {
 		return path +dirLimiter+ fileName + Constants.EXT_LIMITER + fileExtension;
 	}
 	
@@ -34,7 +34,7 @@ public class InfoHelper
 	 * @param path path of a directory
 	 * @return path to the directory without endings limiters
 	 */
-	public static String checkPath(String path) {
+	public synchronized static String checkPath(String path) {
 		if ((path.lastIndexOf(dirLimiter) + 1) == path.length()) {
 			return path.substring(0, path.lastIndexOf(dirLimiter));
 		} else {
@@ -47,7 +47,7 @@ public class InfoHelper
 	 * @param ext extension of the file (Example .txt)
 	 * @return Extension without the leading dot (Example: txt)
 	 */
-	public static String checkFileExt(String ext) {
+	public synchronized static String checkFileExt(String ext) {
 		if (ext.contains(Constants.EXT_LIMITER)) {
 			return ext.substring(ext.lastIndexOf(Constants.EXT_LIMITER)+1, ext.length());
 		} else {
@@ -58,14 +58,14 @@ public class InfoHelper
 	/**
 	 * @return the dirLimiter
 	 */
-	public static String getDirLimiter() {
+	public synchronized static String getDirLimiter() {
 		return dirLimiter;
 	}
 
 	/**
 	 * @return the offset
 	 */
-	public static int getOffset() {
+	public synchronized static int getOffset() {
 		return offset;
 	}
 

@@ -27,14 +27,14 @@ public class FileInfoEncrypt extends FileInfo
 	/**
 	 * @return the fullPlainFilePath
 	 */
-	public String getFullPlainFilePath() {
+	public synchronized String getFullPlainFilePath() {
 		return fullPlainFilePath;
 	}
 
 	/**
 	 * @param fullPlainFilePath the fullPlainFilePath to set
 	 */
-	public void setFullPlainFilePath(String fullPlainFilePath) {
+	public synchronized void setFullPlainFilePath(String fullPlainFilePath) {
 		this.fullPlainFilePath = fullPlainFilePath;
 	}	
 

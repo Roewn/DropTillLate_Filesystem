@@ -39,14 +39,14 @@ public class FileInfo implements Comparable<FileInfo>
 	/**
 	 * @return the fileID -> Unique id of the File
 	 */
-	public int getFileID() {
+	public synchronized int getFileID() {
 		return fileID;
 	}
 
 	/**
 	 * @param fileID the unique id of the File to set
 	 */
-	public void setFileID(int fileID) {
+	public synchronized void setFileID(int fileID) {
 		this.fileID = fileID;
 	}
 
@@ -54,7 +54,7 @@ public class FileInfo implements Comparable<FileInfo>
 	 * @return the containerInfo -> Encrypt: Target container for file encryption. Decrypt: Source container of encrypted file. Move: New
 	 *         target container for file encryption.
 	 */
-	public ContainerInfo getContainerInfo() {
+	public synchronized ContainerInfo getContainerInfo() {
 		return containerInfo;
 	}
 
@@ -62,7 +62,7 @@ public class FileInfo implements Comparable<FileInfo>
 	 * @param containerInfo the containerInfo to set Encrypt: Target container for file encryption. Decrypt: Source container of encrypted
 	 *            file. Move: New target container for file encryption.
 	 */
-	public void setContainerInfo(ContainerInfo containerInfo) {
+	public synchronized void setContainerInfo(ContainerInfo containerInfo) {
 		this.containerInfo = containerInfo;
 	}
 
@@ -70,39 +70,39 @@ public class FileInfo implements Comparable<FileInfo>
 	/**
 	 * @return the timeStamp
 	 */
-	public long getTimeStamp() {
+	public synchronized long getTimeStamp() {
 		return timeStamp;
 	}
 
 	/**
 	 * @param timeStamp the timeStamp to set
 	 */
-	public void setTimeStamp(long timeStamp) {
+	public synchronized void setTimeStamp(long timeStamp) {
 		this.timeStamp = timeStamp;
 	}
 
 	/**
 	 * @return the error
 	 */
-	public FileError getError() {
+	public synchronized FileError getError() {
 		return error;
 	}
 	
-	public String getErrorMessage() {
+	public synchronized String getErrorMessage() {
 		return error.getMessage();
 	}
 
 	/**
 	 * @param error the error to set
 	 */
-	public void setError(FileError error) {
+	public synchronized void setError(FileError error) {
 		this.error = error;
 	}
 	
 	/**
 	 * @param error the error to set
 	 */
-	public void setError(FileError error, String msg) {
+	public synchronized void setError(FileError error, String msg) {
 		this.error = error;
 		error.setMessage(msg);
 	}
@@ -110,19 +110,19 @@ public class FileInfo implements Comparable<FileInfo>
 	/**
 	 * @return the size in bytes
 	 */
-	public long getSize() {
+	public synchronized long getSize() {
 		return size;
 	}
 
 	/**
 	 * @param size the size to set in bytes
 	 */
-	public void setSize(long size) {
+	public synchronized void setSize(long size) {
 		this.size = size;
 	}
 	
 	@Override
-	public boolean equals(Object other) {
+	public synchronized boolean equals(Object other) {
 		if (other == null)
 		{
 			return false;
@@ -143,7 +143,7 @@ public class FileInfo implements Comparable<FileInfo>
 	}
 
 	@Override
-	public int compareTo(FileInfo o) {
+	public synchronized int compareTo(FileInfo o) {
 		if (this.size > o.size)
 		{
 			return 1;

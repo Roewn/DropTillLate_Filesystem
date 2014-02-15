@@ -6,7 +6,8 @@ package ch.droptilllate.filesystem.concurrent;
 import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.info.InfoHelper;
 import ch.droptilllate.filesystem.io.FileException;
-import ch.droptilllate.filesystem.io.FileOperator;
+import ch.droptilllate.filesystem.io.IFile;
+import ch.droptilllate.filesystem.truezip.FileHandler;
 
 /**
  * @author Roewn
@@ -14,10 +15,13 @@ import ch.droptilllate.filesystem.io.FileOperator;
  */
 public class WorkerMove implements Runnable
 {
+	private IFile iFile = new FileHandler();
 	private FileInfoMove fileInfo;
+	private String key;
 
-    public WorkerMove(FileInfoMove fileInfo){
+    public WorkerMove(FileInfoMove fileInfo, String key){
         this.fileInfo= fileInfo;
+        this.key = key;
     }
 
     @Override
@@ -25,13 +29,11 @@ public class WorkerMove implements Runnable
         System.out.println("Thread started: " +Thread.currentThread().getName() + " -> File: " + fileInfo.getContainerInfo().getFullContainerPath()+InfoHelper.getDirLimiter()+fileInfo.getFileID());
         try
 		{
-			FileOperator.moveFile(fileInfo);
+			iFile.moveFile(fileInfo, key);
 		} catch (FileException e)
 		{
 			System.err.println(e.getError());
 			fileInfo.setError(e.getError());
 		}
     }
-
-
 }

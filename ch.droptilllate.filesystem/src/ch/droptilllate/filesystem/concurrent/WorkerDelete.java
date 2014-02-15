@@ -6,7 +6,8 @@ package ch.droptilllate.filesystem.concurrent;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.InfoHelper;
 import ch.droptilllate.filesystem.io.FileException;
-import ch.droptilllate.filesystem.io.FileOperator;
+import ch.droptilllate.filesystem.io.IFile;
+import ch.droptilllate.filesystem.truezip.FileHandler;
 
 /**
  * @author Roewn
@@ -14,10 +15,13 @@ import ch.droptilllate.filesystem.io.FileOperator;
  */
 public class WorkerDelete implements Runnable
 {
+	private IFile iFile = new FileHandler();
 	private FileInfo fileInfo;
+	private String key;
 
-    public WorkerDelete(FileInfo fileInfo){
+    public WorkerDelete(FileInfo fileInfo, String key){
         this.fileInfo= fileInfo;
+        this.key = key;
     }
 
     @Override
@@ -25,7 +29,7 @@ public class WorkerDelete implements Runnable
         System.out.println("Thread started: " +Thread.currentThread().getName() + " -> File: " + fileInfo.getContainerInfo().getFullContainerPath()+InfoHelper.getDirLimiter()+fileInfo.getFileID());
         try
 		{
-			FileOperator.deleteFile(fileInfo);
+			iFile.deleteFile(fileInfo, key);
 		} catch (FileException e)
 		{
 			System.err.println(e.getError());

@@ -17,19 +17,28 @@ import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.io.FileException;
-import ch.droptilllate.filesystem.io.FileOperator;
-import ch.droptilllate.filesystem.security.KeyManager;
+import ch.droptilllate.filesystem.io.IFile;
+import ch.droptilllate.filesystem.security.KeyRelation;
+import ch.droptilllate.filesystem.truezip.FileHandler;
+import ch.droptilllate.filesystem.truezip.KeyManager;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
 
 public class WorkerDeleteTest
 {
+	private IFile iFile = new FileHandler();
+	private KeyRelation kr1 = null;
+
 	private File textFile;
 	private String filenameTextFile = "test.txt";
 	private String contentTextFile = "This is a test File";
+	
+	private String key1 = Constants.TEST_PASSWORD_1;
 
 	@Rule
 	public TestName name = new TestName();
+	
+	// TODO Remove TConfig from constructor and encrypt files by the encrypt worker
 
 	/**
 	 * Constructor
@@ -39,7 +48,7 @@ public class WorkerDeleteTest
 		// initalize the config
 		TConfig config = TConfig.get();
 		// Configure custom application file format.
-		TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION, Constants.PASSWORD.toCharArray());
+		TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION, Constants.TEST_PASSWORD_1.toCharArray());
 		config.setArchiveDetector(tad);
 	}
 
@@ -57,16 +66,16 @@ public class WorkerDeleteTest
 		// Add the text file
 		try
 		{
-			FileOperator.addFile(fie);
+			iFile.encryptFile(fie, key1);
 		} catch (FileException e1)
 		{
 			e1.printStackTrace();
 		}
-		FileOperator.umountFileSystem();
+		iFile.umountFileSystem();
 
 		// delete the file
 		FileInfo fi = new FileInfo(id, fie.getContainerInfo());
-		Thread thread = new Thread(new WorkerDelete(fi));
+		Thread thread = new Thread(new WorkerDelete(fi, key1));
 		thread.start();
 		try
 		{
@@ -76,8 +85,8 @@ public class WorkerDeleteTest
 			e.printStackTrace();
 		}
 
-		FileOperator.umountFileSystem();
-		assertFalse(FileOperator.isFileInContainer(fie));
+		iFile.umountFileSystem();
+		assertFalse(iFile.isFileInContainer(fie));
 	}
 
 	@Test
@@ -95,16 +104,16 @@ public class WorkerDeleteTest
 		// Add the text file
 		try
 		{
-			FileOperator.addFile(fie);
+			iFile.encryptFile(fie, key1);
 		} catch (FileException e1)
 		{
 			e1.printStackTrace();
 		}
-		FileOperator.umountFileSystem();
+		iFile.umountFileSystem();
 
 		// delete the file
-		FileInfo fi = new FileInfo(id+1, fie.getContainerInfo());
-		Thread thread = new Thread(new WorkerDelete(fi));
+		FileInfo fi = new FileInfo(id + 1, fie.getContainerInfo());
+		Thread thread = new Thread(new WorkerDelete(fi, key1));
 		thread.start();
 		try
 		{
@@ -115,7 +124,7 @@ public class WorkerDeleteTest
 		}
 
 		assertTrue(fi.getError() == FileError.SRC_FILE_NOT_FOUND);
-		FileOperator.umountFileSystem();
+		iFile.umountFileSystem();
 
 	}
 

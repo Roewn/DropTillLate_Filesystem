@@ -30,28 +30,28 @@ public class FileInfoMove extends FileInfo
 	/**
 	 * @return the source ContainerInfo
 	 */
-	public ContainerInfo getSrcContainerInfo() {
+	public synchronized ContainerInfo getSrcContainerInfo() {
 		return srcContainerInfo;
 	}
 
 	/**
 	 * @param srcContainerInfo the source ContainerInfo to set
 	 */
-	public void setSrcContainerInfo(ContainerInfo srcContainerInfo) {
+	public synchronized void setSrcContainerInfo(ContainerInfo srcContainerInfo) {
 		this.srcContainerInfo = srcContainerInfo;
 	}
 	
 	/**
 	 * @return the destination ContainerInfo
 	 */
-	public ContainerInfo getDestContainerInfo() {
+	public synchronized ContainerInfo getDestContainerInfo() {
 		return super.getContainerInfo();
 	}
 
 	/**
 	 * @param destContainerInfo the destination ContainerInfo to set
 	 */
-	public void setDestContainerInfo(ContainerInfo destContainerInfo) {
+	public synchronized void setDestContainerInfo(ContainerInfo destContainerInfo) {
 		super.setContainerInfo(destContainerInfo);
 	}
 	

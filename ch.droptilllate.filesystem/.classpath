@@ -10,13 +10,41 @@
 	<classpathentry kind="lib" path="libraries/truezip-7.7.5-jar-with-dependencies.jar"/>
 	<classpathentry kind="lib" path="libraries/truezip-archetype-file-7.7.5.jar"/>
 	<classpathentry kind="lib" path="libraries/truezip-archetype-path-7.7.5.jar"/>
-	<classpathentry kind="lib" path="libraries/truezip-driver-file-7.7.5.jar"/>
-	<classpathentry kind="lib" path="libraries/truezip-driver-tar-7.7.5.jar"/>
-	<classpathentry kind="lib" path="libraries/truezip-driver-tzp-7.7.5.jar"/>
-	<classpathentry kind="lib" path="libraries/truezip-driver-zip-7.7.5.jar"/>
-	<classpathentry kind="lib" path="libraries/truezip-file-7.7.5.jar"/>
-	<classpathentry kind="lib" path="libraries/truezip-kernel-7.7.5.jar"/>
-	<classpathentry kind="lib" path="libraries/truezip-path-7.7.5.jar"/>
+	<classpathentry kind="lib" path="libraries/truezip-driver-file-7.7.5.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/01_Development/Eclipse/git/DropTillLate_Filesystem/ch.droptilllate.filesystem/libraries/javadoc/truezip-driver-file-7.7.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libraries/truezip-driver-tar-7.7.5.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/01_Development/Eclipse/git/DropTillLate_Filesystem/ch.droptilllate.filesystem/libraries/javadoc/truezip-driver-tar-7.7.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libraries/truezip-driver-tzp-7.7.5.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/01_Development/Eclipse/git/DropTillLate_Filesystem/ch.droptilllate.filesystem/libraries/javadoc/truezip-driver-tzp-7.7.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libraries/truezip-driver-zip-7.7.5.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/01_Development/Eclipse/git/DropTillLate_Filesystem/ch.droptilllate.filesystem/libraries/javadoc/truezip-driver-zip-7.7.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libraries/truezip-file-7.7.5.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/01_Development/Eclipse/git/DropTillLate_Filesystem/ch.droptilllate.filesystem/libraries/javadoc/truezip-file-7.7.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libraries/truezip-kernel-7.7.5.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/01_Development/Eclipse/git/DropTillLate_Filesystem/ch.droptilllate.filesystem/libraries/javadoc/truezip-kernel-7.7.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libraries/truezip-path-7.7.5.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/01_Development/Eclipse/git/DropTillLate_Filesystem/ch.droptilllate.filesystem/libraries/javadoc/truezip-path-7.7.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="libraries/xz-1.4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>

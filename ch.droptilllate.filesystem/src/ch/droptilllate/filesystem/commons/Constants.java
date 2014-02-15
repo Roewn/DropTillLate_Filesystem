@@ -16,11 +16,10 @@ public final class Constants
 	// 100000 and 900000, means that the ID will have 6 digits
 	public static final int MIN_RND = 100000;
 	public static final int MAX_RND = 900000;
-
-	// *****************************************************************************
-	// Strings for Test Cases
-	// *****************************************************************************
-	public static final String PASSWORD = "12341234";
+	// Exception mappings
+	public static final String EXC_IDENTIFIER_KEY = "password";
+	public static final String EXC_IDENTIFIER_NOT_FOUND = "no such entry";
+	public static final String EXC_IDENTIFIER_MISSING = "missing file";
 
 	// *****************************************************************************
 	// Console
@@ -28,9 +27,15 @@ public final class Constants
 	public static final String TIMER_MESSAGE = "Time elapsed: ";
 	public static final String CONSOLE_LIMITER = "----------------------------------";
 	public static final String TESTCASE_LIMITER = "**********************************";
-	
+
 	// *****************************************************************************
 	// Exceptions
 	// *****************************************************************************
 	public static final String EXC_ISDIR = "Target is not a file, it is a directory";
+
+	// *****************************************************************************
+	// Strings for Test Cases
+	// *****************************************************************************
+	public static final String TEST_PASSWORD_1 = "1111";
+	public static final String TEST_PASSWORD_2 = "2222";
 }

@@ -12,20 +12,21 @@ import java.util.List;
 import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
+import ch.droptilllate.filesystem.truezip.ContainerHandler;
 
 /**
  * @author Roewn
  * 
  */
-public class DirectoryOperator
+public class ShareRelationHandler implements IShareRelation
 {
-	/**
-	 * Checks if the directory of the passed path exists, if not, it gets created.
-	 * 
-	 * @param path path of the directory
-	 * @return true if the directory already existed, false if a new directory was created
+	private IContainer iContainer = new ContainerHandler();
+	
+	/* (non-Javadoc)
+	 * @see ch.droptilllate.filesystem.io.IShareRelation#checkIfDirectoryExists(java.lang.String)
 	 */
-	public synchronized static boolean checkIfDirectoryExists(String path)
+	@Override
+	public synchronized boolean checkIfDirectoryExists(String path)
 	{
 		// create the dir file
 		File directory = new File(path);
@@ -41,32 +42,37 @@ public class DirectoryOperator
 
 	}
 
-	/**
-	 * Lists all encrypted files in the passed directory and returns a list of the their FileInfos.
-	 * 
-	 * @param path path of the directory which contains the files
-	 * @return List off all encrypted files contained by this directory
+	/* (non-Javadoc)
+	 * @see ch.droptilllate.filesystem.io.IShareRelation#getAllEncryptedFilesInDir(java.lang.String)
 	 */
-	public synchronized static List<FileInfo> getAllEncryptedFilesInDir(String path)
+	@Override
+	public synchronized List<FileInfo> getFilesOfShareRelation(String path, String key)
 	{
 		ArrayList<FileInfo> fileInfoList = new ArrayList<FileInfo>();
 		// get all containers in this directory
-		List<File> containerList= getContainersInDir(path);
+		List<File> containerList= getContainersOfShareRelation(path);
 		// for every container, add all contained files to the resultList
 		for (File cont: containerList) {
 			// get list of fileInfos of the current container
-			List<FileInfo> currentContContent = ContainerOperator.listContainerContent(new ContainerInfo(cont.getAbsolutePath()));
+			List<FileInfo> currentContContent =	null;
+			try
+			{
+				currentContContent = iContainer.listContainerContent(new ContainerInfo(cont.getAbsolutePath()), key);
+			} catch (FileException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			fileInfoList.addAll(currentContContent);
 		}		
 		return fileInfoList;
 	}
 
-	/**
-	 * 
-	 * @param path
-	 * @return
+	/* (non-Javadoc)
+	 * @see ch.droptilllate.filesystem.io.IShareRelation#getContainersInDir(java.lang.String)
 	 */
-	public synchronized static List<File> getContainersInDir(String path)
+	@Override
+	public synchronized List<File> getContainersOfShareRelation(String path)
 	{
 		// get all containers in this directory
 		File directory = new File(path);

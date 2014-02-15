@@ -33,28 +33,28 @@ public class FileInfoDecrypt extends FileInfo
 	/**
 	 * @return the tempDirPath
 	 */
-	public String getTempDirPath() {
+	public synchronized String getTempDirPath() {
 		return tempDirPath;
 	}
 
 	/**
 	 * @param tempDirPath the tempDirPath to set
 	 */
-	public void setTempDirPath(String tempDirPath) {
+	public synchronized void setTempDirPath(String tempDirPath) {
 		this.tempDirPath = InfoHelper.checkPath(tempDirPath);
 	}
 
 	/**
 	 * @return the fileExtension
 	 */
-	public String getFileExtension() {
+	public synchronized String getFileExtension() {
 		return fileExtension;
 	}
 
 	/**
 	 * @param fileExtension the fileExtension to set
 	 */
-	public void setFileExtension(String fileExtension) {
+	public synchronized void setFileExtension(String fileExtension) {
 		this.fileExtension = InfoHelper.checkFileExt(fileExtension);
 	}	
 	
@@ -62,7 +62,7 @@ public class FileInfoDecrypt extends FileInfo
 	 * Example: "C:\\Temp\\3425.txt"
 	 * @return fullContainerPath -> Parent container path + containerID + Container extension.
 	 */
-	public String getFullTmpFilePath() {
+	public synchronized String getFullTmpFilePath() {
 		return InfoHelper.createFullPath(this.tempDirPath, Integer.toString(super.getFileID()), this.fileExtension);
 	}
 	
@@ -71,7 +71,7 @@ public class FileInfoDecrypt extends FileInfo
 	 * Example: "3425.txt"
 	 * @return
 	 */
-	public String getFullFileName() {
+	public synchronized String getFullFileName() {
 		return super.getFileID() + Constants.EXT_LIMITER + this.fileExtension;
 	}
 

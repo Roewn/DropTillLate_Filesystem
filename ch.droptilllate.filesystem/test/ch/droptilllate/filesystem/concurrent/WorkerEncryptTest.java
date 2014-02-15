@@ -15,17 +15,22 @@ import ch.droptilllate.filesystem.api.FileError;
 import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
-import ch.droptilllate.filesystem.io.FileOperator;
-import ch.droptilllate.filesystem.security.KeyManager;
+import ch.droptilllate.filesystem.io.IFile;
+import ch.droptilllate.filesystem.security.KeyRelation;
+import ch.droptilllate.filesystem.truezip.FileHandler;
+import ch.droptilllate.filesystem.truezip.KeyManager;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
 
 public class WorkerEncryptTest
 {
+	private IFile iFile = new FileHandler();
 
 	private File textFile;
 	private String filenameTextFile = "test.txt";
 	private String contentTextFile = "This is a test File";
+	
+	private String key1 = Constants.TEST_PASSWORD_1;
 
 	@Rule
 	public TestName name = new TestName();
@@ -38,7 +43,7 @@ public class WorkerEncryptTest
 		// initalize the config
 		TConfig config = TConfig.get();
 		// Configure custom application file format.
-		TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION, Constants.PASSWORD.toCharArray());
+		TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION, Constants.TEST_PASSWORD_1.toCharArray());
 		config.setArchiveDetector(tad);
 	}
 
@@ -53,7 +58,7 @@ public class WorkerEncryptTest
 		// Create FileInfo
 		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
 		fie.getContainerInfo().setContainerID(contId);
-		Thread thread = new Thread(new WorkerEncrypt(fie));
+		Thread thread = new Thread(new WorkerEncrypt(fie, key1));
 		thread.start();
 		try
 		{
@@ -62,8 +67,8 @@ public class WorkerEncryptTest
 		{
 			e.printStackTrace();
 		}
-		assertTrue(FileOperator.isFileInContainer(fie));
-		FileOperator.umountFileSystem();
+		assertTrue(iFile.isFileInContainer(fie));
+		iFile.umountFileSystem();
 	}
 
 	@Test
@@ -77,7 +82,7 @@ public class WorkerEncryptTest
 		// Create FileInfo
 		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath() + "bla", TestHelper.getTestDir());
 		fie.getContainerInfo().setContainerID(contId);
-		Thread thread = new Thread(new WorkerEncrypt(fie));
+		Thread thread = new Thread(new WorkerEncrypt(fie, key1));
 		thread.start();
 
 		try
@@ -89,9 +94,9 @@ public class WorkerEncryptTest
 		{
 			e.printStackTrace();
 		}
-		assertFalse(FileOperator.isFileInContainer(fie));
+		assertFalse(iFile.isFileInContainer(fie));
 		assertTrue(fie.getError() == FileError.SRC_FILE_NOT_FOUND);
-		FileOperator.umountFileSystem();
+		iFile.umountFileSystem();
 
 	}
 

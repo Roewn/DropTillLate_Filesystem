@@ -11,11 +11,17 @@ public enum FileError
 {
 	NONE("No error"),
 	UNKNOWN("Unkown exceptions"), 
+	
 	IO_EXCEPTION("TrueZIP IO Exception"), 
+	
 	SRC_FILE_NOT_FOUND("Source file not found"), 
 	SRC_FILE_IS_A_DIR("Source file is a directory"), 
+	
 	DEST_FILE_NOT_FOUND("Destination file not found"),
 	EXTRACTED_FILE_NOT_FOUND("Extracted file not found in temp directory"),
+	
+	INVALID_KEY("Invalid key"),
+	SHARERELATION_NOT_FOUND("Share relation not found in key relation"),
 	
 	CONT_NOT_FOUND("Container not found");
 	

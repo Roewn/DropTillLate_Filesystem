@@ -1,4 +1,4 @@
-package ch.droptilllate.filesystem.security;
+package ch.droptilllate.filesystem.truezip;
 
 import de.schlichtherle.truezip.crypto.raes.RaesKeyException;
 import de.schlichtherle.truezip.crypto.raes.Type0RaesParameters;

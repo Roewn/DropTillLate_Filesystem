@@ -17,6 +17,8 @@ import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 
 public class ContainerManager
 {
+	private IShareRelation iShareRelation = new ShareRelationHandler(); 
+	
 	private static ContainerManager instance = null;
 	private long maxContainerSize = Constants.MAX_CONT_SIZE;
 
@@ -153,10 +155,10 @@ public class ContainerManager
 					shareRelationsMap.put(actFileContInfo.getParentContainerPath(), new TreeSet<ContainerInfo>());
 					
 					// If folder already exists, get all containers and update the Map with these infos
-					if (DirectoryOperator.checkIfDirectoryExists(actFileContInfo.getParentContainerPath()))
+					if (iShareRelation.checkIfDirectoryExists(actFileContInfo.getParentContainerPath()))
 					{
 						// get all containers in this share relation
-						List<File> containerList = DirectoryOperator.getContainersInDir(actFileContInfo.getParentContainerPath());						
+						List<File> containerList = iShareRelation.getContainersOfShareRelation(actFileContInfo.getParentContainerPath());						
 						TreeSet<ContainerInfo> contInfoSet = new TreeSet<ContainerInfo>();
 						// get all FileInfos for the containers in these path
 						for (File file : containerList)

@@ -1,12 +1,9 @@
-package ch.droptilllate.filesystem.io;
+package ch.droptilllate.filesystem.truezip;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,31 +20,36 @@ import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.info.InfoHelper;
-import ch.droptilllate.filesystem.security.KeyManager;
+import ch.droptilllate.filesystem.io.FileException;
+import ch.droptilllate.filesystem.io.IFile;
+import ch.droptilllate.filesystem.io.IShareRelation;
+import ch.droptilllate.filesystem.io.ShareRelationHandler;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
-import de.schlichtherle.truezip.file.TFile;
 
-public class FileOperatorTest
+public class FileHandlerTest
 {
-
+	private IFile iFile = new FileHandler();
+	private IShareRelation iShareRelation = new ShareRelationHandler(); 
+	
 	private File textFile;
 	private String filenameTextFile = "test.txt";
 	private String contentTextFile = "This is a test File";
+	
+	//TODO Add testcase for different src and dest keys for moving files
 	
 	 @Rule public TestName name = new TestName();
 
 	/**
 	 * Constructor
 	 */
-	public FileOperatorTest()
+	public FileHandlerTest()
 	{
-		
 		// initalize the config
-		TConfig config = TConfig.get();
-		// Configure custom application file format.
-		TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION, Constants.PASSWORD.toCharArray());
-		config.setArchiveDetector(tad);
+				TConfig config = TConfig.get();
+				// Configure custom application file format.
+				TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION, Constants.TEST_PASSWORD_1.toCharArray());
+				config.setArchiveDetector(tad);
 	}
 
 	@Test
@@ -63,17 +65,17 @@ public class FileOperatorTest
 		System.out.println(Constants.CONSOLE_LIMITER);
 		System.out.println("Adding the text file");
 		Timer.start();
-		try
-		{
-			FileOperator.addFile(fie);
+		try {
+						
+			iFile.encryptFile(fie, Constants.TEST_PASSWORD_1);
 		} catch (FileException e)
 		{
 			System.out.println(e.getMessage());
 		}
 		Timer.stop(true);
-		FileOperator.umountFileSystem();
+		iFile.umountFileSystem();
 		System.out.println("Size: " + (textFile.length() / 1024) + "kb");
-		assertTrue(FileOperator.isFileInContainer(fie));
+		assertTrue(iFile.isFileInContainer(fie));
 
 		// Create FileInfo
 		FileInfoDecrypt fid = new FileInfoDecrypt(id, InfoHelper.checkFileExt(filenameTextFile), TestHelper.getTestDir(),
@@ -83,8 +85,8 @@ public class FileOperatorTest
 		System.out.println("Extracting the text file");
 		Timer.start();
 		try
-		{
-			FileOperator.extractFile(fid);
+		{			
+			iFile.decryptFile(fid, Constants.TEST_PASSWORD_2);
 		} catch (FileException e)
 		{
 			System.out.println(e.getMessage());
@@ -92,7 +94,7 @@ public class FileOperatorTest
 		Timer.stop(true);
 		System.out.println("Size: " + (textFile.length() / 1024) + "kb");
 		assertTrue(TestHelper.getTextFileContent(textFile).equals(TestHelper.getTextFileContent(new File(fid.getFullTmpFilePath()))));
-		FileOperator.umountFileSystem();
+		iFile.umountFileSystem();
 
 	}
 
@@ -109,31 +111,30 @@ public class FileOperatorTest
 		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), deleteDir);
 		fie.getContainerInfo().setContainerID(contId);
 		// Create the directories
-		DirectoryOperator.checkIfDirectoryExists(fie.getContainerInfo().getParentContainerPath());
+		iShareRelation.checkIfDirectoryExists(fie.getContainerInfo().getParentContainerPath());
 		
 		// Adding File
 		try
 		{
-			FileOperator.addFile(fie);
+			iFile.encryptFile(fie, Constants.TEST_PASSWORD_1);
 		} catch (FileException e)
 		{
 			System.out.println(e.getMessage());
 		}
-		FileOperator.umountFileSystem();
-		assertTrue(FileOperator.isFileInContainer(fie));
+		iFile.umountFileSystem();
+		assertTrue(iFile.isFileInContainer(fie));
 
 		// Create FileInfo to delete
 		FileInfo fi = new FileInfo(id, new ContainerInfo(contId, deleteDir));
 		try
 		{
-			FileOperator.deleteFile(fi);
+			iFile.deleteFile(fi, Constants.TEST_PASSWORD_1);
 		} catch (FileException e)
 		{
 			System.out.println(e.getMessage());
 		}
-		FileOperator.umountFileSystem();
-		assertFalse(FileOperator.isFileInContainer(fie));
-
+		iFile.umountFileSystem();
+		assertFalse(iFile.isFileInContainer(fie));
 	}
 
 	@Test
@@ -157,13 +158,13 @@ public class FileOperatorTest
 		// Adding File
 		try
 		{
-			FileOperator.addFile(fie);
+			iFile.encryptFile(fie, Constants.TEST_PASSWORD_1);
 		} catch (FileException e)
 		{
 			System.out.println(e.getMessage());
 		}
-		FileOperator.umountFileSystem();
-		assertTrue(FileOperator.isFileInContainer(fie));
+		iFile.umountFileSystem();
+		assertTrue(iFile.isFileInContainer(fie));
 
 		
 		// Create FileInfo to move the file to share2
@@ -171,16 +172,16 @@ public class FileOperatorTest
 		fim.getContainerInfo().setContainerID(contId);
 		try
 		{
-			FileOperator.moveFile(fim);
+			iFile.moveFile(fim, Constants.TEST_PASSWORD_1);
 		} catch (FileException e)
 		{
 			System.out.println(e.getMessage());
 		}
-		FileOperator.umountFileSystem();
+		iFile.umountFileSystem();
 		//file should not be longer in the source container
-		assertFalse(FileOperator.isFileInContainer(fie));
+		assertFalse(iFile.isFileInContainer(fie));
 		//check if its in the dest container
-		assertTrue(FileOperator.isFileInContainer(fim));
+		assertTrue(iFile.isFileInContainer(fim));
 	}
 
 	@Before
