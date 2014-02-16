@@ -58,9 +58,9 @@ public interface IFile
 	 * Checks if the File still exists in this Container
 	 * 
 	 * @param fileInfo Info of the File to check (including container id)
-	 * @return true when file still exists
+	 * @return true when file exists
 	 */
-	boolean isFileInContainer(FileInfo fileInfo);
+	boolean checkFile(FileInfo fileInfo, String key);
 
 	/**
 	 * Commits all pending changes for all (nested) archive files to their respective parent file system, closes their associated target

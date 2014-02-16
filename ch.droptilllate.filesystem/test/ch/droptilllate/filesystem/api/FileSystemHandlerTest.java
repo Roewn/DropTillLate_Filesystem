@@ -27,8 +27,6 @@ import ch.droptilllate.filesystem.io.IShareRelation;
 import ch.droptilllate.filesystem.io.ShareRelationHandler;
 import ch.droptilllate.filesystem.security.KeyRelation;
 import ch.droptilllate.filesystem.truezip.FileHandler;
-import ch.droptilllate.filesystem.truezip.KeyManager;
-import de.schlichtherle.truezip.file.TConfig;
 
 public class FileSystemHandlerTest
 {
@@ -37,10 +35,12 @@ public class FileSystemHandlerTest
 	public TestName name = new TestName();
 
 	private FileSystemHandler fsh = null;
-	private KeyRelation kr1 = null;
+	private KeyRelation krS = null;
 
 	private IFile iFile = new FileHandler();
 	private IShareRelation iShareRelation = new ShareRelationHandler();
+	
+	File shareDir;
 
 	// TODO Add testcase for different src and dest keys for moving files
 
@@ -74,7 +74,7 @@ public class FileSystemHandlerTest
 		// ******************************************************************
 		// encrypt all files
 		Timer.start();
-		FileHandlingSummary fhs = fsh.encryptFiles(fieList, kr1);
+		FileHandlingSummary fhs = fsh.encryptFiles(fieList, krS);
 		Timer.stop(true);
 		// list the files
 		iFile.listFileAssignment(fieList);
@@ -108,7 +108,7 @@ public class FileSystemHandlerTest
 			id++;
 		}
 		// encrypt all files
-		fsh.encryptFiles(fieList, kr1);
+		fsh.encryptFiles(fieList, krS);
 
 		// create FileInfos Decrypt
 		ArrayList<FileInfoDecrypt> fidList = new ArrayList<FileInfoDecrypt>();
@@ -121,7 +121,7 @@ public class FileSystemHandlerTest
 		// ******************************************************************
 		// decrypt all Files
 		Timer.start();
-		FileHandlingSummary fhs = fsh.decryptFiles(fidList, kr1);
+		FileHandlingSummary fhs = fsh.decryptFiles(fidList, krS);
 		Timer.stop(true);
 		// test if the Summary
 		for (FileInfoDecrypt fid : fidList)
@@ -160,7 +160,7 @@ public class FileSystemHandlerTest
 			id++;
 		}
 		// encrypt all files
-		fsh.encryptFiles(fieList, kr1);
+		fsh.encryptFiles(fieList, krS);
 
 		// create FileInfos Delete
 		ArrayList<FileInfo> fiList = new ArrayList<FileInfo>();
@@ -172,7 +172,7 @@ public class FileSystemHandlerTest
 		// ******************************************************************
 		// delete all Files
 		Timer.start();
-		FileHandlingSummary fhs = fsh.deleteFiles(fiList, kr1);
+		FileHandlingSummary fhs = fsh.deleteFiles(fiList, krS);
 		Timer.stop(true);
 		// test if the Summary is correct and the empty container got deleted
 		for (FileInfo fi : fiList)
@@ -195,10 +195,6 @@ public class FileSystemHandlerTest
 		System.out.println(this.getClass().getSimpleName() + ": " + name.getMethodName());
 		System.out.println(count + " Files a " + size + " MB");
 
-		// Create share directory
-		File shareDir = new File(TestHelper.getTestDir(), "share");
-		shareDir.mkdir();
-
 		// create Files
 		ArrayList<File> fileList = TestHelper.createFiles(count, size, ext);
 
@@ -210,7 +206,7 @@ public class FileSystemHandlerTest
 			id++;
 		}
 		// encrypt all files
-		fsh.encryptFiles(fieList, kr1);
+		fsh.encryptFiles(fieList, krS);
 
 		// create FileInfos Move
 		ArrayList<FileInfoMove> fimList = new ArrayList<FileInfoMove>();
@@ -222,16 +218,14 @@ public class FileSystemHandlerTest
 
 		// ******************************************************************
 		// move Files
+
 		Timer.start();
-		FileHandlingSummary fhs = fsh.moveFiles(fimList, kr1);
+		FileHandlingSummary fhs = fsh.moveFiles(fimList, krS);
 		Timer.stop(true);
 
-		// pass for the share relation
-		KeyRelation krS = new KeyRelation();
-		krS.addKeyOfShareRelation(shareDir.getAbsolutePath(), Constants.TEST_PASSWORD_1);
 		// get all files in the share directory
 		HashMap<String, List<FileInfo>> resultMap = fsh.getFilesPerRelation(krS);
-		
+
 		List<FileInfo> fiShareList = resultMap.get(shareDir.getAbsolutePath());
 
 		// test if the Summary is ok and all files are in the shared directory
@@ -247,9 +241,14 @@ public class FileSystemHandlerTest
 	public void befor()
 	{
 		TestHelper.setupTestDir();
+		// Create share directory
+		shareDir = new File(TestHelper.getTestDir(), "share");
+		shareDir.mkdir();
 		// create key relation
-		kr1 = new KeyRelation();
-		kr1.addKeyOfShareRelation(TestHelper.getTestDir(), Constants.TEST_PASSWORD_1);
+		// pass for the share relation
+		krS = new KeyRelation();
+		krS.addKeyOfShareRelation(TestHelper.getTestDir(), Constants.TEST_PASSWORD_1);
+		krS.addKeyOfShareRelation(shareDir.getAbsolutePath(), Constants.TEST_PASSWORD_1);
 	}
 
 	@After

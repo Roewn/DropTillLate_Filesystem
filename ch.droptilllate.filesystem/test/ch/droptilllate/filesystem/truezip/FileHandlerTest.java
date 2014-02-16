@@ -24,8 +24,6 @@ import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.io.IShareRelation;
 import ch.droptilllate.filesystem.io.ShareRelationHandler;
-import de.schlichtherle.truezip.file.TArchiveDetector;
-import de.schlichtherle.truezip.file.TConfig;
 
 public class FileHandlerTest
 {
@@ -45,11 +43,6 @@ public class FileHandlerTest
 	 */
 	public FileHandlerTest()
 	{
-		// initalize the config
-				TConfig config = TConfig.get();
-				// Configure custom application file format.
-				TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION, Constants.TEST_PASSWORD_1.toCharArray());
-				config.setArchiveDetector(tad);
 	}
 
 	@Test
@@ -65,17 +58,17 @@ public class FileHandlerTest
 		System.out.println(Constants.CONSOLE_LIMITER);
 		System.out.println("Adding the text file");
 		Timer.start();
-		try {
-						
-			iFile.encryptFile(fie, Constants.TEST_PASSWORD_1);
+		try {						
+			iFile.encryptFile(fie, Constants.TEST_PASSWORD_1);			
 		} catch (FileException e)
 		{
 			System.out.println(e.getMessage());
 		}
 		Timer.stop(true);
 		iFile.umountFileSystem();
+		
 		System.out.println("Size: " + (textFile.length() / 1024) + "kb");
-		assertTrue(iFile.isFileInContainer(fie));
+		//assertTrue(iFile.isFileInContainer(fie));
 
 		// Create FileInfo
 		FileInfoDecrypt fid = new FileInfoDecrypt(id, InfoHelper.checkFileExt(filenameTextFile), TestHelper.getTestDir(),
@@ -92,10 +85,10 @@ public class FileHandlerTest
 			System.out.println(e.getMessage());
 		}
 		Timer.stop(true);
+		iFile.umountFileSystem();
 		System.out.println("Size: " + (textFile.length() / 1024) + "kb");
 		assertTrue(TestHelper.getTextFileContent(textFile).equals(TestHelper.getTextFileContent(new File(fid.getFullTmpFilePath()))));
-		iFile.umountFileSystem();
-
+		
 	}
 
 	@Test
@@ -122,7 +115,7 @@ public class FileHandlerTest
 			System.out.println(e.getMessage());
 		}
 		iFile.umountFileSystem();
-		assertTrue(iFile.isFileInContainer(fie));
+		assertTrue(iFile.checkFile(fie, Constants.TEST_PASSWORD_1));
 
 		// Create FileInfo to delete
 		FileInfo fi = new FileInfo(id, new ContainerInfo(contId, deleteDir));
@@ -134,7 +127,7 @@ public class FileHandlerTest
 			System.out.println(e.getMessage());
 		}
 		iFile.umountFileSystem();
-		assertFalse(iFile.isFileInContainer(fie));
+		assertFalse(iFile.checkFile(fie, Constants.TEST_PASSWORD_1));
 	}
 
 	@Test
@@ -164,7 +157,7 @@ public class FileHandlerTest
 			System.out.println(e.getMessage());
 		}
 		iFile.umountFileSystem();
-		assertTrue(iFile.isFileInContainer(fie));
+		assertTrue(iFile.checkFile(fie, Constants.TEST_PASSWORD_1));
 
 		
 		// Create FileInfo to move the file to share2
@@ -179,9 +172,9 @@ public class FileHandlerTest
 		}
 		iFile.umountFileSystem();
 		//file should not be longer in the source container
-		assertFalse(iFile.isFileInContainer(fie));
+		assertFalse(iFile.checkFile(fie, Constants.TEST_PASSWORD_1));
 		//check if its in the dest container
-		assertTrue(iFile.isFileInContainer(fim));
+		assertTrue(iFile.checkFile(fim, Constants.TEST_PASSWORD_1));
 	}
 
 	@Before

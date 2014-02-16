@@ -56,7 +56,7 @@ public interface IFileSystem
 	FileHandlingSummary moveFiles(List<FileInfoMove> fileInfoList, KeyRelation keyRelation);
 	
 	/**
-	 * Lists all encrypted files per passed directories (contained in the key relation) and returns a list of the their FileInfos.
+	 * Lists all encrypted files per passed directories (contained in the key relation) and returns a list of their FileInfos.
 	 * 
 	 * @param keyRelation Map of all shareRelations of the passed files and the related key
 	 * @return Map off all encrypted files contained per directory (where the share relation is the key)

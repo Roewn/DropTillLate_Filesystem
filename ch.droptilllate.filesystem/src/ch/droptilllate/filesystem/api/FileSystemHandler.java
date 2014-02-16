@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -54,8 +53,7 @@ public class FileSystemHandler implements IFileSystem
 	public FileHandlingSummary encryptFiles(List<FileInfoEncrypt> fileInfoList, KeyRelation keyRelation)
 	{
 		ExecutorService executor = Executors.newFixedThreadPool(cores);
-		System.out.println(Constants.CONSOLE_LIMITER);
-		System.out.println("Prozessor Threads: " + cores);
+		printStartToConsole("encryptFiles", cores);
 
 		// Get the ContainerInfo with the assigned ContainerID of every File updated
 		containerManager.assignContainerID(fileInfoList);
@@ -65,28 +63,15 @@ public class FileSystemHandler implements IFileSystem
 		for (FileInfoEncrypt fileInfo : fileInfoList)
 		{
 			// Get key for the current share relation
-			String key = keyRelation.getKeyOfShareRelation(fileInfo.getContainerInfo().getParentContainerPath());
-			// Generate Error if share relation not found in key relation
-			if (key == null)
-			{
-				fileInfo.setError(FileError.SHARERELATION_NOT_FOUND, fileInfo.getContainerInfo().getParentContainerPath());
-			}
+			String key = getKey(fileInfo, keyRelation);
 			// if no error occurred during the container assignment perform the operation
 			if (fileInfo.getError() == FileError.NONE)
 			{
 				Runnable worker = new WorkerEncrypt(fileInfo, key);
 				executor.execute(worker);
 			}
-
 		}
-
-		// This will make the executor accept no new threads
-		// and finish all existing threads in the queue
-		executor.shutdown();
-		// Wait until all threads are finish
-		while (!executor.isTerminated())
-		{
-		}
+		waitExecutor(executor);
 
 		System.out.println("Finished all threads");
 
@@ -101,20 +86,14 @@ public class FileSystemHandler implements IFileSystem
 	public FileHandlingSummary decryptFiles(List<FileInfoDecrypt> fileInfoList, KeyRelation keyRelation)
 	{
 		ExecutorService executor = Executors.newFixedThreadPool(cores);
-		System.out.println(Constants.CONSOLE_LIMITER);
-		System.out.println("Prozessor Threads: " + cores);
+		printStartToConsole("encryptFiles", cores);
 
 		System.out.println(Constants.CONSOLE_LIMITER);
 		// Encrypt the Files
 		for (FileInfoDecrypt fileInfo : fileInfoList)
 		{
 			// Get key for the current share relation
-			String key = keyRelation.getKeyOfShareRelation(fileInfo.getContainerInfo().getParentContainerPath());
-			// Generate Error if share relation not found in key relation
-			if (key == null)
-			{
-				fileInfo.setError(FileError.SHARERELATION_NOT_FOUND, fileInfo.getContainerInfo().getParentContainerPath());
-			}
+			String key = getKey(fileInfo, keyRelation);
 			// if no error occurred during the container assignment perform the operation
 			if (fileInfo.getError() == FileError.NONE)
 			{
@@ -122,13 +101,7 @@ public class FileSystemHandler implements IFileSystem
 				executor.execute(worker);
 			}
 		}
-		// This will make the executor accept no new threads
-		// and finish all existing threads in the queue
-		executor.shutdown();
-		// Wait until all threads are finish
-		while (!executor.isTerminated())
-		{
-		}
+		waitExecutor(executor);
 
 		System.out.println("Finished all threads");
 
@@ -143,20 +116,14 @@ public class FileSystemHandler implements IFileSystem
 	public FileHandlingSummary deleteFiles(List<FileInfo> fileInfoList, KeyRelation keyRelation)
 	{
 		ExecutorService executor = Executors.newFixedThreadPool(cores);
-		System.out.println(Constants.CONSOLE_LIMITER);
-		System.out.println("Prozessor Threads: " + cores);
+		printStartToConsole("deleteFiles", cores);
 
 		System.out.println(Constants.CONSOLE_LIMITER);
 		// Delete the Files
 		for (FileInfo fileInfo : fileInfoList)
 		{
 			// Get key for the current share relation
-			String key = keyRelation.getKeyOfShareRelation(fileInfo.getContainerInfo().getParentContainerPath());
-			// Generate Error if share relation not found in key relation
-			if (key == null)
-			{
-				fileInfo.setError(FileError.SHARERELATION_NOT_FOUND, fileInfo.getContainerInfo().getParentContainerPath());
-			}
+			String key = getKey(fileInfo, keyRelation);
 			// if no error occurred during the container assignment perform the operation
 			if (fileInfo.getError() == FileError.NONE)
 			{
@@ -165,13 +132,7 @@ public class FileSystemHandler implements IFileSystem
 			}
 
 		}
-		// This will make the executor accept no new threads
-		// and finish all existing threads in the queue
-		executor.shutdown();
-		// Wait until all threads are finish
-		while (!executor.isTerminated())
-		{
-		}
+		waitExecutor(executor);
 
 		System.out.println("Finished all threads");
 		iFile.umountFileSystem();
@@ -186,8 +147,7 @@ public class FileSystemHandler implements IFileSystem
 	public FileHandlingSummary moveFiles(List<FileInfoMove> fileInfoList, KeyRelation keyRelation)
 	{
 		ExecutorService executor = Executors.newFixedThreadPool(cores);
-		System.out.println(Constants.CONSOLE_LIMITER);
-		System.out.println("Prozessor Threads: " + cores);
+		printStartToConsole("moveFiles", cores);
 
 		// Get the ContainerInfo with the assigned ContainerID of every File updated
 		containerManager.assignContainerID(fileInfoList);
@@ -197,12 +157,7 @@ public class FileSystemHandler implements IFileSystem
 		for (FileInfoMove fileInfo : fileInfoList)
 		{
 			// Get key for the current share relation
-			String key = keyRelation.getKeyOfShareRelation(fileInfo.getContainerInfo().getParentContainerPath());
-			// Generate Error if share relation not found in key relation
-			if (key == null)
-			{
-				fileInfo.setError(FileError.SHARERELATION_NOT_FOUND, fileInfo.getContainerInfo().getParentContainerPath());
-			}
+			String key = getKey(fileInfo, keyRelation);
 			// if no error occurred during the container assignment perform the operation
 			if (fileInfo.getError() == FileError.NONE)
 			{
@@ -210,13 +165,7 @@ public class FileSystemHandler implements IFileSystem
 				executor.execute(worker);
 			}
 		}
-		// This will make the executor accept no new threads
-		// and finish all existing threads in the queue
-		executor.shutdown();
-		// Wait until all threads are finish
-		while (!executor.isTerminated())
-		{
-		}
+		waitExecutor(executor);
 
 		System.out.println("Finished all threads");
 		iFile.umountFileSystem();
@@ -239,9 +188,7 @@ public class FileSystemHandler implements IFileSystem
 	public HashMap<String, List<FileInfo>> getFilesPerRelation(KeyRelation keyRelation)
 	{
 		ExecutorService executor = Executors.newFixedThreadPool(cores);
-		System.out.println(Constants.CONSOLE_LIMITER);
-		System.out.println("Prozessor Threads: " + cores);
-		System.out.println(Constants.CONSOLE_LIMITER);
+		printStartToConsole("getFilesPerRelation", cores);
 
 		// create a list to hold the Future object associated with Callable
 		List<Future<List<FileInfo>>> workerList = new ArrayList<Future<List<FileInfo>>>();
@@ -264,7 +211,7 @@ public class FileSystemHandler implements IFileSystem
 			try
 			{
 				List<FileInfo> resultList = worker.get();
-				if (resultList.size() > 0)
+				if (resultList != null && resultList.size() > 0)
 				{
 					resultMap.put(resultList.get(0).getContainerInfo().getParentContainerPath(), resultList);
 				}
@@ -272,20 +219,59 @@ public class FileSystemHandler implements IFileSystem
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (NullPointerException e)
+			{
+				e.printStackTrace();
 			}
 		}
+		waitExecutor(executor);
 
-		// This will make the executor accept no new threads
-		// and finish all existing threads in the queue
+		System.out.println("Finished all threads");
+		iFile.umountFileSystem();
+		return resultMap;
+	}
+
+	/**
+	 * Gets the key for the current file info from the passed key relation. If the share relation is not contained in the key relation, a
+	 * errer gets set to the FileInfo
+	 * 
+	 * @param fileInfo current file info
+	 * @param keyRelation relation of all keys
+	 * @return key for the passed file info
+	 */
+	private String getKey(FileInfo fileInfo, KeyRelation keyRelation)
+	{
+		// Get key for the current share relation
+		String key = keyRelation.getKeyOfShareRelation(fileInfo.getContainerInfo().getParentContainerPath());
+		// Generate Error if share relation not found in key relation
+		if (key == null)
+		{
+			fileInfo.setError(FileError.SHARERELATION_NOT_FOUND, fileInfo.getContainerInfo().getParentContainerPath());
+		}
+		return key;
+	}
+
+	/**
+	 * Closes the executor and waits until all threads are finished
+	 * @param executor to wait for
+	 */
+	private void waitExecutor(ExecutorService executor)
+	{
+		// make the executor accept no new threads and finish all existing threads
 		executor.shutdown();
 		// Wait until all threads are finish
 		while (!executor.isTerminated())
 		{
 		}
+	}
 
-		System.out.println("Finished all threads");
-		iFile.umountFileSystem();
-		return resultMap;
+	private void printStartToConsole(String methode, int cores)
+	{
+
+		System.out.println(Constants.CONSOLE_LIMITER);
+		System.out.println(methode);
+		System.out.println("Prozessor Threads: " + cores);
+		System.out.println(Constants.CONSOLE_LIMITER);
 	}
 
 }

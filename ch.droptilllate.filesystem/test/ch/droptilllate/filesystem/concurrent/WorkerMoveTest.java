@@ -18,7 +18,6 @@ import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.IFile;
-import ch.droptilllate.filesystem.security.KeyRelation;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 import ch.droptilllate.filesystem.truezip.KeyManager;
 import de.schlichtherle.truezip.file.TArchiveDetector;
@@ -91,9 +90,9 @@ public class WorkerMoveTest
 
 		iFile.umountFileSystem();
 		// file should not be longer in the source container
-		assertFalse(iFile.isFileInContainer(fie));
+		assertFalse(iFile.checkFile(fie, key1));
 		// check if its in the dest container
-		assertTrue(iFile.isFileInContainer(fim));
+		assertTrue(iFile.checkFile(fim, key1));
 	}
 
 	@Test

@@ -36,6 +36,6 @@ public final class Constants
 	// *****************************************************************************
 	// Strings for Test Cases
 	// *****************************************************************************
-	public static final String TEST_PASSWORD_1 = "1111";
-	public static final String TEST_PASSWORD_2 = "2222";
+	public static final String TEST_PASSWORD_1 = "11111111";
+	public static final String TEST_PASSWORD_2 = "22222222";
 }

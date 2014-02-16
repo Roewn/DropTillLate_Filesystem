@@ -8,12 +8,8 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import ch.droptilllate.filesystem.info.FileInfo;
-import ch.droptilllate.filesystem.info.InfoHelper;
-import ch.droptilllate.filesystem.io.FileException;
-import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.io.IShareRelation;
 import ch.droptilllate.filesystem.io.ShareRelationHandler;
-import ch.droptilllate.filesystem.truezip.FileHandler;
 
 /**
  * @author Roewn
@@ -40,7 +36,6 @@ public class WorkerListFiles implements  Callable<List<FileInfo>>
 		System.out.println("Thread started: " + Thread.currentThread().getName() + " -> Relation: " + shareRelation);
 		fiResultList = iShareRelation.getFilesOfShareRelation(shareRelation, key);
 		
-		fiResultList.add(new FileInfo(444));
 		return fiResultList;		
 	}
 

@@ -16,11 +16,7 @@ import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.io.IFile;
-import ch.droptilllate.filesystem.security.KeyRelation;
 import ch.droptilllate.filesystem.truezip.FileHandler;
-import ch.droptilllate.filesystem.truezip.KeyManager;
-import de.schlichtherle.truezip.file.TArchiveDetector;
-import de.schlichtherle.truezip.file.TConfig;
 
 public class WorkerEncryptTest
 {
@@ -40,11 +36,6 @@ public class WorkerEncryptTest
 	 */
 	public WorkerEncryptTest()
 	{
-		// initalize the config
-		TConfig config = TConfig.get();
-		// Configure custom application file format.
-		TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION, Constants.TEST_PASSWORD_1.toCharArray());
-		config.setArchiveDetector(tad);
 	}
 
 	@Test
@@ -67,7 +58,7 @@ public class WorkerEncryptTest
 		{
 			e.printStackTrace();
 		}
-		assertTrue(iFile.isFileInContainer(fie));
+		assertTrue(iFile.checkFile(fie, key1));
 		iFile.umountFileSystem();
 	}
 
@@ -94,7 +85,7 @@ public class WorkerEncryptTest
 		{
 			e.printStackTrace();
 		}
-		assertFalse(iFile.isFileInContainer(fie));
+		assertFalse(iFile.checkFile(fie, key1));
 		assertTrue(fie.getError() == FileError.SRC_FILE_NOT_FOUND);
 		iFile.umountFileSystem();
 

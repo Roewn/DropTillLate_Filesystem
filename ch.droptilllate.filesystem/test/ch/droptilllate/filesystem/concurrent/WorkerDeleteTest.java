@@ -16,7 +16,6 @@ import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
-import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.security.KeyRelation;
 import ch.droptilllate.filesystem.truezip.FileHandler;
@@ -32,12 +31,12 @@ public class WorkerDeleteTest
 	private File textFile;
 	private String filenameTextFile = "test.txt";
 	private String contentTextFile = "This is a test File";
-	
+
 	private String key1 = Constants.TEST_PASSWORD_1;
 
 	@Rule
 	public TestName name = new TestName();
-	
+
 	// TODO Remove TConfig from constructor and encrypt files by the encrypt worker
 
 	/**
@@ -64,12 +63,14 @@ public class WorkerDeleteTest
 		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
 		fie.getContainerInfo().setContainerID(contId);
 		// Add the text file
+		Thread thread1 = new Thread(new WorkerEncrypt(fie, key1));
+		thread1.start();
 		try
 		{
-			iFile.encryptFile(fie, key1);
-		} catch (FileException e1)
+			thread1.join();
+		} catch (InterruptedException e)
 		{
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
 		iFile.umountFileSystem();
 
@@ -86,7 +87,7 @@ public class WorkerDeleteTest
 		}
 
 		iFile.umountFileSystem();
-		assertFalse(iFile.isFileInContainer(fie));
+		assertFalse(iFile.checkFile(fie, key1));
 	}
 
 	@Test
@@ -102,12 +103,14 @@ public class WorkerDeleteTest
 		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
 		fie.getContainerInfo().setContainerID(contId);
 		// Add the text file
+		Thread thread1 = new Thread(new WorkerEncrypt(fie, key1));
+		thread1.start();
 		try
 		{
-			iFile.encryptFile(fie, key1);
-		} catch (FileException e1)
+			thread1.join();
+		} catch (InterruptedException e)
 		{
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
 		iFile.umountFileSystem();
 

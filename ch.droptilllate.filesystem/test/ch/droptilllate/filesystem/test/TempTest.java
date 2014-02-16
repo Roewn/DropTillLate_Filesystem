@@ -44,8 +44,8 @@ public class TempTest
 		
 		List<String> fileNameList = new ArrayList<String>();
 		fileNameList.add(plainFileName5);
-		fileNameList.add(plainFileName10);
-		fileNameList.add(plainFileName20);
+//		fileNameList.add(plainFileName10);
+//		fileNameList.add(plainFileName20);
 //		fileNameList.add(plainFileName50);
 //		fileNameList.add(plainFileName100);
 //		fileNameList.add(plainFileName200);
@@ -58,6 +58,7 @@ public class TempTest
 		kr1.addKeyOfShareRelation(testPath, Constants.TEST_PASSWORD_1);
 		KeyRelation kr2 = new KeyRelation();
 		kr2.addKeyOfShareRelation(testPath, Constants.TEST_PASSWORD_2);
+//		kr2.addKeyOfShareRelation(testPath, "testtest");
 				
 
 		// Wait for user Permission
@@ -102,7 +103,7 @@ public class TempTest
 				int[] containerIds = {03231321, 45454, 464564};
 				for (String name : fileNameList) {
 //					fileInfoDecList.add(new FileInfoDecrypt(id,InfoHelper.checkFileExt(name), extractPath,testPath, containerIds[id]));
-					fileInfoDecList.add(new FileInfoDecrypt(id,InfoHelper.checkFileExt(name), extractPath,testPath, 484866));
+					fileInfoDecList.add(new FileInfoDecrypt(id, InfoHelper.checkFileExt(name), extractPath,testPath, 319049));
 					id++;
 				}
 				fhs = fileSystemHandler.decryptFiles(fileInfoDecList, kr1);

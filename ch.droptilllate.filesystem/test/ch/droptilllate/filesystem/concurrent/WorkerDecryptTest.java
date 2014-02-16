@@ -15,13 +15,9 @@ import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
-import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.security.KeyRelation;
 import ch.droptilllate.filesystem.truezip.FileHandler;
-import ch.droptilllate.filesystem.truezip.KeyManager;
-import de.schlichtherle.truezip.file.TArchiveDetector;
-import de.schlichtherle.truezip.file.TConfig;
 
 public class WorkerDecryptTest
 {
@@ -31,8 +27,9 @@ public class WorkerDecryptTest
 	private File textFile;
 	private String filenameTextFile = "test.txt";
 	private String contentTextFile = "This is a test File";
-	
+
 	private String key1 = Constants.TEST_PASSWORD_1;
+	private String key2 = Constants.TEST_PASSWORD_2;
 
 	@Rule
 	public TestName name = new TestName();
@@ -42,11 +39,6 @@ public class WorkerDecryptTest
 	 */
 	public WorkerDecryptTest()
 	{
-		// initalize the config
-		TConfig config = TConfig.get();
-		// Configure custom application file format.
-		TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION, Constants.TEST_PASSWORD_1.toCharArray());
-		config.setArchiveDetector(tad);
 	}
 
 	@Test
@@ -61,12 +53,14 @@ public class WorkerDecryptTest
 		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
 		fie.getContainerInfo().setContainerID(contId);
 		// Add the text file
+		Thread thread1 = new Thread(new WorkerEncrypt(fie, key1));
+		thread1.start();
 		try
 		{
-			iFile.encryptFile(fie, key1);
-		} catch (FileException e1)
+			thread1.join();
+		} catch (InterruptedException e)
 		{
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
 		iFile.umountFileSystem();
 
@@ -81,12 +75,14 @@ public class WorkerDecryptTest
 		{
 			e.printStackTrace();
 		}
-		assertTrue(TestHelper.getTextFileContent(textFile).equals(TestHelper.getTextFileContent(new File(fid.getFullTmpFilePath()))));
 		iFile.umountFileSystem();
+		
+		assertTrue(TestHelper.getTextFileContent(textFile).equals(TestHelper.getTextFileContent(new File(fid.getFullTmpFilePath()))));
+		
 	}
 
 	@Test
-	public void testException()
+	public void testNotFoundException()
 	{
 		System.out.println(Constants.TESTCASE_LIMITER);
 		System.out.println(this.getClass().getSimpleName() + ": " + name.getMethodName());
@@ -98,12 +94,14 @@ public class WorkerDecryptTest
 		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
 		fie.getContainerInfo().setContainerID(contId);
 		// Add the text file
+		Thread thread1 = new Thread(new WorkerEncrypt(fie, key1));
+		thread1.start();
 		try
 		{
-			iFile.encryptFile(fie, key1);
-		} catch (FileException e1)
+			thread1.join();
+		} catch (InterruptedException e)
 		{
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
 		iFile.umountFileSystem();
 
@@ -118,11 +116,12 @@ public class WorkerDecryptTest
 		{
 			e.printStackTrace();
 		}
-
-		assertTrue(fid.getError() == FileError.SRC_FILE_NOT_FOUND);
 		iFile.umountFileSystem();
-
+		
+		assertTrue(fid.getError() == FileError.SRC_FILE_NOT_FOUND);
+		
 	}
+	
 
 	@Before
 	public void befor()

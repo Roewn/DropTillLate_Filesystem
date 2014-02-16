@@ -95,7 +95,7 @@ public class ContainerHandler implements IContainer
 				for (TFile file : fileList)
 				{
 					// TODO add error handling
-					fileInfoList.add(new FileInfo(Integer.parseInt(file.getName())));
+					fileInfoList.add(new FileInfo(Integer.parseInt(file.getName()), containerInfo));
 				}
 			}
 		} catch (Exception e)

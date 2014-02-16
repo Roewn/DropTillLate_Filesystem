@@ -97,7 +97,7 @@ public class ContainerManager
 							// system.out.println("TreeSet\n"+ contInfoSet);
 						}
 					}
-					// When the smallest Container han't enough space, assign a new one
+					// When the smallest Container han't1 enough space, assign a new one
 					if (actFileContInfo.getContainerID() <= 0)
 					{
 						// Pass the relation ContainerInfos to generate a new ContainerInfo with a random number.

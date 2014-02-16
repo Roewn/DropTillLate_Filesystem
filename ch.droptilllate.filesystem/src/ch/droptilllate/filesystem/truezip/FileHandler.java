@@ -16,6 +16,7 @@ import ch.droptilllate.filesystem.info.InfoHelper;
 import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.IContainer;
 import ch.droptilllate.filesystem.io.IFile;
+import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
 import de.schlichtherle.truezip.file.TFile;
 import de.schlichtherle.truezip.file.TVFS;
@@ -24,8 +25,18 @@ import de.schlichtherle.truezip.fs.FsSyncException;
 public class FileHandler implements IFile
 {
 	private IContainer iContainer = new ContainerHandler();
+	
+	public FileHandler() {
+		// TODO initalize the tillate archive detector globally
+		
+		// initalize the config
+		TConfig config = TConfig.get();
+		// Configure custom application file format.
+		TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION);
+		config.setArchiveDetector(tad);
+	}
 
-	// TODO when moving files to another archive use the RDC methode
+	
 
 	/*
 	 * (non-Javadoc)
@@ -36,7 +47,8 @@ public class FileHandler implements IFile
 	public synchronized void encryptFile(FileInfoEncrypt fileInfo, String key) throws FileException
 	{
 
-		try (TConfig config = TConfig.push())
+		TConfig config = TConfig.push();
+		try
 		{
 			// Set the password for the current operation
 			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
@@ -64,6 +76,11 @@ public class FileHandler implements IFile
 		} catch (Exception e)
 		{
 			throw new FileException(FileError.UNKNOWN, e.getMessage());
+		} finally
+		{
+			// Pop the current configuration off the inheritable thread local stack,
+			// thereby reverting to the old default archive detector.
+			config.close();
 		}
 	}
 
@@ -75,10 +92,12 @@ public class FileHandler implements IFile
 	@Override
 	public synchronized void decryptFile(FileInfoDecrypt fileInfo, String key) throws FileException
 	{
-		try (TConfig config = TConfig.push())
+		TConfig config = TConfig.push();
+		try
 		{
 			// Set the password for the current operation
 			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
+			System.out.println(TConfig.get().getArchiveDetector());
 
 			TFile src = new TFile(fileInfo.getContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()));
 
@@ -107,6 +126,11 @@ public class FileHandler implements IFile
 		} catch (Exception e)
 		{
 			throw new FileException(FileError.UNKNOWN, e.getMessage());
+		} finally
+		{
+			// Pop the current configuration off the inheritable thread local stack,
+			// thereby reverting to the old default archive detector.
+			config.close();
 		}
 	}
 
@@ -119,7 +143,8 @@ public class FileHandler implements IFile
 	public synchronized void deleteFile(FileInfo fileInfo, String key) throws FileException
 	{
 		// TODO delete dir if it contains no more containers
-		try (TConfig config = TConfig.push())
+		TConfig config = TConfig.push();
+		try
 		{
 			// Set the password for the current operation
 			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
@@ -139,6 +164,11 @@ public class FileHandler implements IFile
 		} catch (Exception e)
 		{
 			throw new FileException(FileError.UNKNOWN, e.getMessage());
+		} finally
+		{
+			// Pop the current configuration off the inheritable thread local stack,
+			// thereby reverting to the old default archive detector.
+			config.close();
 		}
 	}
 
@@ -150,12 +180,14 @@ public class FileHandler implements IFile
 	@Override
 	public synchronized void moveFile(FileInfoMove fileInfo, String key) throws FileException
 	{
-		try (TConfig config = TConfig.push())
+		// TODO when moving files to another archive use the RDC methode
+		TConfig config = TConfig.push();
+		try
 		{
 			// Set the password for the current operation
 			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
 
-			//TODO different src and dest keys for moving files
+			// TODO different src and dest keys for moving files
 			TFile src = new TFile(fileInfo.getSrcContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()));
 
 			createDir(fileInfo.getDestContainerInfo().getParentContainerPath());
@@ -179,6 +211,11 @@ public class FileHandler implements IFile
 		} catch (Exception e)
 		{
 			throw new FileException(FileError.UNKNOWN, e.getMessage());
+		} finally
+		{
+			// Pop the current configuration off the inheritable thread local stack,
+			// thereby reverting to the old default archive detector.
+			config.close();
 		}
 	}
 
@@ -188,10 +225,14 @@ public class FileHandler implements IFile
 	 * @param fileInfo Info of the File to check (including container id)
 	 * @return true when file still exists
 	 */
-	public synchronized boolean isFileInContainer(FileInfo fileInfo)
+	public synchronized boolean checkFile(FileInfo fileInfo, String key)
 	{
+		TConfig config = TConfig.push();
 		try
 		{
+			// Set the password for the current operation
+			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
+
 			for (FileInfo file : iContainer.listContainerContent(fileInfo.getContainerInfo()))
 			{
 				if (fileInfo.getFileID() == file.getFileID())
@@ -203,6 +244,11 @@ public class FileHandler implements IFile
 		} catch (FileException e)
 		{
 			System.err.println(e.getError());
+		} finally
+		{
+			// Pop the current configuration off the inheritable thread local stack,
+			// thereby reverting to the old default archive detector.
+			config.close();
 		}
 		return false;
 

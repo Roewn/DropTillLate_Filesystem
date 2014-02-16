@@ -3,7 +3,6 @@
  */
 package ch.droptilllate.filesystem.concurrent;
 
-import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.InfoHelper;
 import ch.droptilllate.filesystem.io.FileException;
