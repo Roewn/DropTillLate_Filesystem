@@ -42,10 +42,11 @@ public interface IFile
 	 * Moves the file from the src to the dest Container
 	 * 
 	 * @param fileinfo Info of the file including source and destination container
-	 * @param key related key for the passed file
+	 * @param srcKey related key for the passed source file
+	 * @param dstKey new key for the destination of the passed file
 	 * @throws FileException Throw when file could not be moved.
 	 */
-	public abstract void moveFile(FileInfoMove fileInfo, String key) throws FileException;
+	public abstract void moveFile(FileInfoMove fileInfo, String srcKey, String dstKey) throws FileException;
 	
 	/**
 	 * List the Containers of each passed fileinfo and list all the file in those containers to the console
@@ -67,6 +68,6 @@ public interface IFile
 	 * archive file in order to allow access by third parties (e.g. other processes), cleans up any temporary allocated resources (e.g.
 	 * temporary files) and purges any cached data.
 	 */
-	public abstract void umountFileSystem();
+	public abstract void unmountFileSystem();
 
 }

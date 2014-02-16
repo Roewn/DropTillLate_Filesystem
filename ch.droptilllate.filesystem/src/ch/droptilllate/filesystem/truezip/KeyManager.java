@@ -4,6 +4,7 @@ package ch.droptilllate.filesystem.truezip;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 
 	public class KeyManager {
+		// TODO See Truezip samples for better implementations of the Key manager
 		
 		/**
 		 * Returns a new archive detector which uses the given password for all

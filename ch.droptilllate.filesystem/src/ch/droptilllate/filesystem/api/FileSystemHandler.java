@@ -75,7 +75,7 @@ public class FileSystemHandler implements IFileSystem
 
 		System.out.println("Finished all threads");
 
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 
 		// Initialise the summary
 		FileHandlingSummary fileHandSummary = new FileHandlingSummary(fileInfoList);
@@ -105,7 +105,7 @@ public class FileSystemHandler implements IFileSystem
 
 		System.out.println("Finished all threads");
 
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 
 		// Initialise the summary
 		FileHandlingSummary fileHandSummary = new FileHandlingSummary(fileInfoList);
@@ -135,7 +135,7 @@ public class FileSystemHandler implements IFileSystem
 		waitExecutor(executor);
 
 		System.out.println("Finished all threads");
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 		// Remove all empty containers from the fileSystem
 		iContainer.removeEmptyContainers(fileInfoList);
 		// Initialise the summary
@@ -156,19 +156,23 @@ public class FileSystemHandler implements IFileSystem
 		// Move the Files
 		for (FileInfoMove fileInfo : fileInfoList)
 		{
-			// Get key for the current share relation
-			String key = getKey(fileInfo, keyRelation);
+			
+			
+			// Get key for the destination share relation
+			String dstKey = getKey(fileInfo, keyRelation);
+			// Get key for the source share relation
+			String srcKey = getKey(fileInfo.getSrcContainerInfo().getParentContainerPath(), fileInfo, keyRelation);
 			// if no error occurred during the container assignment perform the operation
 			if (fileInfo.getError() == FileError.NONE)
 			{
-				Runnable worker = new WorkerMove(fileInfo, key);
+				Runnable worker = new WorkerMove(fileInfo, srcKey , dstKey);
 				executor.execute(worker);
 			}
 		}
 		waitExecutor(executor);
 
 		System.out.println("Finished all threads");
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 
 		// create FileInfo list of the src files
 		List<FileInfo> fiSrcList = new ArrayList<FileInfo>();
@@ -227,26 +231,42 @@ public class FileSystemHandler implements IFileSystem
 		waitExecutor(executor);
 
 		System.out.println("Finished all threads");
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 		return resultMap;
 	}
+	
+	
 
 	/**
 	 * Gets the key for the current file info from the passed key relation. If the share relation is not contained in the key relation, a
-	 * errer gets set to the FileInfo
+	 * error gets set to the FileInfo. If the FileInfo is a FileInfoMove, the destination key gets returned
 	 * 
 	 * @param fileInfo current file info
 	 * @param keyRelation relation of all keys
-	 * @return key for the passed file info
+	 * @return key for the passed file info. If the FileInfo is a FileInfoMove, the destination key gets returned.
 	 */
 	private String getKey(FileInfo fileInfo, KeyRelation keyRelation)
+	{		
+		return getKey(fileInfo.getContainerInfo().getParentContainerPath(),fileInfo,keyRelation);
+	}
+	
+	/**
+	 * Gets the key for the current file info from the passed key relation. If the share relation is not contained in the key relation, a
+	 * error gets set to the FileInfo. If the FileInfo is a FileInfoMove, the destination key gets returned
+	 * 
+	 * @param shareRelation path of the share relation the determine the key
+	 * @param fileInfo current file info
+	 * @param keyRelation relation of all keys
+	 * @return key for the passed file info. If the FileInfo is a FileInfoMove, the destination key gets returned.
+	 */
+	private String getKey(String shareRelation, FileInfo fileInfo, KeyRelation keyRelation)
 	{
 		// Get key for the current share relation
-		String key = keyRelation.getKeyOfShareRelation(fileInfo.getContainerInfo().getParentContainerPath());
+		String key = keyRelation.getKeyOfShareRelation(shareRelation);
 		// Generate Error if share relation not found in key relation
 		if (key == null)
 		{
-			fileInfo.setError(FileError.SHARERELATION_NOT_FOUND, fileInfo.getContainerInfo().getParentContainerPath());
+			fileInfo.setError(FileError.SHARERELATION_NOT_FOUND, shareRelation);
 		}
 		return key;
 	}

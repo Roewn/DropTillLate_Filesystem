@@ -72,7 +72,7 @@ public class WorkerDeleteTest
 		{
 			e.printStackTrace();
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 
 		// delete the file
 		FileInfo fi = new FileInfo(id, fie.getContainerInfo());
@@ -86,7 +86,7 @@ public class WorkerDeleteTest
 			e.printStackTrace();
 		}
 
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 		assertFalse(iFile.checkFile(fie, key1));
 	}
 
@@ -112,7 +112,7 @@ public class WorkerDeleteTest
 		{
 			e.printStackTrace();
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 
 		// delete the file
 		FileInfo fi = new FileInfo(id + 1, fie.getContainerInfo());
@@ -127,7 +127,7 @@ public class WorkerDeleteTest
 		}
 
 		assertTrue(fi.getError() == FileError.SRC_FILE_NOT_FOUND);
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 
 	}
 

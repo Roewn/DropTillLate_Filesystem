@@ -25,18 +25,17 @@ import de.schlichtherle.truezip.fs.FsSyncException;
 public class FileHandler implements IFile
 {
 	private IContainer iContainer = new ContainerHandler();
-	
-	public FileHandler() {
+
+	public FileHandler()
+	{
 		// TODO initalize the tillate archive detector globally
-		
+
 		// initalize the config
 		TConfig config = TConfig.get();
 		// Configure custom application file format.
 		TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION);
 		config.setArchiveDetector(tad);
 	}
-
-	
 
 	/*
 	 * (non-Javadoc)
@@ -80,7 +79,7 @@ public class FileHandler implements IFile
 		{
 			// Pop the current configuration off the inheritable thread local stack,
 			// thereby reverting to the old default archive detector.
-			config.close();
+			config.close();			
 		}
 	}
 
@@ -178,17 +177,19 @@ public class FileHandler implements IFile
 	 * @see ch.droptilllate.filesystem.io.IFile#moveFile(ch.droptilllate.filesystem.info.FileInfoMove)
 	 */
 	@Override
-	public synchronized void moveFile(FileInfoMove fileInfo, String key) throws FileException
+	public synchronized void moveFile(FileInfoMove fileInfo, String srcKey, String dstKey) throws FileException
 	{
 		// TODO when moving files to another archive use the RDC methode
+
 		TConfig config = TConfig.push();
 		try
 		{
-			// Set the password for the current operation
-			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
+			// Set the password for the current operation (Archive detector of the destination)
+			config.setArchiveDetector(KeyManager.getArchiveDetector(dstKey.toCharArray()));
 
-			// TODO different src and dest keys for moving files
-			TFile src = new TFile(fileInfo.getSrcContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()));
+			// create the source file and pass the source archive detector with the source key
+			TFile src = new TFile(fileInfo.getSrcContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()),
+					KeyManager.getArchiveDetector(srcKey.toCharArray()));
 
 			createDir(fileInfo.getDestContainerInfo().getParentContainerPath());
 			TFile dst = new TFile(fileInfo.getDestContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()));
@@ -202,7 +203,7 @@ public class FileHandler implements IFile
 				throw new FileException(FileError.INVALID_KEY, e.getCause().toString());
 			} else if (isFileNotFoundException(e))
 			{
-				throw new FileException(FileError.SRC_FILE_NOT_FOUND, fileInfo.getContainerInfo().getFullContainerPath()
+				throw new FileException(FileError.SRC_FILE_NOT_FOUND, fileInfo.getSrcContainerInfo().getFullContainerPath()
 						+ InfoHelper.getDirLimiter() + fileInfo.getFileID());
 			} else
 			{
@@ -217,6 +218,7 @@ public class FileHandler implements IFile
 			// thereby reverting to the old default archive detector.
 			config.close();
 		}
+
 	}
 
 	/**
@@ -297,7 +299,7 @@ public class FileHandler implements IFile
 	 * @see ch.droptilllate.filesystem.io.IFile#umountFileSystem()
 	 */
 	@Override
-	public synchronized void umountFileSystem()
+	public synchronized void unmountFileSystem()
 	{
 		try
 		{

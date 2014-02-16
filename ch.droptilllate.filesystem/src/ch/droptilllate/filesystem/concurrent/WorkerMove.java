@@ -17,11 +17,13 @@ public class WorkerMove implements Runnable
 {
 	private IFile iFile = new FileHandler();
 	private FileInfoMove fileInfo;
-	private String key;
+	private String srcKey;
+	private String dstKey;
 
-    public WorkerMove(FileInfoMove fileInfo, String key){
+    public WorkerMove(FileInfoMove fileInfo, String srcKey, String dstKey){
         this.fileInfo= fileInfo;
-        this.key = key;
+        this.srcKey = srcKey;
+        this.dstKey = dstKey;        
     }
 
     @Override
@@ -29,7 +31,7 @@ public class WorkerMove implements Runnable
         System.out.println("Thread started: " +Thread.currentThread().getName() + " -> File: " + fileInfo.getContainerInfo().getFullContainerPath()+InfoHelper.getDirLimiter()+fileInfo.getFileID());
         try
 		{
-			iFile.moveFile(fileInfo, key);
+			iFile.moveFile(fileInfo, srcKey, dstKey);
 		} catch (FileException e)
 		{
 			System.err.println(e.getError());

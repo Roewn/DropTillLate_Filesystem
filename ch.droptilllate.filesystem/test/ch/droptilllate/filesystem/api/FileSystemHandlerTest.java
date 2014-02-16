@@ -39,8 +39,9 @@ public class FileSystemHandlerTest
 
 	private IFile iFile = new FileHandler();
 	private IShareRelation iShareRelation = new ShareRelationHandler();
-	
-	File shareDir;
+
+	File shareDir1;
+	File shareDir2;
 
 	// TODO Add testcase for different src and dest keys for moving files
 
@@ -213,7 +214,7 @@ public class FileSystemHandlerTest
 		for (FileInfoEncrypt fie : fieList)
 		{
 			fimList.add(new FileInfoMove(fie.getFileID(), fie.getSize(), fie.getContainerInfo().getParentContainerPath(), fie
-					.getContainerInfo().getContainerID(), shareDir.getAbsolutePath()));
+					.getContainerInfo().getContainerID(), shareDir1.getAbsolutePath()));
 		}
 
 		// ******************************************************************
@@ -226,7 +227,7 @@ public class FileSystemHandlerTest
 		// get all files in the share directory
 		HashMap<String, List<FileInfo>> resultMap = fsh.getFilesPerRelation(krS);
 
-		List<FileInfo> fiShareList = resultMap.get(shareDir.getAbsolutePath());
+		List<FileInfo> fiShareList = resultMap.get(shareDir1.getAbsolutePath());
 
 		// test if the Summary is ok and all files are in the shared directory
 		for (FileInfoMove fim : fimList)
@@ -237,18 +238,73 @@ public class FileSystemHandlerTest
 
 	}
 
+	@Test
+	public void testListFilesPerShareRelation()
+	{
+		int id = 1;
+		int size = 1;
+		int count = 4;
+		String ext = "txt";
+
+		System.out.println(Constants.TESTCASE_LIMITER);
+		System.out.println(this.getClass().getSimpleName() + ": " + name.getMethodName());
+		System.out.println(count + " Files a " + size + " MB");
+
+		// create Files
+		ArrayList<File> fileList = TestHelper.createFiles(count, size, ext);
+
+		// create FileInfos Encrypt
+		ArrayList<FileInfoEncrypt> fieList = new ArrayList<FileInfoEncrypt>();
+		for (File file : fileList)
+		{
+			if (id <= 2)
+			{
+				fieList.add(new FileInfoEncrypt(id, file.getAbsolutePath(), shareDir1.getAbsolutePath()));
+			} else
+			{
+				fieList.add(new FileInfoEncrypt(id, file.getAbsolutePath(), shareDir2.getAbsolutePath()));
+			}
+			id++;
+		}
+		// encrypt all files
+		fsh.encryptFiles(fieList, krS);
+
+		// get all files in the share directory
+		HashMap<String, List<FileInfo>> resultMap = fsh.getFilesPerRelation(krS);
+
+		// check dirs
+		List<FileInfo> resultList1 = resultMap.get(shareDir1.getAbsolutePath());
+		List<FileInfo> resultList2 = resultMap.get(shareDir2.getAbsolutePath());
+		assertTrue(resultList1.size() == 2);
+		assertTrue(resultList2.size() == 2);
+		id = 1;
+		for (FileInfo fi: fieList) {
+			if (fi.getFileID() <= 2)
+			{
+				assertTrue(resultList1.contains(fi));
+			} else
+			{
+				assertTrue(resultList2.contains(fi));
+			}
+			id++;			
+		}
+	}
+
 	@Before
 	public void befor()
 	{
 		TestHelper.setupTestDir();
 		// Create share directory
-		shareDir = new File(TestHelper.getTestDir(), "share");
-		shareDir.mkdir();
+		shareDir1 = new File(TestHelper.getTestDir(), "share1");
+		shareDir1.mkdir();
+		shareDir2 = new File(TestHelper.getTestDir(), "share2");
+		shareDir2.mkdir();
 		// create key relation
 		// pass for the share relation
 		krS = new KeyRelation();
 		krS.addKeyOfShareRelation(TestHelper.getTestDir(), Constants.TEST_PASSWORD_1);
-		krS.addKeyOfShareRelation(shareDir.getAbsolutePath(), Constants.TEST_PASSWORD_1);
+		krS.addKeyOfShareRelation(shareDir1.getAbsolutePath(), Constants.TEST_PASSWORD_1);
+		krS.addKeyOfShareRelation(shareDir2.getAbsolutePath(), Constants.TEST_PASSWORD_1);
 	}
 
 	@After

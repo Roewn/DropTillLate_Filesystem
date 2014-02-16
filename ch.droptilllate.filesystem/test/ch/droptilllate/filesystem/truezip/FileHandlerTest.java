@@ -65,7 +65,7 @@ public class FileHandlerTest
 			System.out.println(e.getMessage());
 		}
 		Timer.stop(true);
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 		
 		System.out.println("Size: " + (textFile.length() / 1024) + "kb");
 		//assertTrue(iFile.isFileInContainer(fie));
@@ -85,7 +85,7 @@ public class FileHandlerTest
 			System.out.println(e.getMessage());
 		}
 		Timer.stop(true);
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 		System.out.println("Size: " + (textFile.length() / 1024) + "kb");
 		assertTrue(TestHelper.getTextFileContent(textFile).equals(TestHelper.getTextFileContent(new File(fid.getFullTmpFilePath()))));
 		
@@ -114,7 +114,7 @@ public class FileHandlerTest
 		{
 			System.out.println(e.getMessage());
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 		assertTrue(iFile.checkFile(fie, Constants.TEST_PASSWORD_1));
 
 		// Create FileInfo to delete
@@ -126,7 +126,7 @@ public class FileHandlerTest
 		{
 			System.out.println(e.getMessage());
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 		assertFalse(iFile.checkFile(fie, Constants.TEST_PASSWORD_1));
 	}
 
@@ -156,7 +156,7 @@ public class FileHandlerTest
 		{
 			System.out.println(e.getMessage());
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 		assertTrue(iFile.checkFile(fie, Constants.TEST_PASSWORD_1));
 
 		
@@ -165,12 +165,12 @@ public class FileHandlerTest
 		fim.getContainerInfo().setContainerID(contId);
 		try
 		{
-			iFile.moveFile(fim, Constants.TEST_PASSWORD_1);
+			iFile.moveFile(fim, Constants.TEST_PASSWORD_1, Constants.TEST_PASSWORD_1);
 		} catch (FileException e)
 		{
 			System.out.println(e.getMessage());
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 		//file should not be longer in the source container
 		assertFalse(iFile.checkFile(fie, Constants.TEST_PASSWORD_1));
 		//check if its in the dest container

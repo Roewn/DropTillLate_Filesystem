@@ -66,7 +66,7 @@ public class WorkerListFilesTest
 		{
 			e1.printStackTrace();
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 
 		// list the files
 		ExecutorService executor = Executors.newFixedThreadPool(1);
@@ -82,7 +82,7 @@ public class WorkerListFilesTest
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 		
 		assertTrue(resultList.size() == 2);
 		assertTrue(resultList.contains(fie1));

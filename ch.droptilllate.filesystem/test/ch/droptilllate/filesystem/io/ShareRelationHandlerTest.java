@@ -63,7 +63,7 @@ public class ShareRelationHandlerTest
 		{
 			System.out.println(e.getMessage());
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 		assertTrue(iFile.checkFile(fie1, key1));
 		assertTrue(iFile.checkFile(fie2, key1));
 				

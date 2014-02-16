@@ -32,6 +32,7 @@ public class WorkerMoveTest
 	private String contentTextFile = "This is a test File";
 	
 	private String key1 = Constants.TEST_PASSWORD_1;
+	private String key2 = Constants.TEST_PASSWORD_2;
 
 	//TODO Add testcase for different src and dest keys
 	
@@ -72,13 +73,13 @@ public class WorkerMoveTest
 		{
 			e1.printStackTrace();
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 
 		// move the file
 		FileInfoMove fim = new FileInfoMove(id, fie.getSize(), fie.getContainerInfo().getParentContainerPath(), contId,
 				shareDir.getAbsolutePath());
 		fim.getDestContainerInfo().setContainerID(contId);
-		Thread thread = new Thread(new WorkerMove(fim, key1));
+		Thread thread = new Thread(new WorkerMove(fim, key1, key2));
 		thread.start();
 		try
 		{
@@ -88,11 +89,12 @@ public class WorkerMoveTest
 			e.printStackTrace();
 		}
 
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 		// file should not be longer in the source container
 		assertFalse(iFile.checkFile(fie, key1));
+		iFile.unmountFileSystem();
 		// check if its in the dest container
-		assertTrue(iFile.checkFile(fim, key1));
+		assertTrue(iFile.checkFile(fim, key2));
 	}
 
 	@Test
@@ -117,13 +119,13 @@ public class WorkerMoveTest
 		{
 			e1.printStackTrace();
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 
 		// move the file
 		FileInfoMove fim = new FileInfoMove(id + 1, fie.getSize(), fie.getContainerInfo().getParentContainerPath(), contId,
 				shareDir.getAbsolutePath());
 		fim.getDestContainerInfo().setContainerID(contId);
-		Thread thread = new Thread(new WorkerMove(fim, key1));
+		Thread thread = new Thread(new WorkerMove(fim, key1, key2));
 		thread.start();
 		try
 		{
@@ -134,7 +136,7 @@ public class WorkerMoveTest
 		}
 
 		assertTrue(fim.getError() == FileError.SRC_FILE_NOT_FOUND);
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 
 	}
 

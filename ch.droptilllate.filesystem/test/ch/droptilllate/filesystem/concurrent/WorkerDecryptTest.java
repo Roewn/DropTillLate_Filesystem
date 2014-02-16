@@ -62,7 +62,7 @@ public class WorkerDecryptTest
 		{
 			e.printStackTrace();
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 
 		// Extract the file
 		FileInfoDecrypt fid = new FileInfoDecrypt(id, "txt", TestHelper.getExtractDir(), TestHelper.getTestDir(), contId);
@@ -75,7 +75,7 @@ public class WorkerDecryptTest
 		{
 			e.printStackTrace();
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 		
 		assertTrue(TestHelper.getTextFileContent(textFile).equals(TestHelper.getTextFileContent(new File(fid.getFullTmpFilePath()))));
 		
@@ -103,7 +103,7 @@ public class WorkerDecryptTest
 		{
 			e.printStackTrace();
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 
 		// Extract the file
 		FileInfoDecrypt fid = new FileInfoDecrypt(id + 1, "txt", TestHelper.getExtractDir(), TestHelper.getTestDir(), contId);
@@ -116,7 +116,7 @@ public class WorkerDecryptTest
 		{
 			e.printStackTrace();
 		}
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 		
 		assertTrue(fid.getError() == FileError.SRC_FILE_NOT_FOUND);
 		

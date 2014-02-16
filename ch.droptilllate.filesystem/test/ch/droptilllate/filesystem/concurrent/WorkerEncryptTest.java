@@ -59,7 +59,7 @@ public class WorkerEncryptTest
 			e.printStackTrace();
 		}
 		assertTrue(iFile.checkFile(fie, key1));
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 	}
 
 	@Test
@@ -87,7 +87,7 @@ public class WorkerEncryptTest
 		}
 		assertFalse(iFile.checkFile(fie, key1));
 		assertTrue(fie.getError() == FileError.SRC_FILE_NOT_FOUND);
-		iFile.umountFileSystem();
+		iFile.unmountFileSystem();
 
 	}
 
