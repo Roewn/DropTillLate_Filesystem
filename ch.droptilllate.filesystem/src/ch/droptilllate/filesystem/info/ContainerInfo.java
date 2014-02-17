@@ -18,19 +18,19 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 	 * Creates an ContainerInfo and sets the full path of the Container (Parent container path + containerID + Container extension).
 	 * The Container id as well as the parent container path will be set automatically
 	 * Example: "C:\\Temp\\Share1\\342657.tilllate"
-	 * @param fullContainerPath -> Parent container path + containerID + Container extension.
+	 * @param containerPath -> Parent container path + containerID + Container extension.
 	 */
-	public ContainerInfo(String fullContainerPath)
+	public ContainerInfo(String containerPath)
 	{
-		setContainerPath(fullContainerPath);		
+		setContainerPath(containerPath);		
 	}
 
 	/**
 	 * Creates an ContainerInfo and sets the parent path of the Container, as well as the Container id
 	 * If the Container id is unknown and the system has to provide a new number, set the containerID = 0.
-	 * ParentContainerPath Example: "C:\\Temp\\Share1\\"
+	 * shareRelationPath Example: "C:\\Temp\\Share1\\"
 	 * @param containerID Id of the container or 0 if unknown.
-	 * @param shareRelationPath Directory which holds the container.
+	 * @param shareRelationPath Directory which holds the container Example: "C:\\Temp\\Share1".
 	 */
 	public ContainerInfo(int containerID, String shareRelationPath)
 	{
@@ -53,7 +53,7 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 	}
 
 	/**
-	 * ShareRelationPath Example: "C:\\Temp\\Share1\\"
+	 * ShareRelationPath Example: "C:\\Temp\\Share1"
 	 * @return the ShareRelationPath -> Directory which holds the container.
 	 */
 	public String getShareRelationPath() {
@@ -61,7 +61,7 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 	}
 
 	/**
-	 * ShareRelationPath Example: "C:\\Temp\\Share1\\"
+	 * ShareRelationPath Example: "C:\\Temp\\Share1"
 	 * @param ShareRelationPath the shareRelationPath to set -> Directory which holds the container.
 	 */
 	public void setShareRelationPath(String ShareRelationPath) {	
@@ -70,7 +70,7 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 
 	/**
 	 * Example: "C:\\Temp\\Share1\\342657.tilllate"
-	 * @param containerPath containerPath -> Parent container path + containerID + Container extension.
+	 * @param containerPath containerPath -> shareRelationPath + containerID + Container extension.
 	 */
 	public void setContainerPath(String containerPath) {
 		try
