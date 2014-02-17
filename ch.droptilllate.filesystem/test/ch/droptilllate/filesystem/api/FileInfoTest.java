@@ -36,7 +36,7 @@ public class FileInfoTest
 		String parentContPath = "C:\\test";
 		FileInfo fi = new FileInfo(id, new ContainerInfo(containerID, parentContPath));
 		assertTrue(containerID == fi.getContainerInfo().getContainerID());
-		assertEquals(parentContPath, fi.getContainerInfo().getParentContainerPath());		
+		assertEquals(parentContPath, fi.getContainerInfo().getShareRelationPath());		
 	}
 	
 	@Test

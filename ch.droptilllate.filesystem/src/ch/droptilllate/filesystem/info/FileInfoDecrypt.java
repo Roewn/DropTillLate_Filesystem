@@ -21,11 +21,11 @@ public class FileInfoDecrypt extends FileInfo
 	 * @param fileID Unique id of the File
 	 * @param fileExtension The file extension of the plain file (this will be added to the file id when decrypted to the temp directory)
 	 * @param tempDirPath Path to the temp directory, where the file gets decrypted 
-	 * @param containerPath Path to the directory (directory of the share relation) which holds the container of the encrypted file.
+	 * @param shareRelationPath Path to the directory (directory of the share relation) which holds the container of the encrypted file.
 	 * @param containerID Id of the container which contains the file. 
 	 */
-	public FileInfoDecrypt(int fileID, String fileExtension, String tempDirPath, String containerPath, int containerID) {
-		super(fileID, new ContainerInfo(containerID, containerPath));
+	public FileInfoDecrypt(int fileID, String fileExtension, String tempDirPath, String shareRelationPath, int containerID) {
+		super(fileID, new ContainerInfo(containerID, shareRelationPath));
 		setTempDirPath(tempDirPath);
 		setFileExtension(fileExtension);
 	}
@@ -60,7 +60,7 @@ public class FileInfoDecrypt extends FileInfo
 	
 	/**
 	 * Example: "C:\\Temp\\3425.txt"
-	 * @return fullContainerPath -> Parent container path + containerID + Container extension.
+	 * @return fullFilePath -> Location of the decrypted File (temp dir path + file Id + File extension)
 	 */
 	public synchronized String getFullTmpFilePath() {
 		return InfoHelper.createFullPath(this.tempDirPath, Integer.toString(super.getFileID()), this.fileExtension);
@@ -71,7 +71,7 @@ public class FileInfoDecrypt extends FileInfo
 	 * Example: "3425.txt"
 	 * @return
 	 */
-	public synchronized String getFullFileName() {
+	public synchronized String getPlainFileName() {
 		return super.getFileID() + Constants.EXT_LIMITER + this.fileExtension;
 	}
 

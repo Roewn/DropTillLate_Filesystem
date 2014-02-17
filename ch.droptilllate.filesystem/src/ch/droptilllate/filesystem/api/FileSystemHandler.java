@@ -161,7 +161,7 @@ public class FileSystemHandler implements IFileSystem
 			// Get key for the destination share relation
 			String dstKey = getKey(fileInfo, keyRelation);
 			// Get key for the source share relation
-			String srcKey = getKey(fileInfo.getSrcContainerInfo().getParentContainerPath(), fileInfo, keyRelation);
+			String srcKey = getKey(fileInfo.getSrcContainerInfo().getShareRelationPath(), fileInfo, keyRelation);
 			// if no error occurred during the container assignment perform the operation
 			if (fileInfo.getError() == FileError.NONE)
 			{
@@ -217,7 +217,7 @@ public class FileSystemHandler implements IFileSystem
 				List<FileInfo> resultList = worker.get();
 				if (resultList != null && resultList.size() > 0)
 				{
-					resultMap.put(resultList.get(0).getContainerInfo().getParentContainerPath(), resultList);
+					resultMap.put(resultList.get(0).getContainerInfo().getShareRelationPath(), resultList);
 				}
 			} catch (InterruptedException | ExecutionException e)
 			{
@@ -247,7 +247,7 @@ public class FileSystemHandler implements IFileSystem
 	 */
 	private String getKey(FileInfo fileInfo, KeyRelation keyRelation)
 	{		
-		return getKey(fileInfo.getContainerInfo().getParentContainerPath(),fileInfo,keyRelation);
+		return getKey(fileInfo.getContainerInfo().getShareRelationPath(),fileInfo,keyRelation);
 	}
 	
 	/**

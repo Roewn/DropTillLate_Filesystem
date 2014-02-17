@@ -104,7 +104,7 @@ public class FileHandlerTest
 		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), deleteDir);
 		fie.getContainerInfo().setContainerID(contId);
 		// Create the directories
-		iShareRelation.checkIfDirectoryExists(fie.getContainerInfo().getParentContainerPath());
+		iShareRelation.checkIfDirectoryExists(fie.getContainerInfo().getShareRelationPath());
 		
 		// Adding File
 		try

@@ -87,7 +87,7 @@ public class ContainerHandler implements IContainer
 		ArrayList<FileInfo> fileInfoList = new ArrayList<FileInfo>();
 		try
 		{
-			TFile containerFile = new TFile(containerInfo.getFullContainerPath());
+			TFile containerFile = new TFile(containerInfo.getContainerPath());
 			TFile[] fileList = containerFile.listFiles();
 
 			if (fileList != null)
@@ -120,7 +120,7 @@ public class ContainerHandler implements IContainer
 			// .. delete the container
 			deleteContainer(containerInfo);
 			System.out.println(Constants.CONSOLE_LIMITER);
-			System.out.println("Empty Container deleted: " + containerInfo.getFullContainerPath());
+			System.out.println("Empty Container deleted: " + containerInfo.getContainerPath());
 		}
 	}
 
@@ -134,7 +134,7 @@ public class ContainerHandler implements IContainer
 	{
 		try
 		{
-			TFile cont = new TFile(containerInfo.getFullContainerPath());
+			TFile cont = new TFile(containerInfo.getContainerPath());
 			checkIfContainerExists(cont, FileError.CONT_NOT_FOUND);
 			TFile.rm_r(cont);
 		} catch (IOException e)
@@ -168,7 +168,7 @@ public class ContainerHandler implements IContainer
 	 */
 	private synchronized void checkIfContainerExists(ContainerInfo containerInfo, FileError fileError) throws FileException
 	{
-		TFile cont = new TFile(containerInfo.getFullContainerPath());
+		TFile cont = new TFile(containerInfo.getContainerPath());
 		checkIfContainerExists(cont, fileError);
 	}
 

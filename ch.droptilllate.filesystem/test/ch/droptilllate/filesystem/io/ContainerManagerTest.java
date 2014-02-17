@@ -60,8 +60,8 @@ public class ContainerManagerTest
 		// check Container ID
 		assertTrue(fileInfoList.get(0).getContainerInfo().getContainerID() >= Constants.MIN_RND);
 		// Check Path
-		assertEquals(fie.getContainerInfo().getParentContainerPath(), fileInfoList.get(0).getContainerInfo()
-				.getParentContainerPath());
+		assertEquals(fie.getContainerInfo().getShareRelationPath(), fileInfoList.get(0).getContainerInfo()
+				.getShareRelationPath());
 		// Check Size
 		assertTrue(fileInfoList.get(0).getContainerInfo().getEstimatedContainerSize() == textFile.length());
 	}
@@ -84,8 +84,8 @@ public class ContainerManagerTest
 		// check Container ID
 		assertTrue(fileInfoList.get(0).getContainerInfo().getContainerID() == contId);
 		// Check Path
-		assertEquals(fie.getContainerInfo().getParentContainerPath(), fileInfoList.get(0).getContainerInfo()
-				.getParentContainerPath());
+		assertEquals(fie.getContainerInfo().getShareRelationPath(), fileInfoList.get(0).getContainerInfo()
+				.getShareRelationPath());
 		// Check Size
 		// assertTrue(fileInfoList.get(0).getContainerInfo().getEstimatedContainerSize() == textFile.length());
 	}

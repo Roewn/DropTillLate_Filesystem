@@ -64,7 +64,7 @@ public class ContainerManager
 			{
 				actFileContInfo = fileInfo.getContainerInfo();
 				// get the Mapkey for the current share relation
-				String shareRelationKey = actFileContInfo.getParentContainerPath();
+				String shareRelationKey = actFileContInfo.getShareRelationPath();
 				// while no ContainerID for this file exists do ...
 				if (actFileContInfo.getContainerID() <= 0)
 				{
@@ -149,16 +149,16 @@ public class ContainerManager
 				// get the containerInfo
 				actFileContInfo = fileInfo.getContainerInfo();
 				// create a new entry for every share relation if it's nor already there
-				if (!shareRelationsMap.containsKey(actFileContInfo.getParentContainerPath()))
+				if (!shareRelationsMap.containsKey(actFileContInfo.getShareRelationPath()))
 				{
 					// TODO Maybe check if the parent folder of droptilllate is correct
-					shareRelationsMap.put(actFileContInfo.getParentContainerPath(), new TreeSet<ContainerInfo>());
+					shareRelationsMap.put(actFileContInfo.getShareRelationPath(), new TreeSet<ContainerInfo>());
 					
 					// If folder already exists, get all containers and update the Map with these infos
-					if (iShareRelation.checkIfDirectoryExists(actFileContInfo.getParentContainerPath()))
+					if (iShareRelation.checkIfDirectoryExists(actFileContInfo.getShareRelationPath()))
 					{
 						// get all containers in this share relation
-						List<File> containerList = iShareRelation.getContainersOfShareRelation(actFileContInfo.getParentContainerPath());						
+						List<File> containerList = iShareRelation.getContainersOfShareRelation(actFileContInfo.getShareRelationPath());						
 						TreeSet<ContainerInfo> contInfoSet = new TreeSet<ContainerInfo>();
 						// get all FileInfos for the containers in these path
 						for (File file : containerList)
@@ -170,7 +170,7 @@ public class ContainerManager
 							contInfoSet.add(contInfo);
 						}
 						// Update the map with the all containers per share relation
-						shareRelationsMap.put(actFileContInfo.getParentContainerPath(), contInfoSet);
+						shareRelationsMap.put(actFileContInfo.getShareRelationPath(), contInfoSet);
 					}
 				}
 			} catch (FileException e)
@@ -210,7 +210,7 @@ public class ContainerManager
 			contIdSet.add(contInfo.getContainerID());
 			if (containerPath == null || containerPath.isEmpty())
 			{
-				containerPath = contInfo.getParentContainerPath();
+				containerPath = contInfo.getShareRelationPath();
 			}
 		}
 

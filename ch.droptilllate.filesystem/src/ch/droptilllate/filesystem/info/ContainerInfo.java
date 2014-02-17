@@ -11,7 +11,7 @@ import ch.droptilllate.filesystem.commons.Constants;
 public class ContainerInfo implements Comparable<ContainerInfo>
 {
 	private int containerID;
-	private String containerPath;
+	private String shareRelationPath;
 	private long estimatedContainerSize;
 
 	/**
@@ -22,7 +22,7 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 	 */
 	public ContainerInfo(String fullContainerPath)
 	{
-		setFullContainerPath(fullContainerPath);		
+		setContainerPath(fullContainerPath);		
 	}
 
 	/**
@@ -30,12 +30,12 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 	 * If the Container id is unknown and the system has to provide a new number, set the containerID = 0.
 	 * ParentContainerPath Example: "C:\\Temp\\Share1\\"
 	 * @param containerID Id of the container or 0 if unknown.
-	 * @param parentContainerPath Directory which holds the container.
+	 * @param shareRelationPath Directory which holds the container.
 	 */
-	public ContainerInfo(int containerID, String parentContainerPath)
+	public ContainerInfo(int containerID, String shareRelationPath)
 	{
 		this.containerID = containerID;
-		setParentContainerPath(parentContainerPath);		
+		setShareRelationPath(shareRelationPath);		
 	}
 
 	/**
@@ -53,31 +53,31 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 	}
 
 	/**
-	 * ParentContainerPath Example: "C:\\Temp\\Share1\\"
-	 * @return the parentContainerPath -> Directory which holds the container.
+	 * ShareRelationPath Example: "C:\\Temp\\Share1\\"
+	 * @return the ShareRelationPath -> Directory which holds the container.
 	 */
-	public String getParentContainerPath() {
-		return containerPath;
+	public String getShareRelationPath() {
+		return shareRelationPath;
 	}
 
 	/**
-	 * ParentContainerPath Example: "C:\\Temp\\Share1\\"
-	 * @param parentContainerPath the containerPath to set -> Directory which holds the container.
+	 * ShareRelationPath Example: "C:\\Temp\\Share1\\"
+	 * @param ShareRelationPath the shareRelationPath to set -> Directory which holds the container.
 	 */
-	public void setParentContainerPath(String parentContainerPath) {	
-		this.containerPath = InfoHelper.checkPath(parentContainerPath);
+	public void setShareRelationPath(String ShareRelationPath) {	
+		this.shareRelationPath = InfoHelper.checkPath(ShareRelationPath);
 	}
 
 	/**
 	 * Example: "C:\\Temp\\Share1\\342657.tilllate"
-	 * @param path fullContainerPath -> Parent container path + containerID + Container extension.
+	 * @param containerPath containerPath -> Parent container path + containerID + Container extension.
 	 */
-	public void setFullContainerPath(String path) {
+	public void setContainerPath(String containerPath) {
 		try
 		{
-			this.containerPath = path.substring(0, path.lastIndexOf(InfoHelper.getDirLimiter()));
-			this.containerID = Integer.parseInt((path.substring(path.lastIndexOf(InfoHelper.getDirLimiter()) + InfoHelper.getOffset(),
-					path.lastIndexOf(Constants.EXT_LIMITER))));
+			this.shareRelationPath = containerPath.substring(0, containerPath.lastIndexOf(InfoHelper.getDirLimiter()));
+			this.containerID = Integer.parseInt((containerPath.substring(containerPath.lastIndexOf(InfoHelper.getDirLimiter()) + InfoHelper.getOffset(),
+					containerPath.lastIndexOf(Constants.EXT_LIMITER))));
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block
@@ -88,10 +88,10 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 
 	/**
 	 * Example: "C:\\Temp\\Share1\\342657.tilllate"
-	 * @return fullContainerPath -> Parent container path + containerID + Container extension.
+	 * @return containerPath -> Parent container path + containerID + Container extension.
 	 */
-	public String getFullContainerPath() {
-		return InfoHelper.createFullPath(this.containerPath, Integer.toString(this.containerID), Constants.CONTAINER_EXTENTION);
+	public String getContainerPath() {
+		return InfoHelper.createFullPath(this.shareRelationPath, Integer.toString(this.containerID), Constants.CONTAINER_EXTENTION);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 			return false;
 		}
 
-		if (!this.containerPath.equals(((ContainerInfo) other).containerPath))
+		if (!this.shareRelationPath.equals(((ContainerInfo) other).shareRelationPath))
 		{
 			return false;
 		}
@@ -146,19 +146,19 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 			return -1;
 		}
 		// if size is the same, check if it is also to same container
-		return this.getFullContainerPath().compareTo((o.getFullContainerPath()));
+		return this.getContainerPath().compareTo((o.getContainerPath()));
 	}
 
 	@Override
 	public String toString() {
-		return getFullContainerPath() + ", Size: " + Long.toString(estimatedContainerSize / 1024) + "KB";
+		return getContainerPath() + ", Size: " + Long.toString(estimatedContainerSize / 1024) + "KB";
 	}
 	
 	 @Override
-	   public int hashCode(){
+	 public int hashCode(){
 	       int result = 0;
 	       result = 31*result + this.containerID;
-	       result = 31*result + (this.containerPath !=null ? this.containerPath.hashCode() : 0);
+	       result = 31*result + (this.shareRelationPath !=null ? this.shareRelationPath.hashCode() : 0);
 	      
 	       return result;
 	   }

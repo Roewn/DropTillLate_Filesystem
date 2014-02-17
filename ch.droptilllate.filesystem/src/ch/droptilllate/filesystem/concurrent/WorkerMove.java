@@ -28,7 +28,7 @@ public class WorkerMove implements Runnable
 
     @Override
     public void run() {
-        System.out.println("Thread started: " +Thread.currentThread().getName() + " -> File: " + fileInfo.getContainerInfo().getFullContainerPath()+InfoHelper.getDirLimiter()+fileInfo.getFileID());
+        System.out.println("Thread started: " +Thread.currentThread().getName() + " -> File: " + fileInfo.getContainerInfo().getContainerPath()+InfoHelper.getDirLimiter()+fileInfo.getFileID());
         try
 		{
 			iFile.moveFile(fileInfo, srcKey, dstKey);

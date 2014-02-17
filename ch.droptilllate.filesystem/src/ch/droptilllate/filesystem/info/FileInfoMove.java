@@ -17,14 +17,14 @@ public class FileInfoMove extends FileInfo
 	 * The target container info does just pass the path of the share relation, the container id will be assigned by the Container Manager.
 	 * @param fileID Unique id of the File
 	 * @param fileSize Size of the file to move
-	 * @param srcParentContainerPath Path to the directory (directory of the share relation) which holds the container of the encrypted source file.
+	 * @param srcShareRelationPath Path to the directory (directory of the share relation) which holds the container of the encrypted source file.
 	 * @param srcContainerID Id of the container which contains the source file. 
 	 * @param destShareRelationPath Path to the directory (directory of the share relation) where the file has to be moved in a new container.
 	 */
-	public FileInfoMove (int fileID, long fileSize, String srcParentContainerPath, int srcContainerID, String destShareRelationPath){
+	public FileInfoMove (int fileID, long fileSize, String srcShareRelationPath, int srcContainerID, String destShareRelationPath){
 		super(fileID, new ContainerInfo(0, destShareRelationPath));
 		super.setSize(fileSize);
-		srcContainerInfo = new ContainerInfo(srcContainerID, srcParentContainerPath);
+		srcContainerInfo = new ContainerInfo(srcContainerID, srcShareRelationPath);
 	}
 
 	/**

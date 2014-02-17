@@ -30,7 +30,7 @@ public class WorkerDecrypt implements Runnable
 	{
 		
 			System.out.println("Thread started: " + Thread.currentThread().getName() + " -> File: "
-					+ fileInfo.getContainerInfo().getFullContainerPath() + InfoHelper.getDirLimiter() + fileInfo.getFileID());
+					+ fileInfo.getContainerInfo().getContainerPath() + InfoHelper.getDirLimiter() + fileInfo.getFileID());
 			try
 			{
 				iFile.decryptFile(fileInfo, this.key);

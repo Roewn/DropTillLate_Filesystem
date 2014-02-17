@@ -116,7 +116,7 @@ public class FileSystemHandlerTest
 		for (FileInfoEncrypt fie : fieList)
 		{
 			fidList.add(new FileInfoDecrypt(fie.getFileID(), ext, TestHelper.getExtractDir(), fie.getContainerInfo()
-					.getParentContainerPath(), fie.getContainerInfo().getContainerID()));
+					.getShareRelationPath(), fie.getContainerInfo().getContainerID()));
 		}
 
 		// ******************************************************************
@@ -134,7 +134,7 @@ public class FileSystemHandlerTest
 		List<String> extractFileList = Arrays.asList(extractDir.list());
 		for (FileInfoDecrypt fid : fidList)
 		{
-			assertTrue(extractFileList.contains(fid.getFullFileName()));
+			assertTrue(extractFileList.contains(fid.getPlainFileName()));
 		}
 	}
 
@@ -179,7 +179,7 @@ public class FileSystemHandlerTest
 		for (FileInfo fi : fiList)
 		{
 			assertTrue(fhs.getFileInfoSuccessList().contains(fi));
-			File cont = new File(fi.getContainerInfo().getFullContainerPath());
+			File cont = new File(fi.getContainerInfo().getContainerPath());
 			assertFalse(cont.exists());
 		}
 	}
@@ -213,7 +213,7 @@ public class FileSystemHandlerTest
 		ArrayList<FileInfoMove> fimList = new ArrayList<FileInfoMove>();
 		for (FileInfoEncrypt fie : fieList)
 		{
-			fimList.add(new FileInfoMove(fie.getFileID(), fie.getSize(), fie.getContainerInfo().getParentContainerPath(), fie
+			fimList.add(new FileInfoMove(fie.getFileID(), fie.getSize(), fie.getContainerInfo().getShareRelationPath(), fie
 					.getContainerInfo().getContainerID(), shareDir1.getAbsolutePath()));
 		}
 

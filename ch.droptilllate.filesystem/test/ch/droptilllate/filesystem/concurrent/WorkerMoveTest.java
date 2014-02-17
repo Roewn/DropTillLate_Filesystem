@@ -76,7 +76,7 @@ public class WorkerMoveTest
 		iFile.unmountFileSystem();
 
 		// move the file
-		FileInfoMove fim = new FileInfoMove(id, fie.getSize(), fie.getContainerInfo().getParentContainerPath(), contId,
+		FileInfoMove fim = new FileInfoMove(id, fie.getSize(), fie.getContainerInfo().getShareRelationPath(), contId,
 				shareDir.getAbsolutePath());
 		fim.getDestContainerInfo().setContainerID(contId);
 		Thread thread = new Thread(new WorkerMove(fim, key1, key2));
@@ -122,7 +122,7 @@ public class WorkerMoveTest
 		iFile.unmountFileSystem();
 
 		// move the file
-		FileInfoMove fim = new FileInfoMove(id + 1, fie.getSize(), fie.getContainerInfo().getParentContainerPath(), contId,
+		FileInfoMove fim = new FileInfoMove(id + 1, fie.getSize(), fie.getContainerInfo().getShareRelationPath(), contId,
 				shareDir.getAbsolutePath());
 		fim.getDestContainerInfo().setContainerID(contId);
 		Thread thread = new Thread(new WorkerMove(fim, key1, key2));

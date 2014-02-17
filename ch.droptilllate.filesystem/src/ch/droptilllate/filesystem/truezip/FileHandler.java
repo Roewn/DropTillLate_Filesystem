@@ -55,7 +55,7 @@ public class FileHandler implements IFile
 			TFile src = new TFile(fileInfo.getFullPlainFilePath());
 			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND);
 
-			TFile dst = new TFile(fileInfo.getContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()));
+			TFile dst = new TFile(fileInfo.getContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 
 			// check if it is a File and not an directory
 			if (src.isDirectory())
@@ -98,7 +98,7 @@ public class FileHandler implements IFile
 			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
 			System.out.println(TConfig.get().getArchiveDetector());
 
-			TFile src = new TFile(fileInfo.getContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()));
+			TFile src = new TFile(fileInfo.getContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 
 			createDir(fileInfo.getTempDirPath());
 			TFile dst = new TFile(fileInfo.getTempDirPath(), fileInfo.getFileID() + Constants.EXT_LIMITER + fileInfo.getFileExtension());
@@ -113,7 +113,7 @@ public class FileHandler implements IFile
 				throw new FileException(FileError.INVALID_KEY, e.getCause().toString());
 			} else if (isFileNotFoundException(e))
 			{
-				throw new FileException(FileError.SRC_FILE_NOT_FOUND, fileInfo.getContainerInfo().getFullContainerPath()
+				throw new FileException(FileError.SRC_FILE_NOT_FOUND, fileInfo.getContainerInfo().getContainerPath()
 						+ InfoHelper.getDirLimiter() + fileInfo.getFileID());
 			} else
 			{
@@ -148,7 +148,7 @@ public class FileHandler implements IFile
 			// Set the password for the current operation
 			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
 
-			TFile src = new TFile(fileInfo.getContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()));
+			TFile src = new TFile(fileInfo.getContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND);
 			iContainer.checkForEmptyContainer(fileInfo.getContainerInfo());
 
@@ -188,11 +188,11 @@ public class FileHandler implements IFile
 			config.setArchiveDetector(KeyManager.getArchiveDetector(dstKey.toCharArray()));
 
 			// create the source file and pass the source archive detector with the source key
-			TFile src = new TFile(fileInfo.getSrcContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()),
+			TFile src = new TFile(fileInfo.getSrcContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()),
 					KeyManager.getArchiveDetector(srcKey.toCharArray()));
 
-			createDir(fileInfo.getDestContainerInfo().getParentContainerPath());
-			TFile dst = new TFile(fileInfo.getDestContainerInfo().getFullContainerPath(), Integer.toString(fileInfo.getFileID()));
+			createDir(fileInfo.getDestContainerInfo().getShareRelationPath());
+			TFile dst = new TFile(fileInfo.getDestContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 
 			src.mv(dst);
 
@@ -203,7 +203,7 @@ public class FileHandler implements IFile
 				throw new FileException(FileError.INVALID_KEY, e.getCause().toString());
 			} else if (isFileNotFoundException(e))
 			{
-				throw new FileException(FileError.SRC_FILE_NOT_FOUND, fileInfo.getSrcContainerInfo().getFullContainerPath()
+				throw new FileException(FileError.SRC_FILE_NOT_FOUND, fileInfo.getSrcContainerInfo().getContainerPath()
 						+ InfoHelper.getDirLimiter() + fileInfo.getFileID());
 			} else
 			{
