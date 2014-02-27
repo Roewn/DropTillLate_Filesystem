@@ -156,8 +156,7 @@ public class FileSystemHandler implements IFileSystem
 		// Move the Files
 		for (FileInfoMove fileInfo : fileInfoList)
 		{
-			
-			
+
 			// Get key for the destination share relation
 			String dstKey = getKey(fileInfo, keyRelation);
 			// Get key for the source share relation
@@ -165,7 +164,7 @@ public class FileSystemHandler implements IFileSystem
 			// if no error occurred during the container assignment perform the operation
 			if (fileInfo.getError() == FileError.NONE)
 			{
-				Runnable worker = new WorkerMove(fileInfo, srcKey , dstKey);
+				Runnable worker = new WorkerMove(fileInfo, srcKey, dstKey);
 				executor.execute(worker);
 			}
 		}
@@ -221,8 +220,8 @@ public class FileSystemHandler implements IFileSystem
 				}
 			} catch (InterruptedException | ExecutionException e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Worker List files interrupted");
+				System.err.println(e.getMessage());
 			} catch (NullPointerException e)
 			{
 				e.printStackTrace();
@@ -234,8 +233,6 @@ public class FileSystemHandler implements IFileSystem
 		iFile.unmountFileSystem();
 		return resultMap;
 	}
-	
-	
 
 	/**
 	 * Gets the key for the current file info from the passed key relation. If the share relation is not contained in the key relation, a
@@ -246,10 +243,10 @@ public class FileSystemHandler implements IFileSystem
 	 * @return key for the passed file info. If the FileInfo is a FileInfoMove, the destination key gets returned.
 	 */
 	private String getKey(FileInfo fileInfo, KeyRelation keyRelation)
-	{		
-		return getKey(fileInfo.getContainerInfo().getShareRelationPath(),fileInfo,keyRelation);
+	{
+		return getKey(fileInfo.getContainerInfo().getShareRelationPath(), fileInfo, keyRelation);
 	}
-	
+
 	/**
 	 * Gets the key for the current file info from the passed key relation. If the share relation is not contained in the key relation, a
 	 * error gets set to the FileInfo. If the FileInfo is a FileInfoMove, the destination key gets returned
@@ -273,6 +270,7 @@ public class FileSystemHandler implements IFileSystem
 
 	/**
 	 * Closes the executor and waits until all threads are finished
+	 * 
 	 * @param executor to wait for
 	 */
 	private void waitExecutor(ExecutorService executor)

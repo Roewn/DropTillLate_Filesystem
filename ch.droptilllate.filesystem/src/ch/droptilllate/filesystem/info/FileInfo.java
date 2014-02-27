@@ -138,7 +138,6 @@ public class FileInfo implements Comparable<FileInfo>
 			return false;
 		}
 
-		// TODO if necessary check for more equals values
 		return true;
 	}
 

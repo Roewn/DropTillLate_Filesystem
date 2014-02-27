@@ -21,8 +21,10 @@ import ch.droptilllate.filesystem.truezip.ContainerHandler;
 public class ShareRelationHandler implements IShareRelation
 {
 	private IContainer iContainer = new ContainerHandler();
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.droptilllate.filesystem.io.IShareRelation#checkIfDirectoryExists(java.lang.String)
 	 */
 	@Override
@@ -42,33 +44,49 @@ public class ShareRelationHandler implements IShareRelation
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.droptilllate.filesystem.io.IShareRelation#getAllEncryptedFilesInDir(java.lang.String)
 	 */
 	@Override
 	public synchronized List<FileInfo> getFilesOfShareRelation(String path, String key)
 	{
+		System.out.println(Constants.CONSOLE_LIMITER);
+		System.out.println("Get files of share relation: " + path);
+
 		ArrayList<FileInfo> fileInfoList = new ArrayList<FileInfo>();
 		// get all containers in this directory
-		List<File> containerList= getContainersOfShareRelation(path);
-		// for every container, add all contained files to the resultList
-		for (File cont: containerList) {
-			// get list of fileInfos of the current container
-			List<FileInfo> currentContContent =	null;
-			try
+		List<File> containerList = getContainersOfShareRelation(path);
+		// Check if there is at least a contaienr in the share relation
+		if (containerList != null && containerList.size() > 0)
+		{
+			// for every container, add all contained files to the resultList
+			for (File cont : containerList)
 			{
-				currentContContent = iContainer.listContainerContent(new ContainerInfo(cont.getAbsolutePath()), key);
-			} catch (FileException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// get list of fileInfos of the current container
+				List<FileInfo> currentContContent = null;
+				try
+				{
+					currentContContent = iContainer.listContainerContent(new ContainerInfo(cont.getAbsolutePath()), key);
+
+					if (currentContContent != null)
+					{
+						fileInfoList.addAll(currentContContent);
+					}
+				} catch (FileException e)
+				{
+					System.err.println(e.getError());
+				}
+
 			}
-			fileInfoList.addAll(currentContContent);
-		}		
+		}
 		return fileInfoList;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ch.droptilllate.filesystem.io.IShareRelation#getContainersInDir(java.lang.String)
 	 */
 	@Override
@@ -81,7 +99,6 @@ public class ShareRelationHandler implements IShareRelation
 			@Override
 			public boolean accept(File dir, String name)
 			{
-				// TODO Check if it is really an archive and maybe put to another class
 				return name.endsWith("." + Constants.CONTAINER_EXTENTION);
 			}
 		});

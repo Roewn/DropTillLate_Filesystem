@@ -23,6 +23,9 @@ public enum FileError
 	INVALID_KEY("Invalid key"),
 	SHARERELATION_NOT_FOUND("Share relation not found in key relation"),
 	
+	FILENAME_NOT_PARSABLE("Can not parse the filename"),
+	
+	CONT_NO_CONTENT("Could not list the content of the container"),
 	CONT_NOT_FOUND("Container not found");
 	
 	private String error;

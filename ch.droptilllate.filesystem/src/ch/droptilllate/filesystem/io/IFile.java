@@ -52,8 +52,9 @@ public interface IFile
 	 * List the Containers of each passed fileinfo and list all the file in those containers to the console
 	 * 
 	 * @param fileInfos List of all fileInfos
+	 * @param key related key for the passed file
 	 */
-	void listFileAssignment(List<? extends FileInfo> fileInfos);
+	void listFileAssignment(List<? extends FileInfo> fileInfos, String key);
 	
 	/**
 	 * Checks if the File still exists in this Container

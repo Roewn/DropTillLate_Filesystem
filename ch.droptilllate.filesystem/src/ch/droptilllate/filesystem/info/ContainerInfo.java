@@ -80,8 +80,7 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 					containerPath.lastIndexOf(Constants.EXT_LIMITER))));
 		} catch (Exception e)
 		{
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
+			System.err.println(e.getMessage());;
 		}
 
 	}

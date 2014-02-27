@@ -30,7 +30,7 @@ public class FileHandler implements IFile
 	{
 		// TODO initalize the tillate archive detector globally
 
-		// initalize the config
+		// initalize the config globally
 		TConfig config = TConfig.get();
 		// Configure custom application file format.
 		TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION);
@@ -79,7 +79,7 @@ public class FileHandler implements IFile
 		{
 			// Pop the current configuration off the inheritable thread local stack,
 			// thereby reverting to the old default archive detector.
-			config.close();			
+			config.close();
 		}
 	}
 
@@ -96,7 +96,6 @@ public class FileHandler implements IFile
 		{
 			// Set the password for the current operation
 			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
-			System.out.println(TConfig.get().getArchiveDetector());
 
 			TFile src = new TFile(fileInfo.getContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 
@@ -246,6 +245,8 @@ public class FileHandler implements IFile
 		} catch (FileException e)
 		{
 			System.err.println(e.getError());
+			fileInfo.setError(e.getError());
+
 		} finally
 		{
 			// Pop the current configuration off the inheritable thread local stack,
@@ -261,35 +262,46 @@ public class FileHandler implements IFile
 	 * 
 	 * @param fileInfos List of all fileInfos
 	 */
-	public synchronized void listFileAssignment(List<? extends FileInfo> fileInfos)
+	public synchronized void listFileAssignment(List<? extends FileInfo> fileInfos, String key)
 	{
-		HashSet<ContainerInfo> containerInfos = new HashSet<ContainerInfo>();
-		for (FileInfo fileInfo : fileInfos)
+		TConfig config = TConfig.push();
+		try
 		{
-			containerInfos.add(fileInfo.getContainerInfo());
-		}
-		for (ContainerInfo contInfo : containerInfos)
-		{
-			List<FileInfo> fileList = null;
-			try
+			// Set the password for the current operation
+			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
+			
+			HashSet<ContainerInfo> containerInfos = new HashSet<ContainerInfo>();
+			for (FileInfo fileInfo : fileInfos)
 			{
-				fileList = iContainer.listContainerContent(contInfo);
-			} catch (FileException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				containerInfos.add(fileInfo.getContainerInfo());
 			}
-			System.out.println(Constants.CONSOLE_LIMITER);
-			System.out.println("Container: " + contInfo.getContainerID());
-			try
+			for (ContainerInfo contInfo : containerInfos)
 			{
-				for (FileInfo file : fileList)
+				List<FileInfo> fileList = null;
+				try
 				{
-					System.out.println("-> " + file.getFileID());
+					fileList = iContainer.listContainerContent(contInfo);
+				} catch (FileException e)
+				{
+					System.err.println(e.getError());
 				}
-			} catch (Exception e1)
-			{
+				System.out.println(Constants.CONSOLE_LIMITER);
+				System.out.println("Container: " + contInfo.getContainerID());
+				try
+				{
+					for (FileInfo file : fileList)
+					{
+						System.out.println("-> " + file.getFileID());
+					}
+				} catch (Exception e1)
+				{
+				}
 			}
+		} finally
+		{
+			// Pop the current configuration off the inheritable thread local stack,
+			// thereby reverting to the old default archive detector.
+			config.close();
 		}
 	}
 
@@ -306,13 +318,12 @@ public class FileHandler implements IFile
 			TVFS.umount();
 		} catch (FsSyncException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * Checks if the file exists and trows the passed FileError if not.
+	 * Checks if the file exists and throws the passed FileError if not.
 	 * 
 	 * @param file File to check
 	 * @param fileError FileError which is thrown by the exception.
@@ -324,8 +335,9 @@ public class FileHandler implements IFile
 		{
 			throw new FileException(fileError, file.getAbsolutePath());
 		}
-
 	}
+	
+	
 
 	/**
 	 * Checks if the directory of the passed path exists, if not, it gets created.

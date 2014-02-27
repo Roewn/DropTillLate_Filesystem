@@ -79,7 +79,6 @@ public class WorkerListFilesTest
 			resultList = worker.get();
 		} catch (InterruptedException | ExecutionException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		iFile.unmountFileSystem();

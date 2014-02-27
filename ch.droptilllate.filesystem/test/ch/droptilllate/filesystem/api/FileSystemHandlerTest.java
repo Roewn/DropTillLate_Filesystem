@@ -78,7 +78,7 @@ public class FileSystemHandlerTest
 		FileHandlingSummary fhs = fsh.encryptFiles(fieList, krS);
 		Timer.stop(true);
 		// list the files
-		iFile.listFileAssignment(fieList);
+		iFile.listFileAssignment(fieList, Constants.TEST_PASSWORD_1);
 		// test if the Summary
 		for (FileInfoEncrypt fie : fieList)
 		{

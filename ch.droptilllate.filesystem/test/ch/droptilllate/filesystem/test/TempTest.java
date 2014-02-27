@@ -94,7 +94,7 @@ public class TempTest
 					ie++;
 				}					
 				fhs = fileSystemHandler.encryptFiles(fileInfoEncList, kr1);
-				iFile.listFileAssignment(fileInfoEncList);
+				iFile.listFileAssignment(fileInfoEncList, Constants.TEST_PASSWORD_1);
 				break;
 				
 			case 2:	 // Decrypt Files			
@@ -117,7 +117,7 @@ public class TempTest
 				fhs = fileSystemHandler.deleteFiles(fileInfoDelList, kr1);
 				
 //				System.out.println(iFile.isFileInContainer(fileInfoDelList.get(0)));
-				iFile.listFileAssignment(fileInfoDelList);
+				iFile.listFileAssignment(fileInfoDelList, Constants.TEST_PASSWORD_1);
 				break;
 				
 				

@@ -7,8 +7,6 @@ import ch.droptilllate.filesystem.info.FileInfo;
 
 public interface IShareRelation
 {
-	// TODO Throw proper FileExceptions
-
 	/**
 	 * Checks if the directory of the passed path exists, if not, it gets created.
 	 * 

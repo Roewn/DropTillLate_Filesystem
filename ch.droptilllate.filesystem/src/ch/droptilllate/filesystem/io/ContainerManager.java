@@ -17,8 +17,8 @@ import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 
 public class ContainerManager
 {
-	private IShareRelation iShareRelation = new ShareRelationHandler(); 
-	
+	private IShareRelation iShareRelation = new ShareRelationHandler();
+
 	private static ContainerManager instance = null;
 	private long maxContainerSize = Constants.MAX_CONT_SIZE;
 
@@ -114,6 +114,8 @@ public class ContainerManager
 					// of
 					// the existing file in the container
 					// Add a new asser statement in testExistingContainerID()
+					
+					
 
 				}
 			}
@@ -153,24 +155,28 @@ public class ContainerManager
 				{
 					// TODO Maybe check if the parent folder of droptilllate is correct
 					shareRelationsMap.put(actFileContInfo.getShareRelationPath(), new TreeSet<ContainerInfo>());
-					
+
 					// If folder already exists, get all containers and update the Map with these infos
 					if (iShareRelation.checkIfDirectoryExists(actFileContInfo.getShareRelationPath()))
 					{
 						// get all containers in this share relation
-						List<File> containerList = iShareRelation.getContainersOfShareRelation(actFileContInfo.getShareRelationPath());						
-						TreeSet<ContainerInfo> contInfoSet = new TreeSet<ContainerInfo>();
-						// get all FileInfos for the containers in these path
-						for (File file : containerList)
+						List<File> containerList = iShareRelation.getContainersOfShareRelation(actFileContInfo.getShareRelationPath());
+						// Check if there is at least a contaienr in the share relation
+						if (containerList != null && containerList.size() > 0)
 						{
-							ContainerInfo contInfo = new ContainerInfo(file.getAbsolutePath());
-							// get size of every container
-							contInfo.setEstimatedContainerSize(file.length());
-							// add the ContainerInfo to the Set
-							contInfoSet.add(contInfo);
+							TreeSet<ContainerInfo> contInfoSet = new TreeSet<ContainerInfo>();
+							// get all FileInfos for the containers in these path
+							for (File file : containerList)
+							{
+								ContainerInfo contInfo = new ContainerInfo(file.getAbsolutePath());
+								// get size of every container
+								contInfo.setEstimatedContainerSize(file.length());
+								// add the ContainerInfo to the Set
+								contInfoSet.add(contInfo);
+							}
+							// Update the map with the all containers per share relation
+							shareRelationsMap.put(actFileContInfo.getShareRelationPath(), contInfoSet);
 						}
-						// Update the map with the all containers per share relation
-						shareRelationsMap.put(actFileContInfo.getShareRelationPath(), contInfoSet);
 					}
 				}
 			} catch (FileException e)

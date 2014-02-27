@@ -21,6 +21,7 @@ public interface IContainer
 	 * @param containerInfo Info of the container to check
 	 * @param key related key for the passed container
 	 * @return List off all files contained by this container
+	 * @throws FileException Throw when container is corrupt.
 	 */
 	List<FileInfo> listContainerContent(ContainerInfo containerInfo, String key) throws FileException;
 	
@@ -29,6 +30,7 @@ public interface IContainer
 	 * 
 	 * @param containerInfo Info of the container to check
 	 * @return List off all files contained by this container
+	 * @throws FileException Throw when container is corrupt.
 	 */
 	List<FileInfo> listContainerContent(ContainerInfo containerInfo) throws FileException;
 	

@@ -69,9 +69,6 @@ public class ContainerHandler implements IContainer
 		try (TConfig config = TConfig.push())
 		{
 			return listContainerContent(containerInfo);
-		} catch (Exception e)
-		{
-			throw e;
 		}
 	}
 
@@ -84,9 +81,7 @@ public class ContainerHandler implements IContainer
 	@Override
 	public List<FileInfo> listContainerContent(ContainerInfo containerInfo) throws FileException
 	{
-		ArrayList<FileInfo> fileInfoList = new ArrayList<FileInfo>();
-		try
-		{
+			ArrayList<FileInfo> fileInfoList = new ArrayList<FileInfo>();
 			TFile containerFile = new TFile(containerInfo.getContainerPath());
 			TFile[] fileList = containerFile.listFiles();
 
@@ -94,15 +89,20 @@ public class ContainerHandler implements IContainer
 			{
 				for (TFile file : fileList)
 				{
-					// TODO add error handling
-					fileInfoList.add(new FileInfo(Integer.parseInt(file.getName()), containerInfo));
+					try
+					{
+						fileInfoList.add(new FileInfo(Integer.parseInt(file.getName()), containerInfo));
+					} catch (NumberFormatException e)
+					{
+						System.err.println(e.getMessage());
+						throw new FileException(FileError.FILENAME_NOT_PARSABLE, e.getMessage());
+					}
 				}
 			}
-		} catch (Exception e)
-		{
-			throw new FileException(FileError.UNKNOWN, e.getMessage());
-		}
-		return fileInfoList;
+			else {
+				throw new FileException(FileError.CONT_NO_CONTENT, "ContainerInfo: "+containerInfo.getContainerPath());
+			}
+			return fileInfoList;
 	}
 
 	/**
@@ -114,6 +114,7 @@ public class ContainerHandler implements IContainer
 	public synchronized void checkForEmptyContainer(ContainerInfo containerInfo) throws FileException
 	{
 		checkIfContainerExists(containerInfo, FileError.CONT_NOT_FOUND);
+
 		// if the container is empty ..
 		if (listContainerContent(containerInfo).size() <= 0)
 		{
@@ -129,6 +130,7 @@ public class ContainerHandler implements IContainer
 	 * 
 	 * @param containerInfo of the container to delete
 	 * @return true if delete was successful
+	 * @throws FileException Throw when container is corrupt.
 	 */
 	public synchronized boolean deleteContainer(ContainerInfo containerInfo) throws FileException
 	{
