@@ -19,7 +19,7 @@ import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.truezip.FileHandler;
-import ch.droptilllate.filesystem.truezip.KeyManager;
+import ch.droptilllate.filesystem.truezip.KeyManager1;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
 
@@ -47,7 +47,7 @@ public class WorkerMoveTest
 		// initalize the config
 		TConfig config = TConfig.get();
 		// Configure custom application file format.
-		TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION, Constants.TEST_PASSWORD_1.toCharArray());
+		TArchiveDetector tad = KeyManager1.getArchiveDetector(Constants.CONTAINER_EXTENTION, Constants.TEST_PASSWORD_1.toCharArray());
 		config.setArchiveDetector(tad);
 	}
 

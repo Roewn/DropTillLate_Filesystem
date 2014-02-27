@@ -3,7 +3,7 @@ package ch.droptilllate.filesystem.truezip;
 	import ch.droptilllate.filesystem.commons.Constants;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 
-	public class KeyManager {
+	public class KeyManager1 {
 		// TODO See Truezip samples for better implementations of the Key manager
 		
 		/**

@@ -33,7 +33,7 @@ public class FileHandler implements IFile
 		// initalize the config globally
 		TConfig config = TConfig.get();
 		// Configure custom application file format.
-		TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION);
+		TArchiveDetector tad = KeyManager1.getArchiveDetector(Constants.CONTAINER_EXTENTION);
 		config.setArchiveDetector(tad);
 	}
 
@@ -50,7 +50,7 @@ public class FileHandler implements IFile
 		try
 		{
 			// Set the password for the current operation
-			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
+			config.setArchiveDetector(KeyManager1.getArchiveDetector(key.toCharArray()));
 
 			TFile src = new TFile(fileInfo.getFullPlainFilePath());
 			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND);
@@ -95,7 +95,7 @@ public class FileHandler implements IFile
 		try
 		{
 			// Set the password for the current operation
-			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
+			config.setArchiveDetector(KeyManager1.getArchiveDetector(key.toCharArray()));
 
 			TFile src = new TFile(fileInfo.getContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 
@@ -145,7 +145,7 @@ public class FileHandler implements IFile
 		try
 		{
 			// Set the password for the current operation
-			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
+			config.setArchiveDetector(KeyManager1.getArchiveDetector(key.toCharArray()));
 
 			TFile src = new TFile(fileInfo.getContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND);
@@ -184,11 +184,11 @@ public class FileHandler implements IFile
 		try
 		{
 			// Set the password for the current operation (Archive detector of the destination)
-			config.setArchiveDetector(KeyManager.getArchiveDetector(dstKey.toCharArray()));
+			config.setArchiveDetector(KeyManager1.getArchiveDetector(dstKey.toCharArray()));
 
 			// create the source file and pass the source archive detector with the source key
 			TFile src = new TFile(fileInfo.getSrcContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()),
-					KeyManager.getArchiveDetector(srcKey.toCharArray()));
+					KeyManager1.getArchiveDetector(srcKey.toCharArray()));
 
 			createDir(fileInfo.getDestContainerInfo().getShareRelationPath());
 			TFile dst = new TFile(fileInfo.getDestContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
@@ -232,7 +232,7 @@ public class FileHandler implements IFile
 		try
 		{
 			// Set the password for the current operation
-			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
+			config.setArchiveDetector(KeyManager1.getArchiveDetector(key.toCharArray()));
 
 			for (FileInfo file : iContainer.listContainerContent(fileInfo.getContainerInfo()))
 			{
@@ -268,7 +268,7 @@ public class FileHandler implements IFile
 		try
 		{
 			// Set the password for the current operation
-			config.setArchiveDetector(KeyManager.getArchiveDetector(key.toCharArray()));
+			config.setArchiveDetector(KeyManager1.getArchiveDetector(key.toCharArray()));
 			
 			HashSet<ContainerInfo> containerInfos = new HashSet<ContainerInfo>();
 			for (FileInfo fileInfo : fileInfos)

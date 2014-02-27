@@ -17,7 +17,7 @@ import org.junit.rules.TestName;
 import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
-import ch.droptilllate.filesystem.truezip.KeyManager;
+import ch.droptilllate.filesystem.truezip.KeyManager1;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
 
@@ -40,7 +40,7 @@ public class ContainerManagerTest
 		// initalize the config
 		TConfig config = TConfig.get();
 		// Configure custom application file format.
-		TArchiveDetector tad = KeyManager.getArchiveDetector(Constants.CONTAINER_EXTENTION, Constants.TEST_PASSWORD_1.toCharArray());
+		TArchiveDetector tad = KeyManager1.getArchiveDetector(Constants.CONTAINER_EXTENTION, Constants.TEST_PASSWORD_1.toCharArray());
 		config.setArchiveDetector(tad);
 	}
 
