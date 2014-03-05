@@ -14,7 +14,7 @@ public final class Constants
 	public static final long MIN_CONT_SIZE = 40000 * 1024;
 	// Limits for the ConatinerID Generator
 	// 100000 and 900000, means that the ID will have 6 digits
-	public static final int MIN_RND = 100000;
+	public static final int STRUCT_CONT_ID = 100001;
 	public static final int MAX_RND = 900000;
 	// Exception mappings
 	public static final String EXC_IDENTIFIER_KEY = "password";

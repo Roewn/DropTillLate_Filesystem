@@ -25,6 +25,7 @@ public enum FileError
 	
 	FILENAME_NOT_PARSABLE("Can not parse the filename"),
 	
+	CONT_WRONG_ID("ContainerInfo contains a wrong container id"),
 	CONT_NO_CONTENT("Could not list the content of the container"),
 	CONT_NOT_FOUND("Container not found");
 	

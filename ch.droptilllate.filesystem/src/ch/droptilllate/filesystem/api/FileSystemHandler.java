@@ -20,6 +20,7 @@ import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.io.ContainerManager;
+import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.IContainer;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.security.KeyRelation;
@@ -232,6 +233,36 @@ public class FileSystemHandler implements IFileSystem
 		System.out.println("Finished all threads");
 		iFile.unmountFileSystem();
 		return resultMap;
+	}
+
+	@Override
+	public FileInfoEncrypt storeFileStructure(FileInfoEncrypt fileInfo, String key)
+	{
+		printStartToConsole("storeFileStructure", 1);
+		try
+		{
+			iFile.encryptFile(fileInfo, key);
+		} catch (FileException e)
+		{
+			System.err.println(e.getError());
+			fileInfo.setError(e.getError());
+		}
+		return fileInfo;
+	}
+
+	@Override
+	public FileInfoDecrypt loadFileStructure(FileInfoDecrypt fileInfo, String key)
+	{
+		printStartToConsole("loadFileStructure", 1);
+		try
+		{
+			iFile.decryptFile(fileInfo, key);
+		} catch (FileException e)
+		{
+			System.err.println(e.getError());
+			fileInfo.setError(e.getError());
+		}
+		return fileInfo;
 	}
 
 	/**

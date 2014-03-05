@@ -58,7 +58,7 @@ public class ContainerManagerTest
 		containerManager.assignContainerID(fileInfoList);
 		assertFalse(fileInfoList.isEmpty()); // not Empty
 		// check Container ID
-		assertTrue(fileInfoList.get(0).getContainerInfo().getContainerID() >= Constants.MIN_RND);
+		assertTrue(fileInfoList.get(0).getContainerInfo().getContainerID() >= Constants.STRUCT_CONT_ID);
 		// Check Path
 		assertEquals(fie.getContainerInfo().getShareRelationPath(), fileInfoList.get(0).getContainerInfo()
 				.getShareRelationPath());

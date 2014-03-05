@@ -226,7 +226,7 @@ public class ContainerManager
 		Random rnd = new Random();
 		while (contIdSet.size() < oldIdCount)
 		{
-			newID = Constants.MIN_RND + rnd.nextInt(Constants.MAX_RND);
+			newID = (Constants.STRUCT_CONT_ID+1) + rnd.nextInt(Constants.MAX_RND);
 			// As we're adding to a set, this will automatically do a containment check
 			contIdSet.add(newID);
 		}

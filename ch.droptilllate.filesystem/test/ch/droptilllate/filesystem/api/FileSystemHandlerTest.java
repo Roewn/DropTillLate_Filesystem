@@ -289,6 +289,36 @@ public class FileSystemHandlerTest
 			id++;			
 		}
 	}
+	
+	@Test
+	public void testStoreAndLoadFileStructure() 
+	{
+		int id = 1;
+		int contID = Constants.STRUCT_CONT_ID;
+		String fileName = "test.xml";
+		String content = "test entry";
+		
+		System.out.println(Constants.TESTCASE_LIMITER);
+		System.out.println(this.getClass().getSimpleName() + ": " + name.getMethodName());
+		// create Files
+		File file = TestHelper.createTextFile(fileName, content);
+		
+		// Store XML
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, file.getAbsolutePath(), TestHelper.getTestDir(), contID);
+		
+		fie = fsh.storeFileStructure(fie, Constants.TEST_PASSWORD_1);
+		assertTrue(fie.getError() == FileError.NONE);
+		
+		// Load XML
+		FileInfoDecrypt fid = new FileInfoDecrypt(id, "xml", TestHelper.getExtractDir(), fie.getContainerInfo()
+				.getShareRelationPath(), fie.getContainerInfo().getContainerID());
+		fid = fsh.loadFileStructure(fid, Constants.TEST_PASSWORD_1);
+		
+		assertTrue(fid.getError() == FileError.NONE);
+		
+		assertTrue(TestHelper.getTextFileContent(file).equals(TestHelper.getTextFileContent(new File(fid.getFullTmpFilePath()))));
+
+	}
 
 	@Before
 	public void befor()

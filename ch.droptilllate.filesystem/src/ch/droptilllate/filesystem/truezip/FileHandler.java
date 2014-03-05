@@ -55,6 +55,7 @@ public class FileHandler implements IFile
 			TFile src = new TFile(fileInfo.getFullPlainFilePath());
 			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND);
 
+			checkContainerID(fileInfo.getContainerInfo());
 			TFile dst = new TFile(fileInfo.getContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 
 			// check if it is a File and not an directory
@@ -96,7 +97,8 @@ public class FileHandler implements IFile
 		{
 			// Set the password for the current operation
 			config.setArchiveDetector(KeyManager1.getArchiveDetector(key.toCharArray()));
-
+			
+			checkContainerID(fileInfo.getContainerInfo());
 			TFile src = new TFile(fileInfo.getContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 
 			createDir(fileInfo.getTempDirPath());
@@ -147,6 +149,7 @@ public class FileHandler implements IFile
 			// Set the password for the current operation
 			config.setArchiveDetector(KeyManager1.getArchiveDetector(key.toCharArray()));
 
+			checkContainerID(fileInfo.getContainerInfo());
 			TFile src = new TFile(fileInfo.getContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND);
 			iContainer.checkForEmptyContainer(fileInfo.getContainerInfo());
@@ -185,7 +188,9 @@ public class FileHandler implements IFile
 		{
 			// Set the password for the current operation (Archive detector of the destination)
 			config.setArchiveDetector(KeyManager1.getArchiveDetector(dstKey.toCharArray()));
-
+			
+			checkContainerID(fileInfo.getSrcContainerInfo());
+			checkContainerID(fileInfo.getDestContainerInfo());
 			// create the source file and pass the source archive detector with the source key
 			TFile src = new TFile(fileInfo.getSrcContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()),
 					KeyManager1.getArchiveDetector(srcKey.toCharArray()));
@@ -269,7 +274,7 @@ public class FileHandler implements IFile
 		{
 			// Set the password for the current operation
 			config.setArchiveDetector(KeyManager1.getArchiveDetector(key.toCharArray()));
-			
+
 			HashSet<ContainerInfo> containerInfos = new HashSet<ContainerInfo>();
 			for (FileInfo fileInfo : fileInfos)
 			{
@@ -336,8 +341,20 @@ public class FileHandler implements IFile
 			throw new FileException(fileError, file.getAbsolutePath());
 		}
 	}
-	
-	
+
+	/**
+	 * Checks the container id and throws an exception if the id is wrong
+	 * @param containerInfo
+	 * @throws FileException
+	 */
+	private synchronized void checkContainerID(ContainerInfo containerInfo) throws FileException
+	{
+		// check the container id
+		if (containerInfo.getContainerID() <= 0)
+		{
+			throw new FileException(FileError.CONT_WRONG_ID, Integer.toString(containerInfo.getContainerID()));
+		}
+	}
 
 	/**
 	 * Checks if the directory of the passed path exists, if not, it gets created.

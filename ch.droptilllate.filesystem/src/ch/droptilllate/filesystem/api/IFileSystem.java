@@ -62,5 +62,22 @@ public interface IFileSystem
 	 * @return Map off all encrypted files contained per directory (where the share relation is the key)
 	 */
 	HashMap<String, List<FileInfo>> getFilesPerRelation(KeyRelation keyRelation);
+	
+	/**
+	 * Stores and encrypted the passed xml file in the share relation and encrypts it with the passed key.
+	 * The Container ID has to be passed in the FileInfo.
+	 * @param fileInfo File Info for the xml file to encrypt
+	 * @param key Key of the shareRelation where the xml gets encrypted
+	 * @return FileInfoEncrypt and the resulting error, if no error occurred than fileInfo.getError() == FileError.NONE
+	 */
+	FileInfoEncrypt storeFileStructure(FileInfoEncrypt fileInfo, String key);
+	
+	/**
+	 * Loads and decrypted the passed xml file from the passed container, using the passed key.
+	 * @param fileInfo File Info for the xml file to decrypt
+	 * @param key Key of the shareRelation where the xml is encrypted
+	 * @return FileInfoDecrypt and the resulting error, if no error occurred than fileInfo.getError() == FileError.NONE
+	 */
+	FileInfoDecrypt loadFileStructure(FileInfoDecrypt fileInfo, String key);
 
 }
