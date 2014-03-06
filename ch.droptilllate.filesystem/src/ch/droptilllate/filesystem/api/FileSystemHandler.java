@@ -247,6 +247,7 @@ public class FileSystemHandler implements IFileSystem
 			System.err.println(e.getError());
 			fileInfo.setError(e.getError());
 		}
+		iFile.unmountFileSystem();
 		return fileInfo;
 	}
 
@@ -262,6 +263,7 @@ public class FileSystemHandler implements IFileSystem
 			System.err.println(e.getError());
 			fileInfo.setError(e.getError());
 		}
+		iFile.unmountFileSystem();
 		return fileInfo;
 	}
 
