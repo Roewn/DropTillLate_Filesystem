@@ -3,8 +3,8 @@
  */
 package ch.droptilllate.filesystem.concurrent;
 
+import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
-import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 

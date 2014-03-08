@@ -18,16 +18,16 @@ import java.util.List;
 
 import com.sun.org.apache.bcel.internal.generic.IFLE;
 
-import ch.droptilllate.filesystem.commons.Constants;
+import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
-import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.IContainer;
 import ch.droptilllate.filesystem.io.IFile;
+import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.truezip.ContainerHandler;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 import ch.droptilllate.filesystem.truezip.KeyManager1;

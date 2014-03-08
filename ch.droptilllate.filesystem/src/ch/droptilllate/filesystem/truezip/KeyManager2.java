@@ -1,6 +1,6 @@
 package ch.droptilllate.filesystem.truezip;
 
-import ch.droptilllate.filesystem.commons.Constants;
+import ch.droptilllate.filesystem.preferences.Constants;
 import de.schlichtherle.truezip.crypto.param.AesKeyStrength;
 import de.schlichtherle.truezip.crypto.raes.Type0RaesParameters.KeyStrength;
 import de.schlichtherle.truezip.crypto.raes.param.AesCipherParameters;

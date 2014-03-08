@@ -1,41 +1,42 @@
 package ch.droptilllate.filesystem.info;
 
-import ch.droptilllate.filesystem.commons.Constants;
+import ch.droptilllate.filesystem.error.FileException;
+import ch.droptilllate.filesystem.preferences.Constants;
 
 /**
- * Class which holds all informations about a container. 
- * The id of a container can be set by the user or it can be left empty, if the system has to assign a new container.
+ * Class which holds all informations about a container and the related share relation. 
+ * The id of a container can be set by the user or it can be left empty, if the system has to assign a new container the id is set to 0.
  * @author Roewn
  * 
  */
 public class ContainerInfo implements Comparable<ContainerInfo>
 {
 	private int containerID;
-	private String shareRelationPath;
+	private int shareRelationID;
 	private long estimatedContainerSize;
 
 	/**
-	 * Creates an ContainerInfo and sets the full path of the Container (Parent container path + containerID + Container extension).
+	 * Creates an ContainerInfo and sets the full path of the Container.
 	 * The Container id as well as the parent container path will be set automatically
 	 * Example: "C:\\Temp\\Share1\\342657.tilllate"
-	 * @param containerPath -> Parent container path + containerID + Container extension.
+	 * @param containerPath -> Dropbox path + shareRealtionID + containerID + Container extension.
+	 * @throws FileException if the container or sharerelation id could not be fetched.
 	 */
-	public ContainerInfo(String containerPath)
+	public ContainerInfo(String containerPath) throws FileException
 	{
 		setContainerPath(containerPath);		
 	}
 
 	/**
-	 * Creates an ContainerInfo and sets the parent path of the Container, as well as the Container id
-	 * If the Container id is unknown and the system has to provide a new number, set the containerID = 0.
-	 * shareRelationPath Example: "C:\\Temp\\Share1\\"
+	 * Creates an ContainerInfo and sets the share relation id, as well as the Container id
+	 * If the Container id is unknown and the system has to provide a new number, it sets the containerID = 0.
 	 * @param containerID Id of the container or 0 if unknown.
-	 * @param shareRelationPath Directory which holds the container Example: "C:\\Temp\\Share1".
+	 * @param shareRelationID share relation which holds the container.
 	 */
-	public ContainerInfo(int containerID, String shareRelationPath)
+	public ContainerInfo(int containerID, int shareRelationID)
 	{
 		this.containerID = containerID;
-		setShareRelationPath(shareRelationPath);		
+		this.shareRelationID = shareRelationID;	
 	}
 
 	/**
@@ -53,36 +54,32 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 	}
 
 	/**
-	 * ShareRelationPath Example: "C:\\Temp\\Share1"
-	 * @return the ShareRelationPath -> Directory which holds the container.
+	 * ShareRelationId which holds the container
+	 * @return the ShareRelationID.
 	 */
-	public String getShareRelationPath() {
-		return shareRelationPath;
+	public int getShareRelationID() {
+		return shareRelationID;
 	}
 
 	/**
-	 * ShareRelationPath Example: "C:\\Temp\\Share1"
-	 * @param ShareRelationPath the shareRelationPath to set -> Directory which holds the container.
+	 * ShareRelationId which holds the container
+	 * @param ShareRelationID the shareRelationID to set.
 	 */
-	public void setShareRelationPath(String ShareRelationPath) {	
-		this.shareRelationPath = InfoHelper.checkPath(ShareRelationPath);
+	public void setShareRelationID(int ShareRelationID) {	
+		this.shareRelationID = ShareRelationID;
 	}
 
 	/**
+	 * Takes the full container path and sets the shareRelationId and the containerID
 	 * Example: "C:\\Temp\\Share1\\342657.tilllate"
-	 * @param containerPath containerPath -> shareRelationPath + containerID + Container extension.
+	 * @param containerPath -> Dropbox path + shareRealtionID + containerID + Container extension.
+	 * @throws FileException if the container or sharerelation id could not be fetched.
 	 */
-	public void setContainerPath(String containerPath) {
-		try
-		{
-			this.shareRelationPath = containerPath.substring(0, containerPath.lastIndexOf(InfoHelper.getDirLimiter()));
-			this.containerID = Integer.parseInt((containerPath.substring(containerPath.lastIndexOf(InfoHelper.getDirLimiter()) + InfoHelper.getOffset(),
-					containerPath.lastIndexOf(Constants.EXT_LIMITER))));
-		} catch (Exception e)
-		{
-			System.err.println(e.getMessage());;
-		}
-
+	public void setContainerPath(String containerPath) throws FileException
+	{
+		
+			this.shareRelationID = InfoHelper.extractShareRelationID(containerPath);
+			this.containerID = InfoHelper.extractContainerID(containerPath);
 	}
 
 	/**
@@ -90,7 +87,7 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 	 * @return containerPath -> Parent container path + containerID + Container extension.
 	 */
 	public String getContainerPath() {
-		return InfoHelper.createFullPath(this.shareRelationPath, Integer.toString(this.containerID), Constants.CONTAINER_EXTENTION);
+		return InfoHelper.createFullContainerPath(this.shareRelationID, this.containerID);
 	}
 
 	/**
@@ -124,7 +121,7 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 			return false;
 		}
 
-		if (!this.shareRelationPath.equals(((ContainerInfo) other).shareRelationPath))
+		if (this.shareRelationID != ((ContainerInfo) other).shareRelationID)
 		{
 			return false;
 		}
@@ -157,7 +154,7 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 	 public int hashCode(){
 	       int result = 0;
 	       result = 31*result + this.containerID;
-	       result = 31*result + (this.shareRelationPath !=null ? this.shareRelationPath.hashCode() : 0);
+	       result = 31*result + this.shareRelationID;
 	      
 	       return result;
 	   }

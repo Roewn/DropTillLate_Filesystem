@@ -5,17 +5,17 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
-import ch.droptilllate.filesystem.api.FileError;
-import ch.droptilllate.filesystem.commons.Constants;
+import ch.droptilllate.filesystem.error.FileError;
+import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.info.InfoHelper;
-import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.IContainer;
 import ch.droptilllate.filesystem.io.IFile;
+import ch.droptilllate.filesystem.preferences.Constants;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
 import de.schlichtherle.truezip.file.TFile;
@@ -195,7 +195,7 @@ public class FileHandler implements IFile
 			TFile src = new TFile(fileInfo.getSrcContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()),
 					KeyManager1.getArchiveDetector(srcKey.toCharArray()));
 
-			createDir(fileInfo.getDestContainerInfo().getShareRelationPath());
+			createDir(fileInfo.getDestContainerInfo().getShareRelationID());
 			TFile dst = new TFile(fileInfo.getDestContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 
 			src.mv(dst);
@@ -345,7 +345,7 @@ public class FileHandler implements IFile
 	/**
 	 * Checks the container id and throws an exception if the id is wrong
 	 * @param containerInfo
-	 * @throws FileException
+	 * @throws FileException Throw when file is corrupt.
 	 */
 	private synchronized void checkContainerID(ContainerInfo containerInfo) throws FileException
 	{

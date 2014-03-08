@@ -9,20 +9,22 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.concurrent.WorkerDecrypt;
 import ch.droptilllate.filesystem.concurrent.WorkerDelete;
 import ch.droptilllate.filesystem.concurrent.WorkerEncrypt;
 import ch.droptilllate.filesystem.concurrent.WorkerListFiles;
 import ch.droptilllate.filesystem.concurrent.WorkerMove;
+import ch.droptilllate.filesystem.error.FileError;
+import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.io.ContainerManager;
-import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.IContainer;
 import ch.droptilllate.filesystem.io.IFile;
+import ch.droptilllate.filesystem.preferences.Constants;
+import ch.droptilllate.filesystem.preferences.Options;
 import ch.droptilllate.filesystem.security.KeyRelation;
 import ch.droptilllate.filesystem.truezip.ContainerHandler;
 import ch.droptilllate.filesystem.truezip.FileHandler;
@@ -42,12 +44,20 @@ public class FileSystemHandler implements IFileSystem
 	private ContainerManager containerManager;
 	private int cores;
 
-	public FileSystemHandler()
+	public FileSystemHandler(String droptilllatePath, String tempPath)
 	{
+		// initialise options
+		Options options = Options.getInstance();
+		options.setDroptilllatePath(droptilllatePath);
+		options.setTempPath(tempPath);
+		
 		containerManager = ContainerManager.getInstance();
+		
+		
 
 		// initialise Worker pool
 		cores = Runtime.getRuntime().availableProcessors();
+		
 	}
 
 	@Override
@@ -161,7 +171,7 @@ public class FileSystemHandler implements IFileSystem
 			// Get key for the destination share relation
 			String dstKey = getKey(fileInfo, keyRelation);
 			// Get key for the source share relation
-			String srcKey = getKey(fileInfo.getSrcContainerInfo().getShareRelationPath(), fileInfo, keyRelation);
+			String srcKey = getKey(fileInfo.getSrcContainerInfo().getShareRelationID(), fileInfo, keyRelation);
 			// if no error occurred during the container assignment perform the operation
 			if (fileInfo.getError() == FileError.NONE)
 			{
@@ -217,7 +227,7 @@ public class FileSystemHandler implements IFileSystem
 				List<FileInfo> resultList = worker.get();
 				if (resultList != null && resultList.size() > 0)
 				{
-					resultMap.put(resultList.get(0).getContainerInfo().getShareRelationPath(), resultList);
+					resultMap.put(resultList.get(0).getContainerInfo().getShareRelationID(), resultList);
 				}
 			} catch (InterruptedException | ExecutionException e)
 			{
@@ -277,7 +287,7 @@ public class FileSystemHandler implements IFileSystem
 	 */
 	private String getKey(FileInfo fileInfo, KeyRelation keyRelation)
 	{
-		return getKey(fileInfo.getContainerInfo().getShareRelationPath(), fileInfo, keyRelation);
+		return getKey(fileInfo.getContainerInfo().getShareRelationID(), fileInfo, keyRelation);
 	}
 
 	/**
@@ -296,7 +306,7 @@ public class FileSystemHandler implements IFileSystem
 		// Generate Error if share relation not found in key relation
 		if (key == null)
 		{
-			fileInfo.setError(FileError.SHARERELATION_NOT_FOUND, shareRelation);
+			fileInfo.setError(FileError.SHARE_NOT_FOUND, shareRelation);
 		}
 		return key;
 	}

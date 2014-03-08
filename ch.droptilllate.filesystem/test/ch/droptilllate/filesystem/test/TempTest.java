@@ -9,13 +9,13 @@ import java.util.List;
 import ch.droptilllate.filesystem.api.FileHandlingSummary;
 import ch.droptilllate.filesystem.api.FileSystemHandler;
 import ch.droptilllate.filesystem.api.IFileSystem;
-import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.InfoHelper;
 import ch.droptilllate.filesystem.io.IFile;
+import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.security.KeyRelation;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 

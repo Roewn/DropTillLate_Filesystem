@@ -7,9 +7,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
-import ch.droptilllate.filesystem.commons.Constants;
+import ch.droptilllate.filesystem.error.FileError;
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
+import ch.droptilllate.filesystem.preferences.Constants;
 
 public class FileInfoTest
 {
@@ -36,7 +37,7 @@ public class FileInfoTest
 		String parentContPath = "C:\\test";
 		FileInfo fi = new FileInfo(id, new ContainerInfo(containerID, parentContPath));
 		assertTrue(containerID == fi.getContainerInfo().getContainerID());
-		assertEquals(parentContPath, fi.getContainerInfo().getShareRelationPath());		
+		assertEquals(parentContPath, fi.getContainerInfo().getShareRelationID());		
 	}
 	
 	@Test

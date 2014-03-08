@@ -14,9 +14,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
-import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
+import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.truezip.KeyManager1;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
@@ -60,8 +60,8 @@ public class ContainerManagerTest
 		// check Container ID
 		assertTrue(fileInfoList.get(0).getContainerInfo().getContainerID() >= Constants.STRUCT_CONT_ID);
 		// Check Path
-		assertEquals(fie.getContainerInfo().getShareRelationPath(), fileInfoList.get(0).getContainerInfo()
-				.getShareRelationPath());
+		assertEquals(fie.getContainerInfo().getShareRelationID(), fileInfoList.get(0).getContainerInfo()
+				.getShareRelationID());
 		// Check Size
 		assertTrue(fileInfoList.get(0).getContainerInfo().getEstimatedContainerSize() == textFile.length());
 	}
@@ -84,8 +84,8 @@ public class ContainerManagerTest
 		// check Container ID
 		assertTrue(fileInfoList.get(0).getContainerInfo().getContainerID() == contId);
 		// Check Path
-		assertEquals(fie.getContainerInfo().getShareRelationPath(), fileInfoList.get(0).getContainerInfo()
-				.getShareRelationPath());
+		assertEquals(fie.getContainerInfo().getShareRelationID(), fileInfoList.get(0).getContainerInfo()
+				.getShareRelationID());
 		// Check Size
 		// assertTrue(fileInfoList.get(0).getContainerInfo().getEstimatedContainerSize() == textFile.length());
 	}

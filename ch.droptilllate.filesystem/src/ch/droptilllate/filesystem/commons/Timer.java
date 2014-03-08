@@ -1,5 +1,7 @@
 package ch.droptilllate.filesystem.commons;
 
+import ch.droptilllate.filesystem.preferences.Constants;
+
 public class Timer
 {
 	private static long startTime;

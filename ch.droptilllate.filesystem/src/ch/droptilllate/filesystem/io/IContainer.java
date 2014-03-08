@@ -2,6 +2,7 @@ package ch.droptilllate.filesystem.io;
 
 import java.util.List;
 
+import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
 

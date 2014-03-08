@@ -11,8 +11,8 @@ import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
-import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.info.InfoHelper;
+import ch.droptilllate.filesystem.preferences.Constants;
 import de.schlichtherle.truezip.file.TFile;
 
 public class TestHelper

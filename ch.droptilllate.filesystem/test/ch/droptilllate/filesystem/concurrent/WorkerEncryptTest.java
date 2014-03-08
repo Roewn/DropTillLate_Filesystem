@@ -11,11 +11,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
-import ch.droptilllate.filesystem.api.FileError;
-import ch.droptilllate.filesystem.commons.Constants;
+import ch.droptilllate.filesystem.error.FileError;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.io.IFile;
+import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 
 public class WorkerEncryptTest

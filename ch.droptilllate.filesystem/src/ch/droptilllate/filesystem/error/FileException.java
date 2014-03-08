@@ -1,9 +1,8 @@
 /**
  * 
  */
-package ch.droptilllate.filesystem.io;
+package ch.droptilllate.filesystem.error;
 
-import ch.droptilllate.filesystem.api.FileError;
 
 /**
  * @author Roewn

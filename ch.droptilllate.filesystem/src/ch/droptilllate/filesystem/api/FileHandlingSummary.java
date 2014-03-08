@@ -3,6 +3,7 @@ package ch.droptilllate.filesystem.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.droptilllate.filesystem.error.FileError;
 import ch.droptilllate.filesystem.info.FileInfo;
 
 /**

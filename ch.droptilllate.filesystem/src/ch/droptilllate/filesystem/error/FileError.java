@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.droptilllate.filesystem.api;
+package ch.droptilllate.filesystem.error;
 
 /**
  * @author Roewn
@@ -21,10 +21,18 @@ public enum FileError
 	EXTRACTED_FILE_NOT_FOUND("Extracted file not found in temp directory"),
 	
 	INVALID_KEY("Invalid key"),
-	SHARERELATION_NOT_FOUND("Share relation not found in key relation"),
+	
 	
 	FILENAME_NOT_PARSABLE("Can not parse the filename"),
 	
+	// share realation
+	SHARE_NOT_FOUND("Share relation not found in key relation"),
+	SHARE_ID_NOT_PARSABLE("Could not parse shareRelation id from string"),
+	SHARE_PATH_SPLIT_ERROR("Could not split the passed path string to extract the share relation"),
+	
+	// container
+	CONT_ID_NOT_PARSABLE("Could not parse container id from string"),
+	CONT_WRONG_PATH("Invalid container path"),
 	CONT_WRONG_ID("ContainerInfo contains a wrong container id"),
 	CONT_NO_CONTENT("Could not list the content of the container"),
 	CONT_NOT_FOUND("Container not found");

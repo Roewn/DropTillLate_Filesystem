@@ -1,4 +1,4 @@
-package ch.droptilllate.filesystem.commons;
+package ch.droptilllate.filesystem.preferences;
 
 public final class Constants
 {

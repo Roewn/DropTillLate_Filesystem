@@ -11,13 +11,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
-import ch.droptilllate.filesystem.api.FileError;
-import ch.droptilllate.filesystem.commons.Constants;
+import ch.droptilllate.filesystem.error.FileError;
+import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
-import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.IFile;
+import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 import ch.droptilllate.filesystem.truezip.KeyManager1;
 import de.schlichtherle.truezip.file.TArchiveDetector;
@@ -76,7 +76,7 @@ public class WorkerMoveTest
 		iFile.unmountFileSystem();
 
 		// move the file
-		FileInfoMove fim = new FileInfoMove(id, fie.getSize(), fie.getContainerInfo().getShareRelationPath(), contId,
+		FileInfoMove fim = new FileInfoMove(id, fie.getSize(), fie.getContainerInfo().getShareRelationID(), contId,
 				shareDir.getAbsolutePath());
 		fim.getDestContainerInfo().setContainerID(contId);
 		Thread thread = new Thread(new WorkerMove(fim, key1, key2));
@@ -122,7 +122,7 @@ public class WorkerMoveTest
 		iFile.unmountFileSystem();
 
 		// move the file
-		FileInfoMove fim = new FileInfoMove(id + 1, fie.getSize(), fie.getContainerInfo().getShareRelationPath(), contId,
+		FileInfoMove fim = new FileInfoMove(id + 1, fie.getSize(), fie.getContainerInfo().getShareRelationID(), contId,
 				shareDir.getAbsolutePath());
 		fim.getDestContainerInfo().setContainerID(contId);
 		Thread thread = new Thread(new WorkerMove(fim, key1, key2));

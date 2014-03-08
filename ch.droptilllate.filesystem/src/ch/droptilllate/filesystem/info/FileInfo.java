@@ -1,6 +1,6 @@
 package ch.droptilllate.filesystem.info;
 
-import ch.droptilllate.filesystem.api.FileError;
+import ch.droptilllate.filesystem.error.FileError;
 
 
 public class FileInfo implements Comparable<FileInfo>

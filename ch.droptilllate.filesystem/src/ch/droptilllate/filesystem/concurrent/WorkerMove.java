@@ -3,9 +3,9 @@
  */
 package ch.droptilllate.filesystem.concurrent;
 
+import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.info.InfoHelper;
-import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 

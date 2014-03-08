@@ -15,8 +15,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
-import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.commons.Timer;
+import ch.droptilllate.filesystem.error.FileError;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
@@ -25,6 +25,7 @@ import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.io.IShareRelation;
 import ch.droptilllate.filesystem.io.ShareRelationHandler;
+import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.security.KeyRelation;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 
@@ -116,7 +117,7 @@ public class FileSystemHandlerTest
 		for (FileInfoEncrypt fie : fieList)
 		{
 			fidList.add(new FileInfoDecrypt(fie.getFileID(), ext, TestHelper.getExtractDir(), fie.getContainerInfo()
-					.getShareRelationPath(), fie.getContainerInfo().getContainerID()));
+					.getShareRelationID(), fie.getContainerInfo().getContainerID()));
 		}
 
 		// ******************************************************************
@@ -213,7 +214,7 @@ public class FileSystemHandlerTest
 		ArrayList<FileInfoMove> fimList = new ArrayList<FileInfoMove>();
 		for (FileInfoEncrypt fie : fieList)
 		{
-			fimList.add(new FileInfoMove(fie.getFileID(), fie.getSize(), fie.getContainerInfo().getShareRelationPath(), fie
+			fimList.add(new FileInfoMove(fie.getFileID(), fie.getSize(), fie.getContainerInfo().getShareRelationID(), fie
 					.getContainerInfo().getContainerID(), shareDir1.getAbsolutePath()));
 		}
 
@@ -311,7 +312,7 @@ public class FileSystemHandlerTest
 		
 		// Load XML
 		FileInfoDecrypt fid = new FileInfoDecrypt(id, "xml", TestHelper.getExtractDir(), fie.getContainerInfo()
-				.getShareRelationPath(), fie.getContainerInfo().getContainerID());
+				.getShareRelationID(), fie.getContainerInfo().getContainerID());
 		fid = fsh.loadFileStructure(fid, Constants.TEST_PASSWORD_1);
 		
 		assertTrue(fid.getError() == FileError.NONE);

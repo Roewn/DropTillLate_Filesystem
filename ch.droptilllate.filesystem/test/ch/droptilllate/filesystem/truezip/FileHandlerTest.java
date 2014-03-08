@@ -11,8 +11,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
-import ch.droptilllate.filesystem.commons.Constants;
 import ch.droptilllate.filesystem.commons.Timer;
+import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
@@ -20,10 +20,10 @@ import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.info.InfoHelper;
-import ch.droptilllate.filesystem.io.FileException;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.io.IShareRelation;
 import ch.droptilllate.filesystem.io.ShareRelationHandler;
+import ch.droptilllate.filesystem.preferences.Constants;
 
 public class FileHandlerTest
 {
@@ -104,7 +104,7 @@ public class FileHandlerTest
 		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), deleteDir);
 		fie.getContainerInfo().setContainerID(contId);
 		// Create the directories
-		iShareRelation.checkIfDirectoryExists(fie.getContainerInfo().getShareRelationPath());
+		iShareRelation.checkIfDirectoryExists(fie.getContainerInfo().getShareRelationID());
 		
 		// Adding File
 		try
