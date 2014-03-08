@@ -51,7 +51,7 @@ public class ContainerManager
 		ContainerInfo actFileContInfo;
 
 		// generate the ContainerInfo entries for every ShareRelation
-		HashMap<String, TreeSet<ContainerInfo>> shareRelationsMap = getContainersPerShareRelation(fileInfoList);
+		HashMap<Integer, TreeSet<ContainerInfo>> shareRelationsMap = getContainersPerShareRelation(fileInfoList);
 
 		// Sort the fileInfos from big to small size
 		// The set of ContainerInfos is order from small to big size
@@ -135,7 +135,7 @@ public class ContainerManager
 	 * @param fileInfoList The list of all FileInfos for which the Containers shall be determined
 	 * @return Sorted Set of ContainerInfos in a Map where the ShareRelation is the key
 	 */
-	private HashMap<String, TreeSet<ContainerInfo>> getContainersPerShareRelation(List<? extends FileInfo> fileInfoList)
+	private HashMap<Integer, TreeSet<ContainerInfo>> getContainersPerShareRelation(List<? extends FileInfo> fileInfoList)
 	{
 		HashMap<Integer, TreeSet<ContainerInfo>> shareRelationsMap = new HashMap<Integer, TreeSet<ContainerInfo>>();
 		ContainerInfo actFileContInfo;
@@ -207,10 +207,10 @@ public class ContainerManager
 	 * Generate a new random ContainerId for the passed ShareRelation.
 	 * 
 	 * @param contInfoSet Set of the existing ContainerInfo for this ShareRelation
-	 * @param containerPath this is the path of the current ShareRelation (root directory of the ContainerFiles)
+	 * @param shareRelationPath this is the path of the current ShareRelation (root directory of the ContainerFiles)
 	 * @return ContainerInfo with the generated ID
 	 */
-	private ContainerInfo generateNewContainerID(Set<ContainerInfo> contInfoSet, String containerPath)
+	private ContainerInfo generateNewContainerID(Set<ContainerInfo> contInfoSet, int shareRelationID)
 	{
 		Set<Integer> contIdSet = new LinkedHashSet<Integer>();
 		Integer newID = 0;
@@ -219,9 +219,10 @@ public class ContainerManager
 		for (ContainerInfo contInfo : contInfoSet)
 		{
 			contIdSet.add(contInfo.getContainerID());
-			if (containerPath == null || containerPath.isEmpty())
+			// if path is empty, get it from containerInfo
+			if (shareRelationID == 0)
 			{
-				containerPath = contInfo.getShareRelationID();
+				shareRelationID = contInfo.getShareRelationID();
 			}
 		}
 
@@ -239,7 +240,7 @@ public class ContainerManager
 		// TODO Error handling if no id can be generated
 
 		// returns the new ContainerInfo
-		return new ContainerInfo(newID, containerPath);
+		return new ContainerInfo(newID, shareRelationID);
 	}
 
 	/**

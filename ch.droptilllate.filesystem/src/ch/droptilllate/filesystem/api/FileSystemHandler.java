@@ -208,7 +208,7 @@ public class FileSystemHandler implements IFileSystem
 		List<Future<List<FileInfo>>> workerList = new ArrayList<Future<List<FileInfo>>>();
 		// create result map
 		HashMap<String, List<FileInfo>> resultMap = new HashMap<String, List<FileInfo>>();
-		Set<String> shareRelationSet = keyRelation.getKeyShareMap().keySet();
+		Set<Integer> shareRelationSet = keyRelation.getKeyShareMap().keySet();
 		// Start the workers for all share relations
 		for (String shareRelation : shareRelationSet)
 		{
@@ -294,19 +294,19 @@ public class FileSystemHandler implements IFileSystem
 	 * Gets the key for the current file info from the passed key relation. If the share relation is not contained in the key relation, a
 	 * error gets set to the FileInfo. If the FileInfo is a FileInfoMove, the destination key gets returned
 	 * 
-	 * @param shareRelation path of the share relation the determine the key
+	 * @param shareRelationID id of the share relation to determine the key
 	 * @param fileInfo current file info
 	 * @param keyRelation relation of all keys
 	 * @return key for the passed file info. If the FileInfo is a FileInfoMove, the destination key gets returned.
 	 */
-	private String getKey(String shareRelation, FileInfo fileInfo, KeyRelation keyRelation)
+	private String getKey(int shareRelationID, FileInfo fileInfo, KeyRelation keyRelation)
 	{
 		// Get key for the current share relation
-		String key = keyRelation.getKeyOfShareRelation(shareRelation);
+		String key = keyRelation.getKeyOfShareRelation(shareRelationID);
 		// Generate Error if share relation not found in key relation
 		if (key == null)
 		{
-			fileInfo.setError(FileError.SHARE_NOT_FOUND, shareRelation);
+			fileInfo.setError(FileError.SHARE_NOT_FOUND, Integer.toString(shareRelationID));
 		}
 		return key;
 	}

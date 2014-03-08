@@ -15,44 +15,44 @@ import ch.droptilllate.filesystem.info.InfoHelper;
  */
 public class KeyRelation
 {
-	HashMap<String, String>  keyShareMap = null;
+	HashMap<Integer, String>  keyShareMap = null;
 	
 
 	public KeyRelation() {
-		keyShareMap = new HashMap<String, String>();
+		keyShareMap = new HashMap<Integer, String>();
 	}
 	
 	/**
 	 * Adds the share relation and its key to the map.
-	 * @param shareRelationPath identifier of the share relation
+	 * @param shareRelationID identifier of the share relation
 	 * @param key related key for this share relation
 	 */
-	public void addKeyOfShareRelation(String shareRelationPath, String key){
-		keyShareMap.put(InfoHelper.checkPath(shareRelationPath), key);
+	public void addKeyOfShareRelation(int shareRelationID, String key){
+		keyShareMap.put(shareRelationID, key);
 	}
 	
 	/**
 	 * Returns the key of the passed share relation.
-	 * @param shareRelationPath identifier of the share relation
+	 * @param shareRelationID identifier of the share relation
 	 * @return related key for this share relation
 	 */
-	public String getKeyOfShareRelation(String shareRelationPath) {
-		return keyShareMap.get(shareRelationPath);
+	public String getKeyOfShareRelation(int shareRelationID) {
+		return keyShareMap.get(shareRelationID);
 	}
 	
 	/**
 	 * Checks if the passed share relation already exists in the map
-	 * @param shareRelationPath identifier of the share relation
+	 * @param shareRelationID identifier of the share relation
 	 * @return True if the share relation already exists
 	 */
-	public boolean containsShareRelation(String shareRelationPath){
-		return keyShareMap.containsKey(shareRelationPath);
+	public boolean containsShareRelation(int shareRelationID){
+		return keyShareMap.containsKey(shareRelationID);
 	}
 	
 	/**
 	 * @return the keyShareMap
 	 */
-	public HashMap<String, String> getKeyShareMap()
+	public HashMap<Integer, String> getKeyShareMap()
 	{
 		return keyShareMap;
 	}
@@ -60,7 +60,7 @@ public class KeyRelation
 	/**
 	 * @param keyShareMap the keyShareMap to set
 	 */
-	public void setKeyShareMap(HashMap<String, String> keyShareMap)
+	public void setKeyShareMap(HashMap<Integer, String> keyShareMap)
 	{
 		this.keyShareMap = keyShareMap;
 	}
