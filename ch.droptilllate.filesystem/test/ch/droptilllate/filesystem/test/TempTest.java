@@ -9,6 +9,7 @@ import java.util.List;
 import ch.droptilllate.filesystem.api.FileHandlingSummary;
 import ch.droptilllate.filesystem.api.FileSystemHandler;
 import ch.droptilllate.filesystem.api.IFileSystem;
+import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
@@ -28,6 +29,9 @@ public class TempTest
 		
 		FileHandlingSummary fhs = null;
 		IFile iFile = new FileHandler();
+		
+		int share1 = 1111;
+		int share2 = 2222;
 
 		// Prepare File Infos
 		String plainFileName5 = "5MB.zip";
@@ -44,7 +48,7 @@ public class TempTest
 		
 		List<String> fileNameList = new ArrayList<String>();
 		fileNameList.add(plainFileName5);
-//		fileNameList.add(plainFileName10);
+		fileNameList.add(plainFileName10);
 //		fileNameList.add(plainFileName20);
 //		fileNameList.add(plainFileName50);
 //		fileNameList.add(plainFileName100);
@@ -55,9 +59,9 @@ public class TempTest
 //		fileNameList.add(plainFileNameTmp);
 		
 		KeyRelation kr1 = new KeyRelation();
-		kr1.addKeyOfShareRelation(testPath, Constants.TEST_PASSWORD_1);
+		kr1.addKeyOfShareRelation(share1, Constants.TEST_PASSWORD_1);
 		KeyRelation kr2 = new KeyRelation();
-		kr2.addKeyOfShareRelation(testPath, Constants.TEST_PASSWORD_2);
+		kr2.addKeyOfShareRelation(share2, Constants.TEST_PASSWORD_2);
 //		kr2.addKeyOfShareRelation(testPath, "testtest");
 				
 
@@ -76,7 +80,7 @@ public class TempTest
 		}
 		
 		// Get the fileSystemHandler
-		IFileSystem fileSystemHandler = new FileSystemHandler();
+		IFileSystem fileSystemHandler = new FileSystemHandler(testPath,testPath);
 
 		// Start Test
 		// System.out.println("-------------------------------------------------");
@@ -84,13 +88,13 @@ public class TempTest
 		{
 
 			// Test cases
-			switch (2)
+			switch (3)
 			{
 			case 1: // Encrypt Files 
 				ArrayList<FileInfoEncrypt> fileInfoEncList = new ArrayList<FileInfoEncrypt>();
 				int ie = 0;
 				for (String name : fileNameList) {					
-					fileInfoEncList.add(new FileInfoEncrypt(ie, testPath + name, testPath));
+					fileInfoEncList.add(new FileInfoEncrypt(ie, testPath + name, share1));
 					ie++;
 				}					
 				fhs = fileSystemHandler.encryptFiles(fileInfoEncList, kr1);
@@ -103,7 +107,7 @@ public class TempTest
 				int[] containerIds = {03231321, 45454, 464564};
 				for (String name : fileNameList) {
 //					fileInfoDecList.add(new FileInfoDecrypt(id,InfoHelper.checkFileExt(name), extractPath,testPath, containerIds[id]));
-					fileInfoDecList.add(new FileInfoDecrypt(id, InfoHelper.checkFileExt(name), extractPath,testPath, 319049));
+					fileInfoDecList.add(new FileInfoDecrypt(id, InfoHelper.checkFileExt(name),share1, 895440));
 					id++;
 				}
 				fhs = fileSystemHandler.decryptFiles(fileInfoDecList, kr1);
@@ -112,7 +116,7 @@ public class TempTest
 			case 3: // Delete Files		
 				ArrayList<FileInfo> fileInfoDelList = new ArrayList<FileInfo>();
 				
-				fileInfoDelList.add(new FileInfo(0,new ContainerInfo(114094, testPath)));
+				fileInfoDelList.add(new FileInfo(1,new ContainerInfo(895440, share1)));
 					
 				fhs = fileSystemHandler.deleteFiles(fileInfoDelList, kr1);
 				

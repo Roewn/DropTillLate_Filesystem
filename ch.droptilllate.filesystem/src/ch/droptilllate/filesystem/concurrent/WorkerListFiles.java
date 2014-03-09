@@ -18,11 +18,11 @@ import ch.droptilllate.filesystem.io.ShareRelationHandler;
 public class WorkerListFiles implements  Callable<List<FileInfo>>
 {
 	private IShareRelation iShareRelation = new ShareRelationHandler();
-	private String shareRelation;
+	private int shareRelation;
 	private String key;
 	private List<FileInfo> fiResultList;
 
-	public WorkerListFiles(String shareRelation, String key)
+	public WorkerListFiles(int shareRelation, String key)
 	{
 		this.shareRelation = shareRelation;
 		this.key = key;

@@ -12,7 +12,9 @@ import java.util.List;
 import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
+import ch.droptilllate.filesystem.info.InfoHelper;
 import ch.droptilllate.filesystem.preferences.Constants;
+import ch.droptilllate.filesystem.preferences.Options;
 import ch.droptilllate.filesystem.truezip.ContainerHandler;
 
 /**
@@ -51,14 +53,14 @@ public class ShareRelationHandler implements IShareRelation
 	 * @see ch.droptilllate.filesystem.io.IShareRelation#getAllEncryptedFilesInDir(java.lang.String)
 	 */
 	@Override
-	public synchronized List<FileInfo> getFilesOfShareRelation(String path, String key)
+	public synchronized List<FileInfo> getFilesOfShareRelation(int shareRelationID, String key)
 	{
 		System.out.println(Constants.CONSOLE_LIMITER);
-		System.out.println("Get files of share relation: " + path);
+		System.out.println("Get files of share relation: " + shareRelationID);
 
 		ArrayList<FileInfo> fileInfoList = new ArrayList<FileInfo>();
 		// get all containers in this directory
-		List<File> containerList = getContainersOfShareRelation(path);
+		List<File> containerList = getContainersOfShareRelation(shareRelationID);
 		// Check if there is at least a contaienr in the share relation
 		if (containerList != null && containerList.size() > 0)
 		{
@@ -91,10 +93,11 @@ public class ShareRelationHandler implements IShareRelation
 	 * @see ch.droptilllate.filesystem.io.IShareRelation#getContainersInDir(java.lang.String)
 	 */
 	@Override
-	public synchronized List<File> getContainersOfShareRelation(String path)
+	public synchronized List<File> getContainersOfShareRelation(int shareRelationID)
 	{
 		// get all containers in this directory
-		File directory = new File(path);
+		File directory = new File(Options.getInstance().getDroptilllatePath() +
+				InfoHelper.getDirLimiter() + shareRelationID);
 		File[] containerList = directory.listFiles(new FilenameFilter()
 		{
 			@Override

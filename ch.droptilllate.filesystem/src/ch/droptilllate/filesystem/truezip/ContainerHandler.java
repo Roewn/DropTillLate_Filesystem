@@ -100,7 +100,7 @@ public class ContainerHandler implements IContainer
 				}
 			}
 			else {
-				throw new FileException(FileError.CONT_NO_CONTENT, "ContainerInfo: "+containerInfo.getContainerPath());
+				throw new FileException(FileError.CONT_NO_CONTENT, "ContainerInfo: " + containerInfo.getContainerPath());
 			}
 			return fileInfoList;
 	}

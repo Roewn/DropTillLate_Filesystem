@@ -27,6 +27,7 @@ public class WorkerDeleteTest
 {
 	private IFile iFile = new FileHandler();
 	private KeyRelation kr1 = null;
+	int shareRelationID = 4444;
 
 	private File textFile;
 	private String filenameTextFile = "test.txt";
@@ -60,7 +61,7 @@ public class WorkerDeleteTest
 		int id = 1234;
 		int contId = 9999;
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID);
 		fie.getContainerInfo().setContainerID(contId);
 		// Add the text file
 		Thread thread1 = new Thread(new WorkerEncrypt(fie, key1));
@@ -100,7 +101,7 @@ public class WorkerDeleteTest
 		int contId = 9999;
 
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID);
 		fie.getContainerInfo().setContainerID(contId);
 		// Add the text file
 		Thread thread1 = new Thread(new WorkerEncrypt(fie, key1));

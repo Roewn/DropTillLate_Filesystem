@@ -81,6 +81,14 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 			this.shareRelationID = InfoHelper.extractShareRelationID(containerPath);
 			this.containerID = InfoHelper.extractContainerID(containerPath);
 	}
+	
+	/**
+	 * ShareRelationpath which holds the container. 
+	 * @return the full sharerelation path. Example for full sharerelation path: "C:\\dropbox\\droptillate\\9999999".
+	 */
+	public String getShareRelationPath() {
+		return InfoHelper.createFullSharerelationPath(this.shareRelationID, this.containerID);
+	}
 
 	/**
 	 * Example: "C:\\Temp\\Share1\\342657.tilllate"

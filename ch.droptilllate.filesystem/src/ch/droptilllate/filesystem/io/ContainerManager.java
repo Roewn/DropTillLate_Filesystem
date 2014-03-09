@@ -165,7 +165,7 @@ public class ContainerManager
 					if (iShareRelation.checkIfDirectoryExists(shareRelationPath))
 					{
 						// get all containers in this share relation
-						List<File> containerList = iShareRelation.getContainersOfShareRelation(shareRelationPath);
+						List<File> containerList = iShareRelation.getContainersOfShareRelation(actFileContInfo.getShareRelationID());
 						// Check if there is at least a contaienr in the share relation
 						if (containerList != null && containerList.size() > 0)
 						{

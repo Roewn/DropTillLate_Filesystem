@@ -39,11 +39,23 @@ public class InfoHelper
 	 *
 	 * @param shareRelationId Id of the share relation containing the container.
 	 * @param containerID Id of the container
+	 * @return full sharerelation path. Example for full sharerelation path: "C:\\dropbox\\droptillate\\9999999"
+	 */
+	public synchronized static String createFullSharerelationPath(int shareRelationId, int containerID)
+	{
+		return Options.getInstance().getDroptilllatePath() + dirLimiter + shareRelationId;
+	}
+	
+	/**
+	 * Concatenates the provided integer to the full container path using the os specific limiters and the value of Options.getDropboxPath as root directory.
+	 *
+	 * @param shareRelationId Id of the share relation containing the container.
+	 * @param containerID Id of the container
 	 * @return full container path. Example for full container path: "C:\\Temp\\Share1\\342657.tilllate"
 	 */
 	public synchronized static String createFullContainerPath(int shareRelationId, int containerID)
 	{
-		return Options.getInstance().getDroptilllatePath() + dirLimiter + shareRelationId + dirLimiter + containerID + Constants.CONTAINER_EXTENTION;
+		return Options.getInstance().getDroptilllatePath() + dirLimiter + shareRelationId + dirLimiter + containerID + Constants.EXT_LIMITER + Constants.CONTAINER_EXTENTION;
 	}
 	
 	

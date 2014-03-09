@@ -34,10 +34,10 @@ public class FileInfoTest
 		System.out.println(this.getClass().getSimpleName()+": " + name.getMethodName());
 		int id = 123;
 		int containerID = 9999;
-		String parentContPath = "C:\\test";
-		FileInfo fi = new FileInfo(id, new ContainerInfo(containerID, parentContPath));
+		int shareIDRelation = 4444;
+		FileInfo fi = new FileInfo(id, new ContainerInfo(containerID, shareIDRelation));
 		assertTrue(containerID == fi.getContainerInfo().getContainerID());
-		assertEquals(parentContPath, fi.getContainerInfo().getShareRelationID());		
+		assertEquals(shareIDRelation, fi.getContainerInfo().getShareRelationID());		
 	}
 	
 	@Test

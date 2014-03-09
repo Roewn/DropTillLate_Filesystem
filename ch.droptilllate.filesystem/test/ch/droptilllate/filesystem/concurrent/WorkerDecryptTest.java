@@ -16,13 +16,18 @@ import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.preferences.Constants;
+import ch.droptilllate.filesystem.preferences.Options;
 import ch.droptilllate.filesystem.security.KeyRelation;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 
 public class WorkerDecryptTest
 {
+	private Options options;
+
+	
 	private IFile iFile = new FileHandler();
 	private KeyRelation kr1 = null;
+	private int shareRelationID = 4444;
 
 	private File textFile;
 	private String filenameTextFile = "test.txt";
@@ -50,7 +55,7 @@ public class WorkerDecryptTest
 		int id = 1234;
 		int contId = 9999;
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID);
 		fie.getContainerInfo().setContainerID(contId);
 		// Add the text file
 		Thread thread1 = new Thread(new WorkerEncrypt(fie, key1));
@@ -65,7 +70,7 @@ public class WorkerDecryptTest
 		iFile.unmountFileSystem();
 
 		// Extract the file
-		FileInfoDecrypt fid = new FileInfoDecrypt(id, "txt", TestHelper.getExtractDir(), TestHelper.getTestDir(), contId);
+		FileInfoDecrypt fid = new FileInfoDecrypt(id, "txt", shareRelationID, contId);
 		Thread thread = new Thread(new WorkerDecrypt(fid, key1));
 		thread.start();
 		try
@@ -76,9 +81,9 @@ public class WorkerDecryptTest
 			e.printStackTrace();
 		}
 		iFile.unmountFileSystem();
-		
+
 		assertTrue(TestHelper.getTextFileContent(textFile).equals(TestHelper.getTextFileContent(new File(fid.getFullTmpFilePath()))));
-		
+
 	}
 
 	@Test
@@ -90,8 +95,9 @@ public class WorkerDecryptTest
 		int id = 1234;
 		int contId = 9999;
 
+		
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID);
 		fie.getContainerInfo().setContainerID(contId);
 		// Add the text file
 		Thread thread1 = new Thread(new WorkerEncrypt(fie, key1));
@@ -106,7 +112,7 @@ public class WorkerDecryptTest
 		iFile.unmountFileSystem();
 
 		// Extract the file
-		FileInfoDecrypt fid = new FileInfoDecrypt(id + 1, "txt", TestHelper.getExtractDir(), TestHelper.getTestDir(), contId);
+		FileInfoDecrypt fid = new FileInfoDecrypt(id + 1, "txt", shareRelationID, contId);
 		Thread thread = new Thread(new WorkerDecrypt(fid, key1));
 		thread.start();
 		try
@@ -117,11 +123,10 @@ public class WorkerDecryptTest
 			e.printStackTrace();
 		}
 		iFile.unmountFileSystem();
-		
+
 		assertTrue(fid.getError() == FileError.SRC_FILE_NOT_FOUND);
-		
+
 	}
-	
 
 	@Before
 	public void befor()
@@ -132,7 +137,11 @@ public class WorkerDecryptTest
 		textFile = TestHelper.createTextFile(filenameTextFile, contentTextFile);
 		// create key relation
 		kr1 = new KeyRelation();
-		kr1.addKeyOfShareRelation(TestHelper.getTestDir(), Constants.TEST_PASSWORD_1);
+		kr1.addKeyOfShareRelation(shareRelationID, Constants.TEST_PASSWORD_1);
+		// set options
+		options = Options.getInstance();
+		options.setDroptilllatePath(TestHelper.getTestDir());
+		options.setTempPath(TestHelper.getExtractDir());
 	}
 
 	@After

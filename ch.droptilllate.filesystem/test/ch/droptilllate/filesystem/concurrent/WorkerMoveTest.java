@@ -18,6 +18,7 @@ import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.preferences.Constants;
+import ch.droptilllate.filesystem.preferences.Options;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 import ch.droptilllate.filesystem.truezip.KeyManager1;
 import de.schlichtherle.truezip.file.TArchiveDetector;
@@ -25,17 +26,21 @@ import de.schlichtherle.truezip.file.TConfig;
 
 public class WorkerMoveTest
 {
+	private Options options;
+	
 	private IFile iFile = new FileHandler();
+	
+	private int shareRelationID = 4444;
 
 	private File textFile;
 	private String filenameTextFile = "test.txt";
 	private String contentTextFile = "This is a test File";
-	
+
 	private String key1 = Constants.TEST_PASSWORD_1;
 	private String key2 = Constants.TEST_PASSWORD_2;
 
-	//TODO Add testcase for different src and dest keys
-	
+	// TODO Add testcase for different src and dest keys
+
 	@Rule
 	public TestName name = new TestName();
 
@@ -59,11 +64,12 @@ public class WorkerMoveTest
 
 		int id = 1234;
 		int contId = 9999;
+		int shareRelationID2 = 5555;
 		// Create share directory
 		File shareDir = new File(TestHelper.getTestDir(), "share");
 		shareDir.mkdir();
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID);
 		fie.getContainerInfo().setContainerID(contId);
 		// Add the text file
 		try
@@ -77,7 +83,7 @@ public class WorkerMoveTest
 
 		// move the file
 		FileInfoMove fim = new FileInfoMove(id, fie.getSize(), fie.getContainerInfo().getShareRelationID(), contId,
-				shareDir.getAbsolutePath());
+				shareRelationID2);
 		fim.getDestContainerInfo().setContainerID(contId);
 		Thread thread = new Thread(new WorkerMove(fim, key1, key2));
 		thread.start();
@@ -105,11 +111,12 @@ public class WorkerMoveTest
 
 		int id = 1234;
 		int contId = 9999;
+		int shareRelationID2 = 5555;
 		// Create share directory
 		File shareDir = new File(TestHelper.getTestDir(), "share");
 		shareDir.mkdir();
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID);
 		fie.getContainerInfo().setContainerID(contId);
 		// Add the text file
 		try
@@ -123,7 +130,7 @@ public class WorkerMoveTest
 
 		// move the file
 		FileInfoMove fim = new FileInfoMove(id + 1, fie.getSize(), fie.getContainerInfo().getShareRelationID(), contId,
-				shareDir.getAbsolutePath());
+				shareRelationID2);
 		fim.getDestContainerInfo().setContainerID(contId);
 		Thread thread = new Thread(new WorkerMove(fim, key1, key2));
 		thread.start();
@@ -147,6 +154,10 @@ public class WorkerMoveTest
 		TestHelper.setupTestDir();
 		// create a new textfile
 		textFile = TestHelper.createTextFile(filenameTextFile, contentTextFile);
+		// set options
+		options = Options.getInstance();
+		options.setDroptilllatePath(TestHelper.getTestDir());
+		options.setTempPath(TestHelper.getExtractDir());
 	}
 
 	@After

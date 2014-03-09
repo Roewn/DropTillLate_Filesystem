@@ -18,17 +18,18 @@ public interface IShareRelation
 	/**
 	 * Lists all encrypted files in the passed directory and returns a list of the their FileInfos.
 	 * 
-	 * @param path path of the directory which contains the files
+	 * @param shareRelationId id of the shareRelation which contains the files
 	 * @param key related key for the passed file
 	 * @return List off all encrypted files contained by this directory
 	 */
-	public abstract List<FileInfo> getFilesOfShareRelation(String path, String key);
+	public abstract List<FileInfo> getFilesOfShareRelation(int shareRelationID, String key);
 
 	/**
-	 * Lists all contaierns in the passed directory and returns a list of files.
-	 * @param path path of the directory which contains the containers
+	 * Lists all containers in the passed shareRelation and returns a list of files.
+	 * @param shareRelationID id of the shareRelation which contains the containers
 	 * @return List off all containers contained by this directory
 	 */
-	public abstract List<File> getContainersOfShareRelation(String path);
+	public abstract List<File> getContainersOfShareRelation(int shareRelationID);
+
 
 }

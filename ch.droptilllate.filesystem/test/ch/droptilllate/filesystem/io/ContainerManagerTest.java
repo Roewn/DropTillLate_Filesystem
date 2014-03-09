@@ -49,8 +49,9 @@ public class ContainerManagerTest
 		System.out.println(Constants.TESTCASE_LIMITER);
 		System.out.println(this.getClass().getSimpleName()+": " + name.getMethodName());
 		int id = 2222;
+		int shareRelationID = 4444;
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID);
 		
 		List<FileInfoEncrypt> fileInfoList = new ArrayList<FileInfoEncrypt>();
 		fileInfoList.add(fie);
@@ -71,9 +72,10 @@ public class ContainerManagerTest
 		System.out.println(Constants.TESTCASE_LIMITER);
 		System.out.println(this.getClass().getSimpleName()+": " + name.getMethodName());
 		int id = 2222;
+		int shareRelationID = 4444;
 		int contId = 9999;
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID);
 		fie.getContainerInfo().setContainerID(contId);
 		
 		List<FileInfoEncrypt> fileInfoList = new ArrayList<FileInfoEncrypt>();
@@ -97,10 +99,11 @@ public class ContainerManagerTest
 		int id1 = 1001;
 		int id2 = 1002;
 		int id3 = 2000;
+		int shareRelationID = 4444;
 		// Create FileInfo
-		FileInfoEncrypt textFileInfo1 = new FileInfoEncrypt(id1, textFile.getAbsolutePath(), TestHelper.getTestDir());
-		FileInfoEncrypt textFileInfo2 = new FileInfoEncrypt(id2, textFile.getAbsolutePath(), TestHelper.getTestDir());
-		FileInfoEncrypt textFileInfoBigger = new FileInfoEncrypt(id3, textFileBigger.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt textFileInfo1 = new FileInfoEncrypt(id1, textFile.getAbsolutePath(), shareRelationID);
+		FileInfoEncrypt textFileInfo2 = new FileInfoEncrypt(id2, textFile.getAbsolutePath(), shareRelationID);
+		FileInfoEncrypt textFileInfoBigger = new FileInfoEncrypt(id3, textFileBigger.getAbsolutePath(), shareRelationID);
 		
 
 		// create FileInfoList

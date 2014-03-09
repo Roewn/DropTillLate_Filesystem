@@ -61,7 +61,7 @@ public interface IFileSystem
 	 * @param keyRelation Map of all shareRelations of the passed files and the related key
 	 * @return Map off all encrypted files contained per directory (where the share relation is the key)
 	 */
-	HashMap<String, List<FileInfo>> getFilesPerRelation(KeyRelation keyRelation);
+	HashMap<Integer, List<FileInfo>> getFilesPerRelation(KeyRelation keyRelation);
 	
 	/**
 	 * Stores and encrypted the passed xml file in the share relation and encrypts it with the passed key.

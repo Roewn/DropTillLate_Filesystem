@@ -16,16 +16,19 @@ import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.preferences.Constants;
+import ch.droptilllate.filesystem.preferences.Options;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 
 public class WorkerEncryptTest
 {
+	
+	private Options options;
 	private IFile iFile = new FileHandler();
 
 	private File textFile;
 	private String filenameTextFile = "test.txt";
 	private String contentTextFile = "This is a test File";
-	
+
 	private String key1 = Constants.TEST_PASSWORD_1;
 
 	@Rule
@@ -46,8 +49,9 @@ public class WorkerEncryptTest
 
 		int id = 1234;
 		int contId = 9999;
+		int shareRelationID = 4444;
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID);
 		fie.getContainerInfo().setContainerID(contId);
 		Thread thread = new Thread(new WorkerEncrypt(fie, key1));
 		thread.start();
@@ -70,8 +74,9 @@ public class WorkerEncryptTest
 
 		int id = 1234;
 		int contId = 9999;
+		int shareRelationID = 4444;
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath() + "bla", TestHelper.getTestDir());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath() + "bla", shareRelationID);
 		fie.getContainerInfo().setContainerID(contId);
 		Thread thread = new Thread(new WorkerEncrypt(fie, key1));
 		thread.start();
@@ -85,10 +90,11 @@ public class WorkerEncryptTest
 		{
 			e.printStackTrace();
 		}
+		iFile.unmountFileSystem();
 		assertTrue(fie.getError() == FileError.SRC_FILE_NOT_FOUND);
 		assertFalse(iFile.checkFile(fie, key1));
+
 		
-		iFile.unmountFileSystem();
 
 	}
 
@@ -99,6 +105,10 @@ public class WorkerEncryptTest
 		TestHelper.setupTestDir();
 		// create a new textfile
 		textFile = TestHelper.createTextFile(filenameTextFile, contentTextFile);
+		// set options
+		options = Options.getInstance();
+		options.setDroptilllatePath(TestHelper.getTestDir());
+		options.setTempPath(TestHelper.getExtractDir());
 	}
 
 	@After

@@ -43,6 +43,9 @@ public class FileSystemHandler implements IFileSystem
 
 	private ContainerManager containerManager;
 	private int cores;
+	
+	@SuppressWarnings("unused")
+	private FileSystemHandler(){}
 
 	public FileSystemHandler(String droptilllatePath, String tempPath)
 	{
@@ -199,7 +202,7 @@ public class FileSystemHandler implements IFileSystem
 	}
 
 	@Override
-	public HashMap<String, List<FileInfo>> getFilesPerRelation(KeyRelation keyRelation)
+	public HashMap<Integer, List<FileInfo>> getFilesPerRelation(KeyRelation keyRelation)
 	{
 		ExecutorService executor = Executors.newFixedThreadPool(cores);
 		printStartToConsole("getFilesPerRelation", cores);
@@ -207,10 +210,10 @@ public class FileSystemHandler implements IFileSystem
 		// create a list to hold the Future object associated with Callable
 		List<Future<List<FileInfo>>> workerList = new ArrayList<Future<List<FileInfo>>>();
 		// create result map
-		HashMap<String, List<FileInfo>> resultMap = new HashMap<String, List<FileInfo>>();
+		HashMap<Integer, List<FileInfo>> resultMap = new HashMap<Integer, List<FileInfo>>();
 		Set<Integer> shareRelationSet = keyRelation.getKeyShareMap().keySet();
 		// Start the workers for all share relations
-		for (String shareRelation : shareRelationSet)
+		for (int shareRelation : shareRelationSet)
 		{
 			// Get key for the current share relation
 			String key = keyRelation.getKeyOfShareRelation(shareRelation);

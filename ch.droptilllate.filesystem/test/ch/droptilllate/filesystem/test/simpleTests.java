@@ -28,6 +28,7 @@ import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.io.IContainer;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.preferences.Constants;
+import ch.droptilllate.filesystem.preferences.Options;
 import ch.droptilllate.filesystem.truezip.ContainerHandler;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 import ch.droptilllate.filesystem.truezip.KeyManager1;
@@ -44,14 +45,18 @@ public class simpleTests
 	static FileInfoDecrypt fid;
 	static Thread t1;
 	static Thread t2;
+	static int share1 = 4444;
 
 	static File textFile;
 	static File shareDir1;
 
 	public static void main(String[] args)
 	{
-		shareDir1 = new File(testPath, "share1");
-		shareDir1.mkdir();
+		// set options
+		Options options = Options.getInstance();
+		options.setDroptilllatePath(TestHelper.getTestDir());
+		options.setTempPath(TestHelper.getExtractDir());
+
 		textFile = new File(testPath + "test.txt");
 
 		// encrypt();
@@ -68,7 +73,7 @@ public class simpleTests
 
 	private static void encrypt()
 	{
-		FileInfoEncrypt fie = new FileInfoEncrypt(1234, textFile.getAbsolutePath(), testPath);
+		FileInfoEncrypt fie = new FileInfoEncrypt(1234, textFile.getAbsolutePath(), share1);
 		fie.getContainerInfo().setContainerID(9999);
 		try
 		{
@@ -84,7 +89,7 @@ public class simpleTests
 		// String dir = shareDir1.getAbsolutePath();
 		String dir = testPath;
 		// Create FileInfo
-		fid = new FileInfoDecrypt(1234, "txt", dir, dir, 9999);
+		fid = new FileInfoDecrypt(1234, "txt", share1, 9999);
 		// Extract File
 
 		try
@@ -99,8 +104,8 @@ public class simpleTests
 
 	private static void move()
 	{
-
-		FileInfoMove fim = new FileInfoMove(1234, textFile.length(), testPath, 9999, shareDir1.getAbsolutePath());
+		int share2 = 5555;
+		FileInfoMove fim = new FileInfoMove(1234, textFile.length(), share1, 9999, share2);
 		fim.getDestContainerInfo().setContainerID(8888);
 		try
 		{
@@ -113,8 +118,7 @@ public class simpleTests
 
 	private static void getFileSize()
 	{
-		FileInfo fi = new FileInfo(1234, new ContainerInfo(9999, testPath));
-
+		FileInfo fi = new FileInfo(1234, new ContainerInfo(9999, share1));
 
 		IFile ifile = new FileHandler();
 		List<FileInfo> fil = new ArrayList<FileInfo>();

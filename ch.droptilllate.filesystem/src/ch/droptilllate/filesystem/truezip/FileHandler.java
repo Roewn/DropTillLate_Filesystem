@@ -56,6 +56,7 @@ public class FileHandler implements IFile
 			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND);
 
 			checkContainerID(fileInfo.getContainerInfo());
+			createDir(fileInfo.getContainerInfo().getShareRelationPath());
 			TFile dst = new TFile(fileInfo.getContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 
 			// check if it is a File and not an directory
@@ -195,7 +196,7 @@ public class FileHandler implements IFile
 			TFile src = new TFile(fileInfo.getSrcContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()),
 					KeyManager1.getArchiveDetector(srcKey.toCharArray()));
 
-			createDir(fileInfo.getDestContainerInfo().getShareRelationID());
+			createDir(fileInfo.getDestContainerInfo().getShareRelationPath());
 			TFile dst = new TFile(fileInfo.getDestContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 
 			src.mv(dst);

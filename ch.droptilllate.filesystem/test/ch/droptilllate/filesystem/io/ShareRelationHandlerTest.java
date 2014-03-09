@@ -16,10 +16,12 @@ import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.preferences.Constants;
+import ch.droptilllate.filesystem.preferences.Options;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 
 public class ShareRelationHandlerTest
 {
+	private Options options;
 	private ShareRelationHandler srh = new ShareRelationHandler();
 	private IFile iFile = new FileHandler();
 	
@@ -37,6 +39,7 @@ public class ShareRelationHandlerTest
 	 */
 	public ShareRelationHandlerTest()
 	{
+		
 	}
 
 	@Test
@@ -47,13 +50,14 @@ public class ShareRelationHandlerTest
 		int id1 = 1111;
 		int contId1 = 8888;
 		int id2 = 2222;
-		int contId2 = 9999;		
-		
+		int contId2 = 9999;	
+		int shareRelationID = 4444;
+		options = options;
 		// Create FileInfo
-		FileInfoEncrypt fie1 = new FileInfoEncrypt(id1, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt fie1 = new FileInfoEncrypt(id1, textFile.getAbsolutePath(), shareRelationID);
 		fie1.getContainerInfo().setContainerID(contId1);
 		// Create FileInfo
-		FileInfoEncrypt fie2 = new FileInfoEncrypt(id2, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt fie2 = new FileInfoEncrypt(id2, textFile.getAbsolutePath(), shareRelationID);
 		fie2.getContainerInfo().setContainerID(contId2);
 		// Add the text file
 		try
@@ -68,7 +72,7 @@ public class ShareRelationHandlerTest
 		assertTrue(iFile.checkFile(fie1, key1));
 		assertTrue(iFile.checkFile(fie2, key1));
 				
-		List<FileInfo> fil = srh.getFilesOfShareRelation(TestHelper.getTestDir(), key1);
+		List<FileInfo> fil = srh.getFilesOfShareRelation(shareRelationID, key1);
 		assertTrue(fil.size() == 2);	
 		assertTrue(fil.contains(fie1));
 		assertTrue(fil.contains(fie2));
@@ -77,10 +81,15 @@ public class ShareRelationHandlerTest
 	@Before
 	public void befor()
 	{
+		
 		// create DIR
 		TestHelper.setupTestDir();
 		// create a new textfile
 		textFile = TestHelper.createTextFile(filenameTextFile, contentTextFile);
+		// set options
+		options = Options.getInstance();
+		options.setDroptilllatePath(TestHelper.getTestDir());
+		options.setTempPath(TestHelper.getExtractDir());
 	}
 
 	@After

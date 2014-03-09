@@ -24,9 +24,12 @@ import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.io.IShareRelation;
 import ch.droptilllate.filesystem.io.ShareRelationHandler;
 import ch.droptilllate.filesystem.preferences.Constants;
+import ch.droptilllate.filesystem.preferences.Options;
 
 public class FileHandlerTest
 {
+	private Options options;
+	
 	private IFile iFile = new FileHandler();
 	private IShareRelation iShareRelation = new ShareRelationHandler(); 
 	
@@ -51,8 +54,9 @@ public class FileHandlerTest
 		System.out.println(this.getClass().getSimpleName()+": " + name.getMethodName());
 		int id = 1234;
 		int contId = 9999;
+		int shareRelationID = 4444;
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), TestHelper.getTestDir());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID);
 		fie.getContainerInfo().setContainerID(contId);
 		// Adding File
 		System.out.println(Constants.CONSOLE_LIMITER);
@@ -62,7 +66,7 @@ public class FileHandlerTest
 			iFile.encryptFile(fie, Constants.TEST_PASSWORD_1);			
 		} catch (FileException e)
 		{
-			System.out.println(e.getMessage());
+			System.err.println(e.getError());
 		}
 		Timer.stop(true);
 		iFile.unmountFileSystem();
@@ -71,8 +75,8 @@ public class FileHandlerTest
 		//assertTrue(iFile.isFileInContainer(fie));
 
 		// Create FileInfo
-		FileInfoDecrypt fid = new FileInfoDecrypt(id, InfoHelper.checkFileExt(filenameTextFile), TestHelper.getTestDir(),
-				TestHelper.getTestDir(), contId);
+		FileInfoDecrypt fid = new FileInfoDecrypt(id, InfoHelper.checkFileExt(filenameTextFile), shareRelationID,
+				contId);
 		// Extract File
 		System.out.println();
 		System.out.println("Extracting the text file");
@@ -97,14 +101,15 @@ public class FileHandlerTest
 		System.out.println(this.getClass().getSimpleName()+": " + name.getMethodName());
 		int id = 1234;
 		int contId = 9999;
+		int shareRelationID = 4444;
 		String deleteDir = TestHelper.getTestDir()+InfoHelper.getDirLimiter()+"dirToDelete";
 		System.out.println(Constants.CONSOLE_LIMITER);
 		System.out.println("Deleting the text file");
 		// Create FileInfo
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), deleteDir);
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID);
 		fie.getContainerInfo().setContainerID(contId);
 		// Create the directories
-		iShareRelation.checkIfDirectoryExists(fie.getContainerInfo().getShareRelationID());
+		iShareRelation.checkIfDirectoryExists(fie.getContainerInfo().getShareRelationPath());
 		
 		// Adding File
 		try
@@ -118,7 +123,7 @@ public class FileHandlerTest
 		assertTrue(iFile.checkFile(fie, Constants.TEST_PASSWORD_1));
 
 		// Create FileInfo to delete
-		FileInfo fi = new FileInfo(id, new ContainerInfo(contId, deleteDir));
+		FileInfo fi = new FileInfo(id, new ContainerInfo(contId, shareRelationID));
 		try
 		{
 			iFile.deleteFile(fi, Constants.TEST_PASSWORD_1);
@@ -140,13 +145,11 @@ public class FileHandlerTest
 		System.out.println("Moving the text file");
 		// Create two share directories
 		// create DIR
-		File shareDir1 = new File(TestHelper.getTestDir(), "share1");
-		shareDir1.mkdir();
-		File shareDir2 = new File(TestHelper.getTestDir(), "share2");
-		shareDir2.mkdir();
+		int shareRelationID1 = 1111;
+		int shareRelationID2 = 2222;
 		
 		// Create FileInfo for adding to share1
-		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareDir1.getAbsolutePath());
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID1);
 		fie.getContainerInfo().setContainerID(contId);
 		// Adding File
 		try
@@ -161,7 +164,7 @@ public class FileHandlerTest
 
 		
 		// Create FileInfo to move the file to share2
-		FileInfoMove fim = new FileInfoMove(id, textFile.length(), shareDir1.getAbsolutePath(), contId, shareDir2.getAbsolutePath());
+		FileInfoMove fim = new FileInfoMove(id, textFile.length(), shareRelationID1, contId, shareRelationID2);
 		fim.getContainerInfo().setContainerID(contId);
 		try
 		{
@@ -184,6 +187,10 @@ public class FileHandlerTest
 		TestHelper.setupTestDir();
 		// create a new textfile
 		textFile = TestHelper.createTextFile(filenameTextFile, contentTextFile);
+		// set options
+		options = Options.getInstance();
+		options.setDroptilllatePath(TestHelper.getTestDir());
+		options.setTempPath(TestHelper.getExtractDir());
 	}
 
 	@After
