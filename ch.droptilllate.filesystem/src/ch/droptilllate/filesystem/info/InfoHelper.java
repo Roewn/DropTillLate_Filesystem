@@ -106,7 +106,7 @@ public class InfoHelper
 		// check for valid path
 		isValidContainerPath(path);
 		// get the container from the path
-		String container = path.substring(path.lastIndexOf(getDirLimiter()) + getOffset(), path.lastIndexOf(Constants.EXT_LIMITER));
+		String container = path.substring(path.lastIndexOf(getDirLimiter()) + 1, path.lastIndexOf(Constants.EXT_LIMITER));
 		// convert to int and return value
 		try
 		{

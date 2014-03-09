@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Filesystem
 Bundle-SymbolicName: ch.droptilllate.filesystem
-Bundle-Version: 0.4.1
+Bundle-Version: 0.4.2
 Bundle-ClassPath: filesystem.jar,
  libraries/annotations-2.0.1.jar,
  libraries/bcprov-jdk16-1.46.jar,
