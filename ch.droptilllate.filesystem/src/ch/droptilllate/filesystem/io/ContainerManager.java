@@ -84,8 +84,10 @@ public class ContainerManager
 					{
 						// get the smallest container from this ShareRelation
 						ContainerInfo smallestContInfoInRelation = contInfoSet.first();
-						// check if there is enough free space in the Container
-						if ((maxContainerSize - smallestContInfoInRelation.getEstimatedContainerSize()) > actFileSize)
+						// check if there is enough free space in the Container and ..
+						// its not the reserved container id for storing the filesystem structure
+						if ((maxContainerSize - smallestContInfoInRelation.getEstimatedContainerSize()) > actFileSize &&
+								smallestContInfoInRelation.getContainerID() != Constants.STRUCT_CONT_ID)
 						{
 							// first remove the ContInfo from the set (needed for update the SET)
 							contInfoSet.remove(smallestContInfoInRelation);
@@ -165,8 +167,8 @@ public class ContainerManager
 					if (iShareRelation.checkIfDirectoryExists(shareRelationPath))
 					{
 						// get all containers in this share relation
-						List<File> containerList = iShareRelation.getContainersOfShareRelation(actFileContInfo.getShareRelationID());
-						// Check if there is at least a contaienr in the share relation
+						List<File> containerList = iShareRelation.getContainersOfShareRelation(actFileContInfo.getShareRelationID());						
+						// Check if there is at least a container in the share relation
 						if (containerList != null && containerList.size() > 0)
 						{
 							TreeSet<ContainerInfo> contInfoSet = new TreeSet<ContainerInfo>();
