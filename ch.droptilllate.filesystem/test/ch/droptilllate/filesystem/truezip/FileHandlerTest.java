@@ -1,3 +1,4 @@
+// $codepro.audit.disable tooManyViolations
 package ch.droptilllate.filesystem.truezip;
 
 import static org.junit.Assert.assertFalse;
@@ -120,7 +121,7 @@ public class FileHandlerTest
 			System.out.println(e.getMessage());
 		}
 		iFile.unmountFileSystem();
-		assertTrue(iFile.checkFile(fie, Constants.TEST_PASSWORD_1));
+		assertTrue(iFile.isFileInContainer(fie, Constants.TEST_PASSWORD_1));
 
 		// Create FileInfo to delete
 		FileInfo fi = new FileInfo(id, new ContainerInfo(contId, shareRelationID));
@@ -132,7 +133,7 @@ public class FileHandlerTest
 			System.out.println(e.getMessage());
 		}
 		iFile.unmountFileSystem();
-		assertFalse(iFile.checkFile(fie, Constants.TEST_PASSWORD_1));
+		assertFalse(iFile.isFileInContainer(fie, Constants.TEST_PASSWORD_1));
 	}
 
 	@Test
@@ -160,7 +161,7 @@ public class FileHandlerTest
 			System.out.println(e.getMessage());
 		}
 		iFile.unmountFileSystem();
-		assertTrue(iFile.checkFile(fie, Constants.TEST_PASSWORD_1));
+		assertTrue(iFile.isFileInContainer(fie, Constants.TEST_PASSWORD_1));
 
 		
 		// Create FileInfo to move the file to share2
@@ -175,9 +176,9 @@ public class FileHandlerTest
 		}
 		iFile.unmountFileSystem();
 		//file should not be longer in the source container
-		assertFalse(iFile.checkFile(fie, Constants.TEST_PASSWORD_1));
+		assertFalse(iFile.isFileInContainer(fie, Constants.TEST_PASSWORD_1));
 		//check if its in the dest container
-		assertTrue(iFile.checkFile(fim, Constants.TEST_PASSWORD_1));
+		assertTrue(iFile.isFileInContainer(fim, Constants.TEST_PASSWORD_1));
 	}
 
 	@Before

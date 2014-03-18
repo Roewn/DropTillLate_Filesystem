@@ -1,3 +1,4 @@
+// $codepro.audit.disable tooManyViolations, avoidNestedBlocks
 package ch.droptilllate.filesystem.test;
 
 import java.io.BufferedReader;
@@ -9,7 +10,7 @@ import java.util.List;
 import ch.droptilllate.filesystem.api.FileHandlingSummary;
 import ch.droptilllate.filesystem.api.FileSystemHandler;
 import ch.droptilllate.filesystem.api.IFileSystem;
-import ch.droptilllate.filesystem.helper.TestHelper;
+
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
@@ -47,9 +48,9 @@ public class TempTest
 		
 		
 		List<String> fileNameList = new ArrayList<String>();
-		fileNameList.add(plainFileName5);
-		fileNameList.add(plainFileName10);
-//		fileNameList.add(plainFileName20);
+//		fileNameList.add(plainFileName5);
+//		fileNameList.add(plainFileName10);
+		fileNameList.add(plainFileName20);
 //		fileNameList.add(plainFileName50);
 //		fileNameList.add(plainFileName100);
 //		fileNameList.add(plainFileName200);
@@ -88,7 +89,7 @@ public class TempTest
 		{
 
 			// Test cases
-			switch (3)
+			switch (1)
 			{
 			case 1: // Encrypt Files 
 				ArrayList<FileInfoEncrypt> fileInfoEncList = new ArrayList<FileInfoEncrypt>();

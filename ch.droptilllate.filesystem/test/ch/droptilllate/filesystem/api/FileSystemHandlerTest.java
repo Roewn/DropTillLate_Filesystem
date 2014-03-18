@@ -1,3 +1,4 @@
+
 package ch.droptilllate.filesystem.api;
 
 import static org.junit.Assert.assertFalse;
@@ -41,7 +42,6 @@ public class FileSystemHandlerTest
 	private int shareRelationID2 = 5555;
 
 	private IFile iFile = new FileHandler();
-	private IShareRelation iShareRelation = new ShareRelationHandler();
 
 	File shareDir1;
 	File shareDir2;

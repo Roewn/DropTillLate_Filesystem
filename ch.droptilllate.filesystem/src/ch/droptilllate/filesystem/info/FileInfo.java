@@ -1,3 +1,4 @@
+// $codepro.audit.disable com.instantiations.assist.eclipse.analysis.audit.rule.effectivejava.obeyEqualsContract.obeyGeneralContractOfEquals
 package ch.droptilllate.filesystem.info;
 
 import ch.droptilllate.filesystem.error.FileError;

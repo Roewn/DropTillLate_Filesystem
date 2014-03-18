@@ -1,7 +1,8 @@
+// $codepro.audit.disable com.instantiations.assist.eclipse.analysis.audit.rule.effectivejava.obeyEqualsContract.obeyGeneralContractOfEquals
 package ch.droptilllate.filesystem.info;
 
 import ch.droptilllate.filesystem.error.FileException;
-import ch.droptilllate.filesystem.preferences.Constants;
+
 
 /**
  * Class which holds all informations about a container and the related share relation. 

@@ -1,3 +1,4 @@
+// $codepro.audit.disable disallowStringConcatenation
 package ch.droptilllate.filesystem.api;
 
 import java.util.ArrayList;
@@ -106,7 +107,7 @@ public class FileHandlingSummary
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Success List:");
+		sb.append("Success List:"); 
 		sb.append(System.getProperty("line.separator"));
 		for (FileInfo fi : fileInfoSuccessList){
 			sb.append(fi.getFileID()+" -> Created in: "+fi.getContainerInfo());

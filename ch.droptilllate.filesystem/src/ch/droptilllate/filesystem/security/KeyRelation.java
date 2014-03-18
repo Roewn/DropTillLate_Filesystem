@@ -5,7 +5,7 @@ package ch.droptilllate.filesystem.security;
 
 import java.util.HashMap;
 
-import ch.droptilllate.filesystem.info.InfoHelper;
+
 
 /**
  * This class hold the key for every share relation.

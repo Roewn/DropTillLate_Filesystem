@@ -1,3 +1,4 @@
+// $codepro.audit.disable tooManyViolations
 package ch.droptilllate.filesystem.io;
 
 import static org.junit.Assert.assertEquals;

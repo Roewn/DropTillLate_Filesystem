@@ -1,3 +1,4 @@
+// $codepro.audit.disable tooManyViolations
 package ch.droptilllate.filesystem.concurrent;
 
 import static org.junit.Assert.assertFalse;
@@ -97,10 +98,10 @@ public class WorkerMoveTest
 
 		iFile.unmountFileSystem();
 		// file should not be longer in the source container
-		assertFalse(iFile.checkFile(fie, key1));
+		assertFalse(iFile.isFileInContainer(fie, key1));
 		iFile.unmountFileSystem();
 		// check if its in the dest container
-		assertTrue(iFile.checkFile(fim, key2));
+		assertTrue(iFile.isFileInContainer(fim, key2));
 	}
 
 	@Test

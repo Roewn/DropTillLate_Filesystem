@@ -62,7 +62,7 @@ public class WorkerEncryptTest
 		{
 			e.printStackTrace();
 		}
-		assertTrue(iFile.checkFile(fie, key1));
+		assertTrue(iFile.isFileInContainer(fie, key1));
 		iFile.unmountFileSystem();
 	}
 
@@ -92,7 +92,7 @@ public class WorkerEncryptTest
 		}
 		iFile.unmountFileSystem();
 		assertTrue(fie.getError() == FileError.SRC_FILE_NOT_FOUND);
-		assertFalse(iFile.checkFile(fie, key1));
+		assertFalse(iFile.isFileInContainer(fie, key1));
 
 		
 

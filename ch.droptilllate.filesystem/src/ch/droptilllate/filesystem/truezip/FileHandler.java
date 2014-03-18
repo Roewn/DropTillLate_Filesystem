@@ -98,7 +98,7 @@ public class FileHandler implements IFile
 		{
 			// Set the password for the current operation
 			config.setArchiveDetector(KeyManager1.getArchiveDetector(key.toCharArray()));
-			
+
 			checkContainerID(fileInfo.getContainerInfo());
 			TFile src = new TFile(fileInfo.getContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 
@@ -189,7 +189,7 @@ public class FileHandler implements IFile
 		{
 			// Set the password for the current operation (Archive detector of the destination)
 			config.setArchiveDetector(KeyManager1.getArchiveDetector(dstKey.toCharArray()));
-			
+
 			checkContainerID(fileInfo.getSrcContainerInfo());
 			checkContainerID(fileInfo.getDestContainerInfo());
 			// create the source file and pass the source archive detector with the source key
@@ -232,7 +232,7 @@ public class FileHandler implements IFile
 	 * @param fileInfo Info of the File to check (including container id)
 	 * @return true when file still exists
 	 */
-	public synchronized boolean checkFile(FileInfo fileInfo, String key)
+	public synchronized boolean isFileInContainer(FileInfo fileInfo, String key)
 	{
 		TConfig config = TConfig.push();
 		try
@@ -293,14 +293,10 @@ public class FileHandler implements IFile
 				}
 				System.out.println(Constants.CONSOLE_LIMITER);
 				System.out.println("Container: " + contInfo.getContainerID());
-				try
+				
+				for (FileInfo file : fileList)
 				{
-					for (FileInfo file : fileList)
-					{
-						System.out.println("-> " + file.getFileID());
-					}
-				} catch (Exception e1)
-				{
+					System.out.println("-> " + file.getFileID());
 				}
 			}
 		} finally
@@ -345,6 +341,7 @@ public class FileHandler implements IFile
 
 	/**
 	 * Checks the container id and throws an exception if the id is wrong
+	 * 
 	 * @param containerInfo
 	 * @throws FileException Throw when file is corrupt.
 	 */

@@ -86,8 +86,7 @@ public class ContainerManager
 						ContainerInfo smallestContInfoInRelation = contInfoSet.first();
 						// check if there is enough free space in the Container and ..
 						// its not the reserved container id for storing the filesystem structure
-						if ((maxContainerSize - smallestContInfoInRelation.getEstimatedContainerSize()) > actFileSize &&
-								smallestContInfoInRelation.getContainerID() != Constants.STRUCT_CONT_ID)
+						if ((maxContainerSize - smallestContInfoInRelation.getEstimatedContainerSize()) > actFileSize)
 						{
 							// first remove the ContInfo from the set (needed for update the SET)
 							contInfoSet.remove(smallestContInfoInRelation);
@@ -119,8 +118,6 @@ public class ContainerManager
 					// of
 					// the existing file in the container
 					// Add a new asser statement in testExistingContainerID()
-					
-					
 
 				}
 			}
@@ -161,13 +158,13 @@ public class ContainerManager
 					// TODO Maybe check if the parent folder of droptilllate is correct
 					shareRelationsMap.put(actFileContInfo.getShareRelationID(), new TreeSet<ContainerInfo>());
 
-					String shareRelationPath = Options.getInstance().getDroptilllatePath() +
-							InfoHelper.getDirLimiter() + actFileContInfo.getShareRelationID();
+					String shareRelationPath = Options.getInstance().getDroptilllatePath() + InfoHelper.getDirLimiter()
+							+ actFileContInfo.getShareRelationID();
 					// If folder already exists, get all containers and update the Map with these infos
 					if (iShareRelation.checkIfDirectoryExists(shareRelationPath))
 					{
 						// get all containers in this share relation
-						List<File> containerList = iShareRelation.getContainersOfShareRelation(actFileContInfo.getShareRelationID());						
+						List<File> containerList = iShareRelation.getContainersOfShareRelation(actFileContInfo.getShareRelationID());
 						// Check if there is at least a container in the share relation
 						if (containerList != null && containerList.size() > 0)
 						{
@@ -175,11 +172,18 @@ public class ContainerManager
 							// get all FileInfos for the containers in these path
 							for (File file : containerList)
 							{
-								ContainerInfo contInfo = new ContainerInfo(file.getAbsolutePath());
-								// get size of every container
-								contInfo.setEstimatedContainerSize(file.length());
-								// add the ContainerInfo to the Set
-								contInfoSet.add(contInfo);
+								// get the full path of the container file
+								String filePath = file.getAbsolutePath();
+								// check if the filePath points to the container which contains the filesystem structure ...
+								// ... this container shall not be added to the set
+								if (InfoHelper.extractContainerID(filePath) != Constants.STRUCT_CONT_ID)
+								{
+									ContainerInfo contInfo = new ContainerInfo(file.getAbsolutePath());
+									// get size of every container
+									contInfo.setEstimatedContainerSize(file.length());
+									// add the ContainerInfo to the Set
+									contInfoSet.add(contInfo);
+								}
 							}
 							// Update the map with the all containers per share relation
 							shareRelationsMap.put(actFileContInfo.getShareRelationID(), contInfoSet);
@@ -234,7 +238,7 @@ public class ContainerManager
 		Random rnd = new Random();
 		while (contIdSet.size() < oldIdCount)
 		{
-			newID = (Constants.STRUCT_CONT_ID+1) + rnd.nextInt(Constants.MAX_RND);
+			newID = (Constants.STRUCT_CONT_ID + 1) + rnd.nextInt(Constants.MAX_RND);
 			// As we're adding to a set, this will automatically do a containment check
 			contIdSet.add(newID);
 		}

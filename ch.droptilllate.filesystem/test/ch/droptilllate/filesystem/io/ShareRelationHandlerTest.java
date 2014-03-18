@@ -1,3 +1,4 @@
+// $codepro.audit.disable unusedField
 package ch.droptilllate.filesystem.io;
 
 import static org.junit.Assert.assertTrue;
@@ -52,7 +53,6 @@ public class ShareRelationHandlerTest
 		int id2 = 2222;
 		int contId2 = 9999;	
 		int shareRelationID = 4444;
-		options = options;
 		// Create FileInfo
 		FileInfoEncrypt fie1 = new FileInfoEncrypt(id1, textFile.getAbsolutePath(), shareRelationID);
 		fie1.getContainerInfo().setContainerID(contId1);
@@ -69,8 +69,8 @@ public class ShareRelationHandlerTest
 			System.out.println(e.getMessage());
 		}
 		iFile.unmountFileSystem();
-		assertTrue(iFile.checkFile(fie1, key1));
-		assertTrue(iFile.checkFile(fie2, key1));
+		assertTrue(iFile.isFileInContainer(fie1, key1));
+		assertTrue(iFile.isFileInContainer(fie2, key1));
 				
 		List<FileInfo> fil = srh.getFilesOfShareRelation(shareRelationID, key1);
 		assertTrue(fil.size() == 2);	

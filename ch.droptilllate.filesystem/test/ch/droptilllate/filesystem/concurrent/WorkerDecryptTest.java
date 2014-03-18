@@ -1,3 +1,4 @@
+// $codepro.audit.disable unusedField
 package ch.droptilllate.filesystem.concurrent;
 
 import static org.junit.Assert.assertTrue;

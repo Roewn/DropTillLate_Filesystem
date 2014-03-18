@@ -1,3 +1,4 @@
+// $codepro.audit.disable unusedField
 package ch.droptilllate.filesystem.concurrent;
 
 import static org.junit.Assert.assertFalse;
@@ -88,7 +89,7 @@ public class WorkerDeleteTest
 		}
 
 		iFile.unmountFileSystem();
-		assertFalse(iFile.checkFile(fie, key1));
+		assertFalse(iFile.isFileInContainer(fie, key1));
 	}
 
 	@Test

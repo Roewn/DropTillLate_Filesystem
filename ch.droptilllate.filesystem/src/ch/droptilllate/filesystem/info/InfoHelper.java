@@ -104,7 +104,7 @@ public class InfoHelper
 	public synchronized static int extractContainerID(String path) throws FileException
 	{
 		// check for valid path
-		isValidContainerPath(path);
+		checkContainerPath(path);
 		// get the container from the path
 		String container = path.substring(path.lastIndexOf(getDirLimiter()) + 1, path.lastIndexOf(Constants.EXT_LIMITER));
 		// convert to int and return value
@@ -127,7 +127,7 @@ public class InfoHelper
 	public synchronized static int extractShareRelationID(String path) throws FileException
 	{
 		// check for valid path
-		isValidContainerPath(path);
+		checkContainerPath(path);
 		// get the container from the path
 		String[] pathElements = null;
 		// this is neccessary for the split function to work properly
@@ -176,7 +176,7 @@ public class InfoHelper
 	 * @param path full container path, Example for full container path: "C:\\Temp\\Share1\\342657.tilllate".
 	 * @throws FileException if path is invalid.
 	 */
-	private static void isValidContainerPath(String path) throws FileException
+	private static void checkContainerPath(String path) throws FileException
 	{
 		if (path != null && path.length() > 0)
 		{

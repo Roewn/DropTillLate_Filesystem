@@ -63,7 +63,7 @@ public interface IFile
 	 * @param fileInfo Info of the File to check (including container id)
 	 * @return true when file exists
 	 */
-	boolean checkFile(FileInfo fileInfo, String key);
+	boolean isFileInContainer(FileInfo fileInfo, String key);
 
 	/**
 	 * Commits all pending changes for all (nested) archive files to their respective parent file system, closes their associated target

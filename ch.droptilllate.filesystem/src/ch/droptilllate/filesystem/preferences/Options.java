@@ -4,7 +4,7 @@
 package ch.droptilllate.filesystem.preferences;
 
 import ch.droptilllate.filesystem.info.InfoHelper;
-import ch.droptilllate.filesystem.io.ContainerManager;
+
 
 /**
  * @author Roewn

@@ -53,7 +53,7 @@ public class TestHelper
 		ArrayList<File> fileList = new ArrayList<File>();
 		for (int i = 0; i < count; i++)
 		{
-			File file = new File(testDir.getAbsolutePath(), i + 1 + Constants.EXT_LIMITER + fileExtentions);
+			File file = new File(testDir.getAbsolutePath(), (i + 1) + Constants.EXT_LIMITER + fileExtentions);
 			RandomAccessFile raf = null;
 			try
 			{
@@ -126,7 +126,7 @@ public class TestHelper
 			FileInputStream fin = new FileInputStream(file);
 			BufferedReader myInput = new BufferedReader(new InputStreamReader(fin));
 			sb = new StringBuilder();
-			while ((thisLine = myInput.readLine()) != null)
+			while ((thisLine = myInput.readLine()) != null) // $codepro.audit.disable assignmentInCondition
 			{
 				sb.append(thisLine);
 			}
