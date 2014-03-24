@@ -20,8 +20,7 @@ public enum FileError
 	DEST_FILE_NOT_FOUND("Destination file not found"),
 	EXTRACTED_FILE_NOT_FOUND("Extracted file not found in temp directory"),
 	
-	INVALID_KEY("Invalid key"),
-	
+	INVALID_KEY("Invalid key"),	
 	
 	FILENAME_NOT_PARSABLE("Can not parse the filename"),
 	
