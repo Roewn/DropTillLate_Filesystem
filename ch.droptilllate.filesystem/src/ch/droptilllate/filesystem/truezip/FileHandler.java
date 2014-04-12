@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
+import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.error.FileError;
 import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.info.ContainerInfo;
@@ -12,7 +13,6 @@ import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
-import ch.droptilllate.filesystem.info.InfoHelper;
 import ch.droptilllate.filesystem.io.IContainer;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.preferences.Constants;
@@ -117,7 +117,7 @@ public class FileHandler implements IFile
 			} else if (isFileNotFoundException(e))
 			{
 				throw new FileException(FileError.SRC_FILE_NOT_FOUND, fileInfo.getContainerInfo().getContainerPath()
-						+ InfoHelper.getDirLimiter() + fileInfo.getFileID());
+						+ OsHelper.getDirLimiter() + fileInfo.getFileID());
 			} else
 			{
 				throw new FileException(FileError.IO_EXCEPTION, e.getMessage());
@@ -210,7 +210,7 @@ public class FileHandler implements IFile
 			} else if (isFileNotFoundException(e))
 			{
 				throw new FileException(FileError.SRC_FILE_NOT_FOUND, fileInfo.getSrcContainerInfo().getContainerPath()
-						+ InfoHelper.getDirLimiter() + fileInfo.getFileID());
+						+ OsHelper.getDirLimiter() + fileInfo.getFileID());
 			} else
 			{
 				throw new FileException(FileError.IO_EXCEPTION, e.getMessage());

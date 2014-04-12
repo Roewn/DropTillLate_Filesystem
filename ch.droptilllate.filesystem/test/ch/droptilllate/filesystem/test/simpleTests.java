@@ -19,6 +19,7 @@ import java.util.List;
 
 
 
+
 import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.ContainerInfo;
@@ -33,6 +34,7 @@ import ch.droptilllate.filesystem.truezip.FileHandler;
 
 
 
+import ch.droptilllate.keyfile.error.KeyFileError;
 import ch.droptilllate.keyfile.io.KeyFile;
 import ch.droptilllate.security.commons.KeyRelation;
 import de.schlichtherle.truezip.file.TFile;
@@ -156,7 +158,6 @@ public class simpleTests
 			KeyFile.store(path, "anus", kr);
 		} catch (Exception e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -164,14 +165,16 @@ public class simpleTests
 	private static void loadKeyFile(){
 		KeyRelation kr = new KeyRelation();
 		String path = testPath + "keyfile";
+		List<KeyFileError> errorList = new ArrayList<KeyFileError>();
 		try
 		{
-			KeyFile.load(path, "penis");
-		} catch (IOException e)
+			kr = KeyFile.load(path, "anus", errorList);
+		} catch (Exception e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		System.out.println(kr.getKeyShareMap());
 	}
 
 }

@@ -1,12 +1,11 @@
-package ch.droptilllate.filesystem.info;
+package ch.droptilllate.filesystem.commons;
 
-import ch.droptilllate.filesystem.commons.OsUtils;
 import ch.droptilllate.filesystem.error.FileError;
 import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.preferences.Options;
 
-public class InfoHelper
+public class OsHelper
 {
 	private static String dirLimiter = Constants.DIR_LIMITER_WIN;
 	private static int offset = 1;
@@ -68,12 +67,27 @@ public class InfoHelper
 	 */
 	public synchronized static String checkPath(String path)
 	{
-		if ((path.lastIndexOf(dirLimiter) + 1) == path.length())
+		if (pathEndsWithDirLimiter(path))
 		{
 			return path.substring(0, path.lastIndexOf(dirLimiter));
 		} else
 		{
 			return path;
+		}
+	}
+	
+	/**
+	 * Checks if the path ends with a directory limiter char.
+	 * @param path path path of a directory or file
+	 * @return true if the path ends with a directory limiter char
+	 */
+	public synchronized static boolean pathEndsWithDirLimiter(String path) {
+		if ((path.lastIndexOf(dirLimiter) + 1) == path.length())
+		{
+			return true;
+		} else
+		{
+			return false;
 		}
 	}
 

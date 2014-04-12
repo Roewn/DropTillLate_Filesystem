@@ -3,6 +3,7 @@
  */
 package ch.droptilllate.filesystem.info;
 
+import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.preferences.Options;
 
 
@@ -35,7 +36,7 @@ public class FileInfoEncrypt extends FileInfo
 	public FileInfoEncrypt (int fileID, int destShareRelationId, int destContainerId, String fileExtension) {
 		// Set the container ID;
 		super(fileID, new ContainerInfo(destContainerId, destShareRelationId));
-		this.fullPlainFilePath = InfoHelper.createFullPath(Options.getInstance().getTempPath(), Integer.toString(fileID), fileExtension);
+		this.fullPlainFilePath = OsHelper.createFullPath(Options.getInstance().getTempPath(), Integer.toString(fileID), fileExtension);
 	}
 
 	/**

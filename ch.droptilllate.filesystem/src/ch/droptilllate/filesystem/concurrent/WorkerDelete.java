@@ -3,9 +3,9 @@
  */
 package ch.droptilllate.filesystem.concurrent;
 
+import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.info.FileInfo;
-import ch.droptilllate.filesystem.info.InfoHelper;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 
@@ -26,7 +26,7 @@ public class WorkerDelete implements Runnable
 
     @Override
     public void run() {
-        System.out.println("Thread started: " +Thread.currentThread().getName() + " -> File: " + fileInfo.getContainerInfo().getContainerPath()+InfoHelper.getDirLimiter()+fileInfo.getFileID());
+        System.out.println("Thread started: " +Thread.currentThread().getName() + " -> File: " + fileInfo.getContainerInfo().getContainerPath()+OsHelper.getDirLimiter()+fileInfo.getFileID());
         try
 		{
 			iFile.deleteFile(fileInfo, key);

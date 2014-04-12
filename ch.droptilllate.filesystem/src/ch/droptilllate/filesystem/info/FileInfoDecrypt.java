@@ -3,6 +3,7 @@
  */
 package ch.droptilllate.filesystem.info;
 
+import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.preferences.Options;
 
@@ -46,7 +47,7 @@ public class FileInfoDecrypt extends FileInfo
 	 * @param fileExtension the fileExtension to set
 	 */
 	public synchronized void setFileExtension(String fileExtension) {
-		this.fileExtension = InfoHelper.checkFileExt(fileExtension);
+		this.fileExtension = OsHelper.checkFileExt(fileExtension);
 	}	
 	
 	/**
@@ -54,7 +55,7 @@ public class FileInfoDecrypt extends FileInfo
 	 * @return fullFilePath -> Location of the decrypted File (temp dir path + file Id + File extension)
 	 */
 	public synchronized String getFullTmpFilePath() {
-		return InfoHelper.createFullPath(getTempDirPath(), Integer.toString(super.getFileID()), this.fileExtension);
+		return OsHelper.createFullPath(getTempDirPath(), Integer.toString(super.getFileID()), this.fileExtension);
 	}
 	
 	/**

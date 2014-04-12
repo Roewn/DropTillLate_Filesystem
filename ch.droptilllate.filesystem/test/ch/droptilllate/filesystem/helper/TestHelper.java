@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
-import ch.droptilllate.filesystem.info.InfoHelper;
+import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.preferences.Constants;
 import de.schlichtherle.truezip.file.TFile;
 
@@ -148,7 +148,7 @@ public class TestHelper
 
 	public static String getExtractDir()
 	{
-		return testDir.getAbsolutePath() + InfoHelper.getDirLimiter() + extractDir;
+		return testDir.getAbsolutePath() + OsHelper.getDirLimiter() + extractDir;
 	}
 
 }

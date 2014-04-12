@@ -17,8 +17,13 @@ public enum KeyFileError
 	IO_EXCEPTION("IO Exception"), 
 	
 	FILE_NOT_FOUND("keyfile not found"),
+	FILE_INVALID_PATH("Keyfile path argument for the keyfile is invalid"),
+	FILE_WRITE_EXCEPTION("An error occurred while writing into the keyfile"),
+	FILE_READ_EXCEPTION("An error occurred while reading from the keyfile"),
 	
-	FILE_INVALID_PATH("Path argument for the keyfile is invalid"),
+	LINE_SPLIT_ERROR("Could not split the read keyfile line to extract the shareRelationID and the related key "),
+	LINE_FETCH_ERROR("Read line from keyfile seems to be corrupt, wrong format or entries"),
+	SHARE_ID_NOT_PARSABLE("ShareRelationId could not be pared to integer"),
 	
 	EMPTY_KEYRELATION("Key relation is empty, no share relation found in key relation");
 	

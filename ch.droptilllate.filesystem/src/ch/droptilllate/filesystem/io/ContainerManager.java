@@ -9,12 +9,12 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
+import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.error.FileError;
 import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
-import ch.droptilllate.filesystem.info.InfoHelper;
 import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.preferences.Options;
 
@@ -158,7 +158,7 @@ public class ContainerManager
 					// TODO Maybe check if the parent folder of droptilllate is correct
 					shareRelationsMap.put(actFileContInfo.getShareRelationID(), new TreeSet<ContainerInfo>());
 
-					String shareRelationPath = Options.getInstance().getDroptilllatePath() + InfoHelper.getDirLimiter()
+					String shareRelationPath = Options.getInstance().getDroptilllatePath() + OsHelper.getDirLimiter()
 							+ actFileContInfo.getShareRelationID();
 					// If folder already exists, get all containers and update the Map with these infos
 					if (iShareRelation.checkIfDirectoryExists(shareRelationPath))
@@ -176,7 +176,7 @@ public class ContainerManager
 								String filePath = file.getAbsolutePath();
 								// check if the filePath points to the container which contains the filesystem structure ...
 								// ... this container shall not be added to the set
-								if (InfoHelper.extractContainerID(filePath) != Constants.STRUCT_CONT_ID)
+								if (OsHelper.extractContainerID(filePath) != Constants.STRUCT_CONT_ID)
 								{
 									ContainerInfo contInfo = new ContainerInfo(file.getAbsolutePath());
 									// get size of every container

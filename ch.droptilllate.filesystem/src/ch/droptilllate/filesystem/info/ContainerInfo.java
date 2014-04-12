@@ -1,6 +1,7 @@
 // $codepro.audit.disable com.instantiations.assist.eclipse.analysis.audit.rule.effectivejava.obeyEqualsContract.obeyGeneralContractOfEquals
 package ch.droptilllate.filesystem.info;
 
+import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.error.FileException;
 
 
@@ -79,8 +80,8 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 	public void setContainerPath(String containerPath) throws FileException
 	{
 		
-			this.shareRelationID = InfoHelper.extractShareRelationID(containerPath);
-			this.containerID = InfoHelper.extractContainerID(containerPath);
+			this.shareRelationID = OsHelper.extractShareRelationID(containerPath);
+			this.containerID = OsHelper.extractContainerID(containerPath);
 	}
 	
 	/**
@@ -88,7 +89,7 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 	 * @return the full sharerelation path. Example for full sharerelation path: "C:\\dropbox\\droptillate\\9999999".
 	 */
 	public String getShareRelationPath() {
-		return InfoHelper.createFullSharerelationPath(this.shareRelationID, this.containerID);
+		return OsHelper.createFullSharerelationPath(this.shareRelationID, this.containerID);
 	}
 
 	/**
@@ -96,7 +97,7 @@ public class ContainerInfo implements Comparable<ContainerInfo>
 	 * @return containerPath -> Parent container path + containerID + Container extension.
 	 */
 	public String getContainerPath() {
-		return InfoHelper.createFullContainerPath(this.shareRelationID, this.containerID);
+		return OsHelper.createFullContainerPath(this.shareRelationID, this.containerID);
 	}
 
 	/**

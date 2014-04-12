@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
+import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.commons.Timer;
 import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.helper.TestHelper;
@@ -20,7 +21,6 @@ import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
-import ch.droptilllate.filesystem.info.InfoHelper;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.io.IShareRelation;
 import ch.droptilllate.filesystem.io.ShareRelationHandler;
@@ -76,7 +76,7 @@ public class FileHandlerTest
 		//assertTrue(iFile.isFileInContainer(fie));
 
 		// Create FileInfo
-		FileInfoDecrypt fid = new FileInfoDecrypt(id, InfoHelper.checkFileExt(filenameTextFile), shareRelationID,
+		FileInfoDecrypt fid = new FileInfoDecrypt(id, OsHelper.checkFileExt(filenameTextFile), shareRelationID,
 				contId);
 		// Extract File
 		System.out.println();
@@ -103,7 +103,7 @@ public class FileHandlerTest
 		int id = 1234;
 		int contId = 9999;
 		int shareRelationID = 4444;
-		String deleteDir = TestHelper.getTestDir()+InfoHelper.getDirLimiter()+"dirToDelete";
+		String deleteDir = TestHelper.getTestDir()+OsHelper.getDirLimiter()+"dirToDelete";
 		System.out.println(Constants.CONSOLE_LIMITER);
 		System.out.println("Deleting the text file");
 		// Create FileInfo

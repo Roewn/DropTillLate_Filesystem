@@ -3,7 +3,7 @@
  */
 package ch.droptilllate.filesystem.preferences;
 
-import ch.droptilllate.filesystem.info.InfoHelper;
+import ch.droptilllate.filesystem.commons.OsHelper;
 
 
 /**
@@ -48,7 +48,7 @@ public class Options
 	 */
 	public void setDroptilllatePath(String DroptilllatePath)
 	{
-		this.DroptilllatePath = InfoHelper.checkPath(DroptilllatePath);
+		this.DroptilllatePath = OsHelper.checkPath(DroptilllatePath);
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class Options
 	 */
 	public void setTempPath(String tempPath)
 	{
-		this.tempPath = InfoHelper.checkPath(tempPath);
+		this.tempPath = OsHelper.checkPath(tempPath);
 	}
 	
 	

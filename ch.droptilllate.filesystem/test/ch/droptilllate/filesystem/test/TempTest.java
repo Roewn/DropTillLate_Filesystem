@@ -10,11 +10,11 @@ import java.util.List;
 import ch.droptilllate.filesystem.api.FileHandlingSummary;
 import ch.droptilllate.filesystem.api.FileSystemHandler;
 import ch.droptilllate.filesystem.api.IFileSystem;
+import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
-import ch.droptilllate.filesystem.info.InfoHelper;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.truezip.FileHandler;
@@ -106,8 +106,8 @@ public class TempTest
 				int id = 0;
 				int[] containerIds = {03231321, 45454, 464564};
 				for (String name : fileNameList) {
-//					fileInfoDecList.add(new FileInfoDecrypt(id,InfoHelper.checkFileExt(name), extractPath,testPath, containerIds[id]));
-					fileInfoDecList.add(new FileInfoDecrypt(id, InfoHelper.checkFileExt(name),share1, 895440));
+//					fileInfoDecList.add(new FileInfoDecrypt(id,OsHelper.checkFileExt(name), extractPath,testPath, containerIds[id]));
+					fileInfoDecList.add(new FileInfoDecrypt(id, OsHelper.checkFileExt(name),share1, 895440));
 					id++;
 				}
 				fhs = fileSystemHandler.decryptFiles(fileInfoDecList, kr1);

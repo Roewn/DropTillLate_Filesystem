@@ -5,6 +5,9 @@ package ch.droptilllate.security.commons;
 
 import java.util.HashMap;
 
+import ch.droptilllate.filesystem.info.ContainerInfo;
+import ch.droptilllate.filesystem.info.FileInfo;
+
 
 
 /**
@@ -63,6 +66,26 @@ public class KeyRelation
 	public void setKeyShareMap(HashMap<Integer, String> keyShareMap)
 	{
 		this.keyShareMap = keyShareMap;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other == null)
+		{
+			return false;
+		}
+
+		if (this.getClass() != other.getClass())
+		{
+			return false;
+		}
+
+		if (!this.keyShareMap.equals(((KeyRelation) other).keyShareMap))
+		{
+			return false;
+		}
+		
+		return true;
 	}
 
 }

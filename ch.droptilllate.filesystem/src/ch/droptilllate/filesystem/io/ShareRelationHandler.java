@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
-import ch.droptilllate.filesystem.info.InfoHelper;
 import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.preferences.Options;
 import ch.droptilllate.filesystem.truezip.ContainerHandler;
@@ -97,7 +97,7 @@ public class ShareRelationHandler implements IShareRelation
 	{
 		// get all containers in this directory
 		File directory = new File(Options.getInstance().getDroptilllatePath() +
-				InfoHelper.getDirLimiter() + shareRelationID);
+				OsHelper.getDirLimiter() + shareRelationID);
 		File[] containerList = directory.listFiles(new FilenameFilter()
 		{
 			@Override
