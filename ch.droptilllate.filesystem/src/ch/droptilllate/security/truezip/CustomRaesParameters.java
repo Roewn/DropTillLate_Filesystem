@@ -1,12 +1,12 @@
-package ch.droptilllate.filesystem.truezip;
+package ch.droptilllate.security.truezip;
 
 import de.schlichtherle.truezip.crypto.raes.RaesKeyException;
 import de.schlichtherle.truezip.crypto.raes.Type0RaesParameters;
 
-final class CustomRaesParameters implements Type0RaesParameters {
+public final class CustomRaesParameters implements Type0RaesParameters {
     final char[] password;
     
-    CustomRaesParameters(final char[] password) 
+    public CustomRaesParameters(final char[] password) 
     {
         this.password = password.clone();
     }

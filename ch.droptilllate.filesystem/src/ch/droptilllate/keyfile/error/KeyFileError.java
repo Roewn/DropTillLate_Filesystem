@@ -11,11 +11,19 @@ public enum KeyFileError
 {
 
 	NONE("No error"),
-	UNKNOWN("Unkown exceptions");
+	UNKNOWN("Unkown exceptions"),
+	INVALID_KEY("Invalid key"),
+	
+	IO_EXCEPTION("IO Exception"), 
+	
+	FILE_NOT_FOUND("keyfile not found"),
+	
+	FILE_INVALID_PATH("Path argument for the keyfile is invalid"),
+	
+	EMPTY_KEYRELATION("Key relation is empty, no share relation found in key relation");
 	
 	private String error;
 	private String message;
-
 
 	private KeyFileError(String error) {
 		this.error = error;

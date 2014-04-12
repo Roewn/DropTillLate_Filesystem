@@ -18,7 +18,7 @@ import org.junit.rules.TestName;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.preferences.Constants;
-import ch.droptilllate.filesystem.truezip.KeyManager1;
+import ch.droptilllate.security.truezip.KeyManager1;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
 

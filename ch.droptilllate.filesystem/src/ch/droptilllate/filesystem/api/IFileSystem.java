@@ -10,7 +10,7 @@ import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
-import ch.droptilllate.filesystem.security.KeyRelation;
+import ch.droptilllate.security.commons.KeyRelation;
 
 /**
  * @author Rene Amrhein
@@ -78,6 +78,6 @@ public interface IFileSystem
 	 * @param key Key of the shareRelation where the xml is encrypted
 	 * @return FileInfoDecrypt and the resulting error, if no error occurred than fileInfo.getError() == FileError.NONE
 	 */
-	FileInfoDecrypt loadFileStructure(FileInfoDecrypt fileInfo, String key);
+	FileInfoDecrypt loadFileStructure(FileInfoDecrypt fileInfo, String key);	
 
 }

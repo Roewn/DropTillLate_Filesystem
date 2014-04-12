@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.droptilllate.filesystem.security;
+package ch.droptilllate.security.commons;
 
 import java.util.HashMap;
 

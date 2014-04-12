@@ -13,8 +13,9 @@ import java.nio.file.Files;
 
 
 import java.util.ArrayList;
-
 import java.util.List;
+
+
 
 
 
@@ -25,15 +26,15 @@ import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
-
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.preferences.Options;
-
 import ch.droptilllate.filesystem.truezip.FileHandler;
 
 
 
+import ch.droptilllate.keyfile.io.KeyFile;
+import ch.droptilllate.security.commons.KeyRelation;
 import de.schlichtherle.truezip.file.TFile;
 import de.schlichtherle.truezip.nio.file.TPath;
 
@@ -53,22 +54,27 @@ public class simpleTests
 	public static void main(String[] args)
 	{
 		// set options
-		Options options = Options.getInstance();
-		options.setDroptilllatePath(TestHelper.getTestDir());
-		options.setTempPath(TestHelper.getExtractDir());
+//		Options options = Options.getInstance();
+//		options.setDroptilllatePath(TestHelper.getTestDir());
+//		options.setTempPath(TestHelper.getExtractDir());
 
 		textFile = new File(testPath + "test.txt");
 
-		// encrypt();
-		iFile.unmountFileSystem();
-
-		// decrypt();
-		iFile.unmountFileSystem();
-
-		// move();
-		iFile.unmountFileSystem();
-
-		getFileSize();
+//		// encrypt();
+//		iFile.unmountFileSystem();
+//
+//		// decrypt();
+//		iFile.unmountFileSystem();
+//
+//		// move();
+//		iFile.unmountFileSystem();
+//		getFileSize();
+		
+		storeKeyFile();
+		loadKeyFile();
+		
+		
+				
 	}
 
 	private static void encrypt()
@@ -138,6 +144,34 @@ public class simpleTests
 			e.printStackTrace();
 		}
 
+	}
+	
+	private static void storeKeyFile(){
+		KeyRelation kr = new KeyRelation();
+		kr.addKeyOfShareRelation(2, "share3erwe");
+		kr.addKeyOfShareRelation(10, "share4werwer");
+		String path = testPath + "keyfile";
+		try
+		{
+			KeyFile.store(path, "anus", kr);
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static void loadKeyFile(){
+		KeyRelation kr = new KeyRelation();
+		String path = testPath + "keyfile";
+		try
+		{
+			KeyFile.load(path, "penis");
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

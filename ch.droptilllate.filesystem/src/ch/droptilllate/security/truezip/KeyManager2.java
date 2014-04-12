@@ -1,4 +1,4 @@
-package ch.droptilllate.filesystem.truezip;
+package ch.droptilllate.security.truezip;
 
 import ch.droptilllate.filesystem.preferences.Constants;
 

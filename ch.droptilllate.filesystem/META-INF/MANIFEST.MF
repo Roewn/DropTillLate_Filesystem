@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Filesystem
 Bundle-SymbolicName: ch.droptilllate.filesystem
-Bundle-Version: 0.4.2
+Bundle-Version: 0.5.0
 Bundle-ClassPath: filesystem.jar,
  libraries/annotations-2.0.1.jar,
  libraries/bcprov-jdk16-1.46.jar,
@@ -26,8 +26,8 @@ Export-Package: ch.droptilllate.filesystem.api,
  ch.droptilllate.filesystem.info,
  ch.droptilllate.filesystem.io,
  ch.droptilllate.filesystem.preferences,
- ch.droptilllate.filesystem.security,
  ch.droptilllate.filesystem.test,
+ ch.droptilllate.security.commons,
  de.schlichtherle.truezip.crypto,
  de.schlichtherle.truezip.crypto.param,
  de.schlichtherle.truezip.crypto.raes,

@@ -3,8 +3,8 @@
  */
 package ch.droptilllate.keyfile.api;
 
-import ch.droptilllate.filesystem.security.KeyRelation;
 import ch.droptilllate.keyfile.error.KeyFileError;
+import ch.droptilllate.security.commons.KeyRelation;
 
 /**
  * @author Roewn

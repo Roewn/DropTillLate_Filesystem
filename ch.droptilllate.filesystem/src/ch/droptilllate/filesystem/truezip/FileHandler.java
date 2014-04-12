@@ -16,6 +16,7 @@ import ch.droptilllate.filesystem.info.InfoHelper;
 import ch.droptilllate.filesystem.io.IContainer;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.preferences.Constants;
+import ch.droptilllate.security.truezip.KeyManager1;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TConfig;
 import de.schlichtherle.truezip.file.TFile;

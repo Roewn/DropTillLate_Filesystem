@@ -18,8 +18,8 @@ import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.preferences.Options;
-import ch.droptilllate.filesystem.security.KeyRelation;
 import ch.droptilllate.filesystem.truezip.FileHandler;
+import ch.droptilllate.security.commons.KeyRelation;
 
 public class WorkerDecryptTest
 {

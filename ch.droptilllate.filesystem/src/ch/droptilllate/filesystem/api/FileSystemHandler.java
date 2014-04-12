@@ -25,9 +25,9 @@ import ch.droptilllate.filesystem.io.IContainer;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.preferences.Options;
-import ch.droptilllate.filesystem.security.KeyRelation;
 import ch.droptilllate.filesystem.truezip.ContainerHandler;
 import ch.droptilllate.filesystem.truezip.FileHandler;
+import ch.droptilllate.security.commons.KeyRelation;
 
 /**
  * This class extends the IFileSystem interface and operates on the filesystem concurrently (multithreading). For every operation of a file,

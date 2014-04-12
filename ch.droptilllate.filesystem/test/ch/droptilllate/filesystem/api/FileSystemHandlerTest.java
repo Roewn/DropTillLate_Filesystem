@@ -27,8 +27,8 @@ import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.io.IShareRelation;
 import ch.droptilllate.filesystem.io.ShareRelationHandler;
 import ch.droptilllate.filesystem.preferences.Constants;
-import ch.droptilllate.filesystem.security.KeyRelation;
 import ch.droptilllate.filesystem.truezip.FileHandler;
+import ch.droptilllate.security.commons.KeyRelation;
 
 public class FileSystemHandlerTest
 {
