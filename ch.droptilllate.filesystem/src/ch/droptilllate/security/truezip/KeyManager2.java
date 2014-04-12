@@ -1,18 +1,14 @@
 package ch.droptilllate.security.truezip;
 
 import ch.droptilllate.filesystem.preferences.Constants;
-
 import de.schlichtherle.truezip.crypto.raes.Type0RaesParameters.KeyStrength;
 import de.schlichtherle.truezip.crypto.raes.param.AesCipherParameters;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.fs.archive.zip.raes.PromptingKeyManagerService;
 import de.schlichtherle.truezip.fs.archive.zip.raes.SafeZipRaesDriver;
-
-
 import de.schlichtherle.truezip.key.PromptingKeyProvider.Controller;
 import de.schlichtherle.truezip.key.PromptingKeyProvider.View;
 import de.schlichtherle.truezip.key.UnknownKeyException;
-
 import de.schlichtherle.truezip.key.sl.KeyManagerLocator;
 import de.schlichtherle.truezip.socket.sl.IOPoolLocator;
 

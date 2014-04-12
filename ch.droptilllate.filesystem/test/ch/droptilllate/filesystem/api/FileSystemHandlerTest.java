@@ -24,8 +24,6 @@ import ch.droptilllate.filesystem.info.FileInfoDecrypt;
 import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.io.IFile;
-import ch.droptilllate.filesystem.io.IShareRelation;
-import ch.droptilllate.filesystem.io.ShareRelationHandler;
 import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.truezip.FileHandler;
 import ch.droptilllate.security.commons.KeyRelation;

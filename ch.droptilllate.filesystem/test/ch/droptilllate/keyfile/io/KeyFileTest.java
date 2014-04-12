@@ -1,6 +1,7 @@
 package ch.droptilllate.keyfile.io;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import org.junit.rules.TestName;
 import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.preferences.Constants;
-import ch.droptilllate.filesystem.preferences.Options;
 import ch.droptilllate.keyfile.error.KeyFileError;
 import ch.droptilllate.keyfile.error.KeyFileException;
 import ch.droptilllate.security.commons.KeyRelation;
@@ -180,14 +180,14 @@ public class KeyFileTest
 	}
 
 	@Test
-	public void testCorruptFileEmptyKey()
+	public void testEmptyShareKey()
 	{
 		System.out.println(Constants.TESTCASE_LIMITER);
 		System.out.println(this.getClass().getSimpleName() + ": " + name.getMethodName());
 
 		KeyRelation kr1 = new KeyRelation();
 		kr1.addKeyOfShareRelation(shareRelationID1, keyFilePass1);
-		kr1.addKeyOfShareRelation(shareRelationID2, "");
+		kr1.addKeyOfShareRelation(shareRelationID2, "1");
 		List<KeyFileError> errorList = new ArrayList<KeyFileError>();
 		
 		String path = TestHelper.getTestDir() + OsHelper.getDirLimiter() + "keyfile";
@@ -214,6 +214,30 @@ public class KeyFileTest
 		System.out.println(kr2.getKeyShareMap());
 		assertTrue(kr2.getKeyShareMap().size() == 1);
 		assertTrue(errorList.contains(KeyFileError.LINE_FETCH_ERROR));
+	}
+	
+	@Test
+	public void testCorruptFileNullKeyValue()
+	{
+		System.out.println(Constants.TESTCASE_LIMITER);
+		System.out.println(this.getClass().getSimpleName() + ": " + name.getMethodName());
+
+		KeyRelation kr1 = new KeyRelation();
+		kr1.addKeyOfShareRelation(shareRelationID1, keyFilePass1);
+		kr1.addKeyOfShareRelation(shareRelationID2, null);
+		KeyFileError error = KeyFileError.NONE;
+		
+		String path = TestHelper.getTestDir() + OsHelper.getDirLimiter() + "keyfile";
+		// STORE keyfile with an empty key
+		try
+		{
+			KeyFile.store(path, Constants.TEST_PASSWORD_1, kr1);
+		} catch (KeyFileException e)
+		{
+			System.err.println(e.getError());
+			error = e.getError();
+		}
+		assertEquals(error, KeyFileError.LINE_WRITE_ERROR);
 	}
 
 	@Test

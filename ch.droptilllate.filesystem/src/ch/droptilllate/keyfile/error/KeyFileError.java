@@ -13,7 +13,6 @@ public enum KeyFileError
 	NONE("No error"),
 	UNKNOWN("Unkown exceptions"),
 	INVALID_KEY("Invalid key"),
-	
 	IO_EXCEPTION("IO Exception"), 
 	
 	FILE_NOT_FOUND("keyfile not found"),
@@ -23,6 +22,7 @@ public enum KeyFileError
 	
 	LINE_SPLIT_ERROR("Could not split the read keyfile line to extract the shareRelationID and the related key "),
 	LINE_FETCH_ERROR("Read line from keyfile seems to be corrupt, wrong format or entries"),
+	LINE_WRITE_ERROR("ShareRelation or related key can not be written to the keyfile, wrong format or entries"),
 	SHARE_ID_NOT_PARSABLE("ShareRelationId could not be pared to integer"),
 	
 	EMPTY_KEYRELATION("Key relation is empty, no share relation found in key relation");

@@ -1,6 +1,5 @@
 package ch.droptilllate.keyfile.error;
 
-import ch.droptilllate.filesystem.error.FileError;
 
 @SuppressWarnings("serial")
 public class KeyFileException extends Exception

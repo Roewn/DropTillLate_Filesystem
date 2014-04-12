@@ -5,9 +5,6 @@ package ch.droptilllate.security.commons;
 
 import java.util.HashMap;
 
-import ch.droptilllate.filesystem.info.ContainerInfo;
-import ch.droptilllate.filesystem.info.FileInfo;
-
 
 
 /**

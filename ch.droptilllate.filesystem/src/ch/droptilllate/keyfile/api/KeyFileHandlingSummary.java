@@ -6,7 +6,6 @@ package ch.droptilllate.keyfile.api;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.keyfile.error.KeyFileError;
 import ch.droptilllate.security.commons.KeyRelation;
 

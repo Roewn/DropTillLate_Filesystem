@@ -3,25 +3,11 @@ package ch.droptilllate.filesystem.test;
 
 import java.io.File;
 import java.io.IOException;
-
-
 import java.nio.file.Files;
-
-
-
-
-
-
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-
-
-
 import ch.droptilllate.filesystem.error.FileException;
-import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.info.FileInfoDecrypt;
@@ -29,11 +15,7 @@ import ch.droptilllate.filesystem.info.FileInfoEncrypt;
 import ch.droptilllate.filesystem.info.FileInfoMove;
 import ch.droptilllate.filesystem.io.IFile;
 import ch.droptilllate.filesystem.preferences.Constants;
-import ch.droptilllate.filesystem.preferences.Options;
 import ch.droptilllate.filesystem.truezip.FileHandler;
-
-
-
 import ch.droptilllate.keyfile.error.KeyFileError;
 import ch.droptilllate.keyfile.io.KeyFile;
 import ch.droptilllate.security.commons.KeyRelation;

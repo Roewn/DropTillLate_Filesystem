@@ -11,7 +11,7 @@ public interface IKeyFile
 	 * @param keyFilePath path to the keyfile, Example: "C:\\DropTillLateApplication\\keyfile"
 	 * @param key Key used for encrypting the keyfile.
 	 * @param keyRelation containing all keys per share relation in the specified keyfile.
-	 * @return KeyFileError, if no error occurred than getError() == KeyFileError.NONE
+	 * @return KeyFileError, if no error occurred than KeyFileError == KeyFileError.NONE
 	 */
 	KeyFileError storeKeyFile(String keyFilePath, String key, KeyRelation keyRelation);
 

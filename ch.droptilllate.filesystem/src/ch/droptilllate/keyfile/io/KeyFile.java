@@ -4,37 +4,29 @@
  */
 package ch.droptilllate.keyfile.io;
 
-import de.schlichtherle.truezip.crypto.raes.RaesKeyException;
-import de.schlichtherle.truezip.crypto.raes.RaesOutputStream;
-import de.schlichtherle.truezip.crypto.raes.RaesParameters;
-import de.schlichtherle.truezip.crypto.raes.RaesReadOnlyFile;
-import de.schlichtherle.truezip.crypto.raes.param.KeyManagerRaesParameters;
-import de.schlichtherle.truezip.file.*;
-import de.schlichtherle.truezip.key.sl.KeyManagerLocator;
-import de.schlichtherle.truezip.rof.DefaultReadOnlyFile;
-import de.schlichtherle.truezip.rof.ReadOnlyFile;
-import de.schlichtherle.truezip.rof.ReadOnlyFileInputStream;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Set;
 
 import ch.droptilllate.filesystem.commons.OsHelper;
-import ch.droptilllate.filesystem.commons.OsUtils;
-import ch.droptilllate.filesystem.error.FileError;
-import ch.droptilllate.filesystem.error.FileException;
-import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.keyfile.error.KeyFileError;
 import ch.droptilllate.keyfile.error.KeyFileException;
 import ch.droptilllate.security.commons.KeyRelation;
 import ch.droptilllate.security.truezip.CustomRaesParameters;
-import ch.droptilllate.security.truezip.KeyManager1;
+import de.schlichtherle.truezip.crypto.raes.RaesKeyException;
+import de.schlichtherle.truezip.crypto.raes.RaesOutputStream;
+import de.schlichtherle.truezip.crypto.raes.RaesParameters;
+import de.schlichtherle.truezip.crypto.raes.RaesReadOnlyFile;
+import de.schlichtherle.truezip.file.TFile;
+import de.schlichtherle.truezip.file.TFileOutputStream;
+import de.schlichtherle.truezip.rof.DefaultReadOnlyFile;
+import de.schlichtherle.truezip.rof.ReadOnlyFile;
+import de.schlichtherle.truezip.rof.ReadOnlyFileInputStream;
 
 /**
  * Saves and restores the contents of arbitrary files to and from the RAES file format for encryption and decryption. This class cannot get
@@ -60,13 +52,14 @@ public class KeyFile
 	 * @param keyRealtion containing all keys per share relation in the specified keyfile.
 	 * @return KeyFileError, if no error occurred than getError() == KeyFileError.NONE
 	 */
-/**
- * Stores and encrypted the passed key relations in the keyfile and encrypts it with the passed key.
- * @param keyFilePath path to the keyfile, Example: "C:\\DropTillLateApplication\\keyfile"
- * @param key Key used for encrypting the keyfile
- * @param keyRelation containing all keys per share relation in the specified keyfile.
- * @throws KeyFileException Thrown if an error occurred.
- */
+	/**
+	 * Stores and encrypted the passed key relations in the keyfile and encrypts it with the passed key.
+	 * 
+	 * @param keyFilePath path to the keyfile, Example: "C:\\DropTillLateApplication\\keyfile"
+	 * @param key Key used for encrypting the keyfile
+	 * @param keyRelation containing all keys per share relation in the specified keyfile.
+	 * @throws KeyFileException Thrown if an error occurred.
+	 */
 	public static synchronized void store(String keyFilePath, String key, KeyRelation keyRelation) throws KeyFileException
 	{
 		// Check if key relation contains entries
@@ -94,7 +87,7 @@ public class KeyFile
 		} catch (IOException e)
 		{
 			throw new KeyFileException(KeyFileError.IO_EXCEPTION, e.getMessage());
-		} 
+		}
 
 		// Console
 		if (keyFile.exists())
@@ -112,12 +105,22 @@ public class KeyFile
 			Set<Integer> shareRelationIdSet = keyRelation.getKeyShareMap().keySet();
 			for (int shareRelationID : shareRelationIdSet)
 			{
-				pw.println(shareRelationID + ENTRY_DIVIDER + keyRelation.getKeyOfShareRelation(shareRelationID));
+				String shareRelationKey = keyRelation.getKeyOfShareRelation(shareRelationID);
+				if (shareRelationKey == null || shareRelationKey.length() < 1)
+				{
+					throw new KeyFileException(KeyFileError.LINE_WRITE_ERROR, "Key for shareRealtion is empty or invalid: ShareRelationID="
+							+ shareRelationID + " and key=" + shareRelationKey);
+				}
+				pw.println(shareRelationID + ENTRY_DIVIDER + shareRelationKey);
 			}
 			pw.flush();
 			pw.close();
+		} catch (KeyFileException e)
+		{
+			throw e;
 		} catch (Exception e)
 		{
+
 			throw new KeyFileException(KeyFileError.FILE_WRITE_EXCEPTION, e.getMessage());
 		} finally
 		{
@@ -132,10 +135,12 @@ public class KeyFile
 
 	/**
 	 * Loads and decrypted the keyfile specified by the path, using the passed key.
+	 * 
 	 * @param keyFilePath path to the keyfile, Example: "C:\\DropTillLateApplication\\keyfile"
 	 * @param key Key used for decrypting the keyfile
-	 * @param errorList A list of error which occur while reading the entry lines from the keyfile, this list gets updated by using the reference!
-	 * @return KeyRelation which contains  all loaded keys per share relation in the specified keyfile.
+	 * @param errorList A list of error which occur while reading the entry lines from the keyfile, this list gets updated by using the
+	 *            reference!
+	 * @return KeyRelation which contains all loaded keys per share relation in the specified keyfile.
 	 * @throws KeyFileException Thrown if an error occurred.
 	 */
 	public static KeyRelation load(final String keyFilePath, String key, List<KeyFileError> errorList) throws KeyFileException
@@ -176,8 +181,8 @@ public class KeyFile
 			// reading lines until the end of the file
 			while ((line = br.readLine()) != null)
 			{
-				
-				//TODO terminate if an error occurs or read the rest of the lines?
+
+				// TODO terminate if an error occurs or read the rest of the lines?
 				try
 				{
 					updateKeyRelation(line, keyRelation);
@@ -264,7 +269,7 @@ public class KeyFile
 		}
 		// fetch key
 		String key = elements[1];
-		if (shareRelationID > 0 && key.length() > 0)
+		if (shareRelationID >= 1 && key.length() > 1)
 		{
 			keyRelation.addKeyOfShareRelation(shareRelationID, key);
 		} else
