@@ -19,7 +19,7 @@ public class TestHelper
 {
 	private static String workingDir = System.getProperty("user.dir");
 	private static File testDir;
-	private static String extractDir = "extract";
+	private static String extractDir = "tmp";
 
 	public static void setupTestDir()
 	{

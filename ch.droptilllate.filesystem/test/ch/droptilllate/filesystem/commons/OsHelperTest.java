@@ -1,4 +1,4 @@
-package ch.droptilllate.filesystem.info;
+package ch.droptilllate.filesystem.commons;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -11,7 +11,7 @@ import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.preferences.Constants;
 
-public class InfoHelperTest
+public class OsHelperTest
 {
 
 	private String testFileName = "test.tmp";
@@ -22,7 +22,7 @@ public class InfoHelperTest
 	@Rule
 	public TestName name = new TestName();
 	
-	public InfoHelperTest() {
+	public OsHelperTest() {
 		this.containerPath = "bla" + OsHelper.getDirLimiter() + "blub" + OsHelper.getDirLimiter() + 
 				shareRelationID + OsHelper.getDirLimiter() +  containerID + Constants.EXT_LIMITER + Constants.CONTAINER_EXTENTION;
 	}

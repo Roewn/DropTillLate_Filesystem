@@ -16,6 +16,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
+import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.commons.Timer;
 import ch.droptilllate.filesystem.error.FileError;
 import ch.droptilllate.filesystem.helper.TestHelper;
@@ -132,6 +133,64 @@ public class FileSystemHandlerTest
 		}
 		// test if all files are in the extracted directory
 		File extractDir = new File(TestHelper.getExtractDir());
+		List<String> extractFileList = Arrays.asList(extractDir.list());
+		for (FileInfoDecrypt fid : fidList)
+		{
+			assertTrue(extractFileList.contains(fid.getPlainFileName()));
+		}
+	}
+	
+	@Test
+	public void testDecryptFilesToAbsPath()
+	{
+		int id = 1;
+		int size = 1;
+		int count = 4;
+		String ext = "txt";
+		
+		String extractPath = TestHelper.getTestDir() + OsHelper.getDirLimiter() + "myExtractDir" + OsHelper.getDirLimiter(); 
+
+		System.out.println(Constants.TESTCASE_LIMITER);
+		System.out.println(this.getClass().getSimpleName() + ": " + name.getMethodName());
+		System.out.println(count + " Files a " + size + " MB");
+
+		// create Files
+		ArrayList<File> fileList = TestHelper.createFiles(count, size, ext);
+
+		// create FileInfos Encrypt and decrypt
+		ArrayList<FileInfoEncrypt> fieList = new ArrayList<FileInfoEncrypt>();
+		ArrayList<FileInfoDecrypt> fidList = new ArrayList<FileInfoDecrypt>();
+		for (File file : fileList)
+		{
+			fieList.add(new FileInfoEncrypt(id, file.getAbsolutePath(), shareRelationID));
+			fidList.add(new FileInfoDecrypt(id, shareRelationID, 0, extractPath + file.getName()));
+			id++;
+		}
+		// encrypt all files
+		fsh.encryptFiles(fieList, krS);
+
+		// Update FileInfos Decrypt		
+		for (FileInfoEncrypt fie : fieList)
+		{
+			for (FileInfoDecrypt fid : fidList) {
+				if (fie.getFileID() == fid.getFileID()) {
+					fid.setContainerInfo(fie.getContainerInfo());
+				}
+			}
+		}
+
+		// ******************************************************************
+		// decrypt all Files
+		Timer.start();
+		FileHandlingSummary fhs = fsh.decryptFiles(fidList, krS);
+		Timer.stop(true);
+		// test if the Summary
+		for (FileInfoDecrypt fid : fidList)
+		{
+			assertTrue(fhs.getFileInfoSuccessList().contains(fid));
+		}
+		// test if all files are in the extracted directory
+		File extractDir = new File(extractPath);
 		List<String> extractFileList = Arrays.asList(extractDir.list());
 		for (FileInfoDecrypt fid : fidList)
 		{

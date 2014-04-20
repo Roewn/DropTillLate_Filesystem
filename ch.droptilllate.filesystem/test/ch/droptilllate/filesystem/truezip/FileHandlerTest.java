@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import org.junit.After;
 import org.junit.Before;
@@ -14,6 +15,7 @@ import org.junit.rules.TestName;
 
 import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.commons.Timer;
+import ch.droptilllate.filesystem.error.FileError;
 import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.helper.TestHelper;
 import ch.droptilllate.filesystem.info.ContainerInfo;
@@ -30,17 +32,18 @@ import ch.droptilllate.filesystem.preferences.Options;
 public class FileHandlerTest
 {
 	private Options options;
-	
+
 	private IFile iFile = new FileHandler();
-	private IShareRelation iShareRelation = new ShareRelationHandler(); 
-	
+	private IShareRelation iShareRelation = new ShareRelationHandler();
+
 	private File textFile;
 	private String filenameTextFile = "test.txt";
 	private String contentTextFile = "This is a test File";
-	
-	//TODO Add testcase for different src and dest keys for moving files
-	
-	 @Rule public TestName name = new TestName();
+
+	// TODO Add testcase for different src and dest keys for moving files
+
+	@Rule
+	public TestName name = new TestName();
 
 	/**
 	 * Constructor
@@ -50,9 +53,10 @@ public class FileHandlerTest
 	}
 
 	@Test
-	public void testAddAndExtractTextFile() {
+	public void testAddAndExtractTextFile()
+	{
 		System.out.println(Constants.TESTCASE_LIMITER);
-		System.out.println(this.getClass().getSimpleName()+": " + name.getMethodName());
+		System.out.println(this.getClass().getSimpleName() + ": " + name.getMethodName());
 		int id = 1234;
 		int contId = 9999;
 		int shareRelationID = 4444;
@@ -63,28 +67,28 @@ public class FileHandlerTest
 		System.out.println(Constants.CONSOLE_LIMITER);
 		System.out.println("Adding the text file");
 		Timer.start();
-		try {						
-			iFile.encryptFile(fie, Constants.TEST_PASSWORD_1);			
+		try
+		{
+			iFile.encryptFile(fie, Constants.TEST_PASSWORD_1);
 		} catch (FileException e)
 		{
 			System.err.println(e.getError());
 		}
 		Timer.stop(true);
 		iFile.unmountFileSystem();
-		
+
 		System.out.println("Size: " + (textFile.length() / 1024) + "kb");
-		//assertTrue(iFile.isFileInContainer(fie));
+		// assertTrue(iFile.isFileInContainer(fie));
 
 		// Create FileInfo
-		FileInfoDecrypt fid = new FileInfoDecrypt(id, OsHelper.checkFileExt(filenameTextFile), shareRelationID,
-				contId);
+		FileInfoDecrypt fid = new FileInfoDecrypt(id, OsHelper.checkFileExt(filenameTextFile), shareRelationID, contId);
 		// Extract File
 		System.out.println();
 		System.out.println("Extracting the text file");
 		Timer.start();
 		try
-		{			
-			iFile.decryptFile(fid, Constants.TEST_PASSWORD_2);
+		{
+			iFile.decryptFile(fid, Constants.TEST_PASSWORD_1);
 		} catch (FileException e)
 		{
 			System.out.println(e.getMessage());
@@ -93,17 +97,108 @@ public class FileHandlerTest
 		iFile.unmountFileSystem();
 		System.out.println("Size: " + (textFile.length() / 1024) + "kb");
 		assertTrue(TestHelper.getTextFileContent(textFile).equals(TestHelper.getTextFileContent(new File(fid.getFullTmpFilePath()))));
-		
+
 	}
 
 	@Test
-	public void deleteFile() {
+	public void extractFileToAbsPath()
+	{
 		System.out.println(Constants.TESTCASE_LIMITER);
-		System.out.println(this.getClass().getSimpleName()+": " + name.getMethodName());
+		System.out.println(this.getClass().getSimpleName() + ": " + name.getMethodName());
 		int id = 1234;
 		int contId = 9999;
 		int shareRelationID = 4444;
-		String deleteDir = TestHelper.getTestDir()+OsHelper.getDirLimiter()+"dirToDelete";
+		String extractPath = TestHelper.getTestDir() + OsHelper.getDirLimiter() + "myExtractDir" + OsHelper.getDirLimiter() + filenameTextFile; 
+		
+		
+		// Create FileInfo
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID);
+		fie.getContainerInfo().setContainerID(contId);
+		// Encrypt the file
+		try
+		{
+			iFile.encryptFile(fie, Constants.TEST_PASSWORD_1);
+		} catch (FileException e)
+		{
+			System.err.println(e.getError());
+		}
+		iFile.unmountFileSystem();
+
+		// Decrypt the file
+		// Create FileInfo
+		FileInfoDecrypt fid = new FileInfoDecrypt(id,shareRelationID, contId, extractPath);
+				
+		try
+		{
+			iFile.decryptFile(fid, Constants.TEST_PASSWORD_1);
+		} catch (FileException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		iFile.unmountFileSystem();
+		assertTrue(TestHelper.getTextFileContent(textFile).equals(TestHelper.getTextFileContent(new File(fid.getAbsExtractPath()))));
+	}
+	
+	@Test
+	public void fileExtractDublicates()
+	{
+		System.out.println(Constants.TESTCASE_LIMITER);
+		System.out.println(this.getClass().getSimpleName() + ": " + name.getMethodName());
+		int id = 1234;
+		int contId = 9999;
+		int shareRelationID = 4444;
+		String extractPath = TestHelper.getTestDir() + OsHelper.getDirLimiter() + "myExtractDir" + OsHelper.getDirLimiter() + filenameTextFile; 
+		
+		
+		// Create FileInfo
+		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID);
+		fie.getContainerInfo().setContainerID(contId);
+		// Encrypt the file
+		try
+		{
+			iFile.encryptFile(fie, Constants.TEST_PASSWORD_1);
+		} catch (FileException e)
+		{
+			System.err.println(e.getError());
+		}
+		iFile.unmountFileSystem();
+
+		// Decrypt the first file
+		// Create FileInfo
+		FileInfoDecrypt fid = new FileInfoDecrypt(id,shareRelationID, contId, extractPath);
+				
+		try
+		{
+			iFile.decryptFile(fid, Constants.TEST_PASSWORD_1);
+		} catch (FileException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		iFile.unmountFileSystem();
+		assertTrue(TestHelper.getTextFileContent(textFile).equals(TestHelper.getTextFileContent(new File(fid.getAbsExtractPath()))));
+		
+		FileError error = FileError.NONE;
+		try
+		{
+			iFile.decryptFile(fid, Constants.TEST_PASSWORD_1);
+		} catch (FileException e)
+		{
+			System.out.println(e.getMessage());
+			error = e.getError();
+		}
+		iFile.unmountFileSystem();
+		assertTrue(error == FileError.EXTRACTED_FILE_EXISTS);
+	}
+
+	@Test
+	public void deleteFile()
+	{
+		System.out.println(Constants.TESTCASE_LIMITER);
+		System.out.println(this.getClass().getSimpleName() + ": " + name.getMethodName());
+		int id = 1234;
+		int contId = 9999;
+		int shareRelationID = 4444;
+		String deleteDir = TestHelper.getTestDir() + OsHelper.getDirLimiter() + "dirToDelete";
 		System.out.println(Constants.CONSOLE_LIMITER);
 		System.out.println("Deleting the text file");
 		// Create FileInfo
@@ -111,7 +206,7 @@ public class FileHandlerTest
 		fie.getContainerInfo().setContainerID(contId);
 		// Create the directories
 		iShareRelation.checkIfDirectoryExists(fie.getContainerInfo().getShareRelationPath());
-		
+
 		// Adding File
 		try
 		{
@@ -137,9 +232,10 @@ public class FileHandlerTest
 	}
 
 	@Test
-	public void moveFile() {
+	public void moveFile()
+	{
 		System.out.println(Constants.TESTCASE_LIMITER);
-		System.out.println(this.getClass().getSimpleName()+": " + name.getMethodName());
+		System.out.println(this.getClass().getSimpleName() + ": " + name.getMethodName());
 		int id = 1234;
 		int contId = 9999;
 		System.out.println(Constants.CONSOLE_LIMITER);
@@ -148,7 +244,7 @@ public class FileHandlerTest
 		// create DIR
 		int shareRelationID1 = 1111;
 		int shareRelationID2 = 2222;
-		
+
 		// Create FileInfo for adding to share1
 		FileInfoEncrypt fie = new FileInfoEncrypt(id, textFile.getAbsolutePath(), shareRelationID1);
 		fie.getContainerInfo().setContainerID(contId);
@@ -163,7 +259,6 @@ public class FileHandlerTest
 		iFile.unmountFileSystem();
 		assertTrue(iFile.isFileInContainer(fie, Constants.TEST_PASSWORD_1));
 
-		
 		// Create FileInfo to move the file to share2
 		FileInfoMove fim = new FileInfoMove(id, textFile.length(), shareRelationID1, contId, shareRelationID2);
 		fim.getContainerInfo().setContainerID(contId);
@@ -175,9 +270,9 @@ public class FileHandlerTest
 			System.out.println(e.getMessage());
 		}
 		iFile.unmountFileSystem();
-		//file should not be longer in the source container
+		// file should not be longer in the source container
 		assertFalse(iFile.isFileInContainer(fie, Constants.TEST_PASSWORD_1));
-		//check if its in the dest container
+		// check if its in the dest container
 		assertTrue(iFile.isFileInContainer(fim, Constants.TEST_PASSWORD_1));
 	}
 

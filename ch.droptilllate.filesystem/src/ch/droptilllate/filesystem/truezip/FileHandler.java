@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
+import com.sun.management.OSMBeanFactory;
+
 import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.error.FileError;
 import ch.droptilllate.filesystem.error.FileException;
@@ -54,7 +56,7 @@ public class FileHandler implements IFile
 			config.setArchiveDetector(KeyManager1.getArchiveDetector(key.toCharArray()));
 
 			TFile src = new TFile(fileInfo.getFullPlainFilePath());
-			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND);
+			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND, true);
 
 			checkContainerID(fileInfo.getContainerInfo());
 			createDir(fileInfo.getContainerInfo().getShareRelationPath());
@@ -103,11 +105,24 @@ public class FileHandler implements IFile
 			checkContainerID(fileInfo.getContainerInfo());
 			TFile src = new TFile(fileInfo.getContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
 
-			createDir(fileInfo.getTempDirPath());
-			TFile dst = new TFile(fileInfo.getTempDirPath(), fileInfo.getFileID() + Constants.EXT_LIMITER + fileInfo.getFileExtension());
-
+			TFile dst = null;
+			// if the file gets extracted to a absolute file path ..
+			if (fileInfo.isToExtract())
+			{
+				createDir(OsHelper.extractDirectoryPath(fileInfo.getAbsExtractPath()));
+				dst = new TFile(fileInfo.getAbsExtractPath());
+			} else
+			{
+				// .. or to the temp directory
+				createDir(fileInfo.getTempDirPath());
+				dst = new TFile(fileInfo.getTempDirPath(), fileInfo.getFileID() + Constants.EXT_LIMITER + fileInfo.getFileExtension());
+			}
+			// check if file already exists in target directory
+			checkIfFileExists(dst, FileError.EXTRACTED_FILE_EXISTS, false);
+			// decrypt file
 			src.cp(dst);
-			checkIfFileExists(dst, FileError.EXTRACTED_FILE_NOT_FOUND);
+			// check if file got extracted
+			checkIfFileExists(dst, FileError.EXTRACTED_FILE_NOT_FOUND, true);
 
 		} catch (IOException e)
 		{
@@ -153,7 +168,7 @@ public class FileHandler implements IFile
 
 			checkContainerID(fileInfo.getContainerInfo());
 			TFile src = new TFile(fileInfo.getContainerInfo().getContainerPath(), Integer.toString(fileInfo.getFileID()));
-			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND);
+			checkIfFileExists(src, FileError.SRC_FILE_NOT_FOUND, true);
 			iContainer.checkForEmptyContainer(fileInfo.getContainerInfo());
 
 			src.rm();
@@ -294,7 +309,7 @@ public class FileHandler implements IFile
 				}
 				System.out.println(Constants.CONSOLE_LIMITER);
 				System.out.println("Container: " + contInfo.getContainerID());
-				
+
 				for (FileInfo file : fileList)
 				{
 					System.out.println("-> " + file.getFileID());
@@ -330,13 +345,25 @@ public class FileHandler implements IFile
 	 * 
 	 * @param file File to check
 	 * @param fileError FileError which is thrown by the exception.
+	 * @param hasToExist exception is thrown if "true" and the file does not exist or opposite
 	 * @throws FileException Throw when file is corrupt.
 	 */
-	private synchronized void checkIfFileExists(File file, FileError fileError) throws FileException
+	private synchronized void checkIfFileExists(File file, FileError fileError, boolean hasToExist) throws FileException
 	{
-		if (!file.exists())
+		if (hasToExist)
 		{
-			throw new FileException(fileError, file.getAbsolutePath());
+			// if file should exists, throw exception if it doesnt
+			if (!file.exists())
+			{
+				throw new FileException(fileError, file.getAbsolutePath());
+			}
+		} else
+		{
+			// if file should not exists, throw exception if it does
+			if (file.exists())
+			{
+				throw new FileException(fileError, file.getAbsolutePath());
+			}
 		}
 	}
 

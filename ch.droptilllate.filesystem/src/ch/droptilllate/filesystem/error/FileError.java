@@ -19,6 +19,7 @@ public enum FileError
 	
 	DEST_FILE_NOT_FOUND("Destination file not found"),
 	EXTRACTED_FILE_NOT_FOUND("Extracted file not found in temp directory"),
+	EXTRACTED_FILE_EXISTS("File to extract does already exist in the target directory"),
 	
 	INVALID_KEY("Invalid key"),	
 	

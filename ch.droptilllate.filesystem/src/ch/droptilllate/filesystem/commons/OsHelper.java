@@ -107,6 +107,15 @@ public class OsHelper
 			return ext;
 		}
 	}
+	
+	/**
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public synchronized static String extractDirectoryPath(String path) {
+		return path.substring(0, path.lastIndexOf(dirLimiter));
+	}
 
 	/**
 	 * Takes the full container path and extracts the containerID. Example for full container path: "C:\\Temp\\Share1\\342657.tilllate"

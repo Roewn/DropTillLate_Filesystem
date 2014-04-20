@@ -3,6 +3,8 @@
  */
 package ch.droptilllate.filesystem.info;
 
+import java.io.File;
+
 import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.preferences.Constants;
 import ch.droptilllate.filesystem.preferences.Options;
@@ -16,6 +18,7 @@ public class FileInfoDecrypt extends FileInfo
 {	
 	
 	private String fileExtension;
+	private String absExtractPath;
 	
 	/**
 	 * Constructor for decrypting an encrypted file from the passed container to the temp directory.
@@ -28,6 +31,18 @@ public class FileInfoDecrypt extends FileInfo
 		super(fileID, new ContainerInfo(containerID, shareRelationID));
 		setFileExtension(fileExtension);
 	}
+	
+	/**
+	 * Constructor for decrypting an encrypted file from the passed container to the temp directory.
+	 * @param fileID Unique id of the File
+	 * @param shareRelationID share relation which holds the container.
+	 * @param containerID Id of the container which contains the file. 
+	 * @param absExtractPath The full path of the file after the decryption (place where it gets decrypted), Example: C:\\Extract\\3425.txt
+	 */
+	public FileInfoDecrypt(int fileID, int shareRelationID, int containerID, String  absExtractPath) {
+		super(fileID, new ContainerInfo(containerID, shareRelationID));
+		this.absExtractPath = absExtractPath;
+	}	
 
 	/**
 	 * @return the tempDirPath
@@ -64,7 +79,36 @@ public class FileInfoDecrypt extends FileInfo
 	 * @return
 	 */
 	public synchronized String getPlainFileName() {
+		if (isToExtract()) return new File(absExtractPath).getName();
 		return super.getFileID() + Constants.EXT_LIMITER + this.fileExtension;
+	}	
+	
+	
+	/**
+	 * Returns the target filename including the path after if a file gets extracted (not the same as the temp directory path)
+	 * @return The full path of the file after the decryption (place where it gets decrypted), Example: C:\\Extract\\3425.txt
+	 */
+	public String getAbsExtractPath()
+	{
+		return absExtractPath;
+	}
+
+	/**
+	 * Sets the target filename including the path after if a file gets extracted (not the same as the temp directory path)
+	 * @param absExtractPath The full path of the file after the decryption (place where it gets decrypted), Example: C:\\Extract\\3425.txt
+	 */
+	public void setAbsExtractPath(String absExtractPath)
+	{
+		this.absExtractPath = absExtractPath;
+	}
+
+	/**
+	 * Returns if the file gets extracted to a given directory (not into the temp directory)
+	 * @return true if the file gets extracted
+	 */
+	public synchronized boolean isToExtract() {
+		if (absExtractPath == null || absExtractPath.length() < 1) return false;
+		return true;
 	}
 
 }

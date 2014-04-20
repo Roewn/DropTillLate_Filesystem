@@ -1,4 +1,4 @@
-package ch.droptilllate.filesystem.api;
+package ch.droptilllate.filesystem.info;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
