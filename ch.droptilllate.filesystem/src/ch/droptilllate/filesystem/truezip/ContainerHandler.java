@@ -16,6 +16,7 @@ import ch.droptilllate.filesystem.info.ContainerInfo;
 import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.io.IContainer;
 import ch.droptilllate.filesystem.preferences.Constants;
+import ch.droptilllate.security.truezip.KeyManager1;
 import de.schlichtherle.truezip.file.TConfig;
 import de.schlichtherle.truezip.file.TFile;
 
@@ -66,9 +67,17 @@ public class ContainerHandler implements IContainer
 	@Override
 	public synchronized List<FileInfo> listContainerContent(ContainerInfo containerInfo, String key) throws FileException
 	{
-		try (TConfig config = TConfig.push())
+		TConfig config = TConfig.push();
+		try
 		{
+			// Set the password for the current operation
+			config.setArchiveDetector(KeyManager1.getArchiveDetector(key.toCharArray()));
 			return listContainerContent(containerInfo);
+		} finally
+		{
+			// Pop the current configuration off the inheritable thread local stack,
+			// thereby reverting to the old default archive detector.
+			config.close();
 		}
 	}
 
