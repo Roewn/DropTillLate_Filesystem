@@ -2,11 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Filesystem
 Bundle-SymbolicName: ch.droptilllate.filesystem
-Bundle-Version: 0.5.1
+Bundle-Version: 1.0.0
 Bundle-ClassPath: filesystem.jar,
  libraries/annotations-2.0.1.jar,
  libraries/bcprov-jdk16-1.46.jar,
- libraries/commons-codec-1.6.jar,
  libraries/commons-compress-1.6.jar,
  libraries/truezip-archetype-file-7.7.5.jar,
  libraries/truezip-archetype-path-7.7.5.jar,
@@ -67,12 +66,6 @@ Export-Package: ch.droptilllate.filesystem.api,
  javax.annotation.concurrent,
  javax.annotation.meta,
  net.jcip.annotations,
- org.apache.commons.codec,
- org.apache.commons.codec.binary,
- org.apache.commons.codec.digest,
- org.apache.commons.codec.language,
- org.apache.commons.codec.language.bm,
- org.apache.commons.codec.net,
  org.apache.commons.compress.archivers,
  org.apache.commons.compress.archivers.ar,
  org.apache.commons.compress.archivers.arj,
