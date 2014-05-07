@@ -40,7 +40,6 @@ public class KeyFileHandler implements IKeyFile
 	{
 		KeyFileHandlingSummary kfhs = new KeyFileHandlingSummary();
 		List<KeyFileError> errorList = new ArrayList<KeyFileError>();
-		KeyFileError error = KeyFileError.NONE;
 		try
 		{
 			// load all key per sharerelation into the summary

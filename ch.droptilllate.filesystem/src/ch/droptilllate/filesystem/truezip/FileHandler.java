@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
-import com.sun.management.OSMBeanFactory;
-
 import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.error.FileError;
 import ch.droptilllate.filesystem.error.FileException;

@@ -7,7 +7,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 
-import ch.droptilllate.filesystem.commons.OsHelper;
 import ch.droptilllate.filesystem.error.FileException;
 import ch.droptilllate.filesystem.preferences.Constants;
 

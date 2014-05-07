@@ -8,8 +8,6 @@ import org.junit.Test;
 import org.junit.rules.TestName;
 
 import ch.droptilllate.filesystem.error.FileError;
-import ch.droptilllate.filesystem.info.ContainerInfo;
-import ch.droptilllate.filesystem.info.FileInfo;
 import ch.droptilllate.filesystem.preferences.Constants;
 
 public class FileInfoTest
